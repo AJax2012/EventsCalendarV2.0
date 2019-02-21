@@ -98,7 +98,6 @@
             var city = '@(Model.Venue.AddressDto.City)';
             var state = '@(Model.Venue.AddressDto.State)';
             var address = `${streetAddress} ${city}, ${state}`;
-            console.log(@(Model.GoogleMapsSrcUrl));
             geocoder.geocode({ 'address': address }, function (results, status) {
                 if (status === 'OK') {
                     resultsMap.setCenter(results[0].geometry.location);
@@ -107,7 +106,7 @@
                         position: results[0].geometry.location
                     });
                 } else {
-                    alert('Geocode was not successful for the following reason: ' + status);
+                    alert('Geocode was not successful: ' + status);
                 }
             });
         }
