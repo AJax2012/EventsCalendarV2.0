@@ -1,0 +1,104 @@
+﻿@model IEnumerable<EventsCalendar.Core.ViewModels.PerformanceViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="custom-control-inline">Performances coming to Denver!</h1>
+
+<p class="custom-control-inline float-right">
+    @Html.ActionLink("New Performance", "Create", "Performances", null, new { @class = "btn btn-primary btn-sm" })
+</p>
+
+<table class="table table-hover table-responsive-lg table-striped table-dark" id="myTable">
+    <thead>
+        <tr>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.EventDate)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.EventTime)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Performance.PerformerDto.Name)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Performance.VenueDto.Name)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Performance.Price)
+            </th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                <div class="date">
+                    <a href="#" class="date-btn">
+                        <span class="binds"></span>
+                        <span class="month">
+                            @Convert.ToDateTime(item.Performance.EventDateTime).ToString("MMM")
+                        </span>
+                        <h2 class="day">@Convert.ToDateTime(item.Performance.EventDateTime).ToString("dd")</h2>
+                    </a>
+                </div>
+            </td>
+            <td>
+                @Convert.ToDateTime(item.Performance.EventDateTime).ToShortTimeString()
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Performance.PerformerDto.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Performance.VenueDto.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Performance.Price)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "Performances", new { id = item.Performance.Id }, new { @class = "btn btn-xs btn-secondary", @style = "display: inline;" })
+                @Html.ActionLink("Details", "Details", new { id=item.Performance.Id }, new { @class = "btn btn-xs btn-secondary", @style = "display: inline;" }) 
+                @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "__AjaxAntiForgeryForm" }))
+                {
+                    @Html.ActionLink("Delete", "Delete", "Performances", null,
+                        new { data_performanceId = item.Performance.Id, @class = "btn btn-xs btn-dark js-delete",
+                            @style = "display: inline;", @value = "Delete" })
+                    @Html.AntiForgeryToken()
+                }
+            </td>
+        </tr>
+        }
+    </tbody>
+
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#myTable");
+            table.DataTable();
+
+            table.on("click", ".js-delete", function () {
+                event.preventDefault();
+                var button = $(this);
+
+                bootbox.confirm("Are you sure you want to delete this performance?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/Performances/Delete/" + button.data("performanceid"),
+                            method: "DELETE",
+                            success: function () {
+                                button.closest("tr").remove().draw();
+                            }
+                        });
+                    };
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,71 @@
+﻿@model EventsCalendar.Core.ViewModels.VenueViewModel
+
+@{
+    ViewBag.Title = "VenueForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Venue Form</h2>
+
+@using (Html.BeginForm("Save", "Venues"))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    @Html.HiddenFor(model => model.Venue.Id)
+    @*     @Html.HiddenFor(model => model.Venue.AddressDto.Id) *@
+    @Html.HiddenFor(model => model.Venue.AddressId)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Venue.Name)
+        @Html.EditorFor(model => model.Venue.Name, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Venue.Name, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Venue.Capacity)
+        @Html.EditorFor(model => model.Venue.Capacity, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Venue.Capacity, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group" id="venue-image">
+        <img src="@Model.ImgSrc" class="img-thumbnail" />
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Venue.ImageUrl)
+        @Html.EditorFor(model => model.Venue.ImageUrl, new { htmlAttributes = new { @class = "form-control", @placeholder = "http://" } })
+        @Html.ValidationMessageFor(model => model.Venue.ImageUrl, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Venue.AddressDto.StreetAddress)
+        @Html.EditorFor(model => model.Venue.AddressDto.StreetAddress, new { htmlAttributes = new { @class = "form-control", @id = "street-address" } })
+        @Html.ValidationMessageFor(model => model.Venue.AddressDto.StreetAddress, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Venue.AddressDto.City)
+        @Html.EditorFor(model => model.Venue.AddressDto.City, new { htmlAttributes = new { @class = "form-control", @id = "city" } })
+        @Html.ValidationMessageFor(model => model.Venue.AddressDto.City, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Venue.AddressDto.State)
+        @Html.EditorFor(model => model.Venue.AddressDto.State, new { htmlAttributes = new { @class = "form-control", @id = "state" } })
+        @Html.ValidationMessageFor(model => model.Venue.AddressDto.State, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Venue.AddressDto.ZipCode)
+        @Html.EditorFor(model => model.Venue.AddressDto.ZipCode, new { htmlAttributes = new { @class = "form-control", @id = "zip-code" } })
+        @Html.ValidationMessageFor(model => model.Venue.AddressDto.ZipCode, "", new { @class = "text-danger" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+    @Html.ActionLink("Cancel", "Index", "Venues", null, new { @class = "btn btn-dark" })
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

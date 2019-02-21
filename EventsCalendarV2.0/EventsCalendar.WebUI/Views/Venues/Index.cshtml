@@ -1,0 +1,110 @@
+﻿@model IEnumerable<EventsCalendar.Core.ViewModels.VenueViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="custom-control-inline">Denver Area Venues</h1>
+
+<p class="custom-control-inline float-right">
+    @Html.ActionLink("New Venue", "Create", "Venues", null, new { @class = "btn btn-primary btn-sm" })
+</p>
+<table class="table table-hover table-responsive-lg table-striped table-dark" id="myTable">
+    <thead>
+    <tr>
+        <th scope="col">
+            @Html.DisplayNameFor(model => model.Venue.Name)
+        </th>
+        <th scope="col">
+            @Html.DisplayNameFor(model => model.Venue.Capacity)
+        </th>
+        <th scope="col">
+            @Html.DisplayNameFor(model => model.Venue.AddressDto.StreetAddress)
+        </th>
+        <th scope="col">
+            @Html.DisplayNameFor(model => model.Venue.AddressDto.City)
+        </th>
+        <th scope="col">
+            @Html.DisplayNameFor(model => model.Venue.AddressDto.State)
+        </th>
+        <th scope="col">
+            @Html.DisplayNameFor(model => model.Venue.AddressDto.ZipCode)
+        </th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+
+    @foreach (var item in Model)
+    {
+        <tr class="table-active">
+            <td>
+                @Html.DisplayFor(modelItem => item.Venue.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Venue.Capacity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Venue.AddressDto.StreetAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Venue.AddressDto.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Venue.AddressDto.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Venue.AddressDto.ZipCode)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "Venues", new {id = item.Venue.Id}, new { @class = "btn btn-xs btn-secondary", @style = "display: inline;" })
+                @Html.ActionLink("Details", "Details", new { id=item.Venue.Id }, new { @class = "btn btn-xs btn-secondary", @style = "display: inline;" })
+                @using (Html.BeginForm(null, null, FormMethod.Post, new {@class = "__AjaxAntiForgeryForm"}))
+                {
+                    @Html.ActionLink("Delete", "Delete", "Venues", null,
+                        new
+                        {
+                            data_venueId = item.Venue.Id,
+                            @class = "btn btn-xs btn-dark js-delete",
+                            @style = "display: inline;",
+                            @value = "Delete"
+                        })
+                    @Html.AntiForgeryToken()
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#myTable");
+            table.dataTable();
+
+            table.on("click", ".js-delete", function () {
+                event.preventDefault();
+                var button = $(this);
+//                    var form = $(".__AjaxAntiForgeryForm");
+//                    var token = $("input[name='__RequestVerificationToken']", form).val();
+
+                bootbox.confirm("Are you sure you want to delete this venue?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/Venues/Delete/" + button.data("venueid"),
+//                                    data: { __RequestVerificationToken: token },
+                            method: "DELETE",
+                            success: function () {
+                                button.closest("tr").remove().draw();
+                            }
+                        });
+                    };
+                });
+            });
+        });
+    </script>
+}

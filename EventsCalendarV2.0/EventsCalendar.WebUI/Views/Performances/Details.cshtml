@@ -1,0 +1,269 @@
+﻿@using Microsoft.Ajax.Utilities
+@model EventsCalendar.Core.ViewModels.PerformanceViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="jumbotron">
+
+    <div class="display-4">Performance Details</div>
+
+    <hr class="my-3" />
+
+    @if (!Model.Performance.Description.IsNullOrWhiteSpace())
+    {
+        <div class="row">
+            <dl class="dl-horizontal col-lg-4">
+                <dt>
+                    @Html.DisplayNameFor(model => model.EventDate)
+                </dt>
+
+                <dd>
+                    @Convert.ToDateTime(Model.Performance.EventDateTime).ToString("MMMM d, yyyy")
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.EventTime)
+                </dt>
+
+                <dd>
+                    @Convert.ToDateTime(Model.Performance.EventDateTime).ToString("h:mm tt")
+                </dd>
+            </dl>
+
+            <dl class="col-lg-4">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Performance.SeatsRemaining)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Performance.SeatsRemaining)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Performance.Price)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Performance.Price)
+                </dd>
+            </dl>
+
+            <dl class="col-lg-4">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Performance.Description)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Performance.Description)
+                </dd>
+            </dl>
+
+            <div class="clearfix"></div>
+        </div>
+    }
+    else /* NO DESCRIPTION */
+    {
+        <div class="row">
+            <div class="dl-horizontal col-lg-6">
+                <h3>
+                    @Convert.ToDateTime(Model.Performance.EventDateTime).ToString("MMMM d, yyyy") at
+                    @Convert.ToDateTime(Model.Performance.EventDateTime).ToString("h:mm tt")
+                </h3>
+
+            </div>
+
+            <dl class="col-lg-3">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Performance.SeatsRemaining)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Performance.SeatsRemaining)
+                </dd>
+            </dl>
+            <dl class="col-lg-3">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Performance.Price)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Performance.Price)
+                </dd>
+            </dl>
+
+            <div class="clearfix"></div>
+        </div>
+    }
+
+    @* Begin Performer Section *@
+    <div class="row mt-lg-4">
+        <div class="col-lg-6" id="performer-img">
+            <img src="@Model.Performance.PerformerDto.ImageUrl" />
+        </div>
+        <dl class="col-lg-6 dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Performance.PerformerDto.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Performance.PerformerDto.Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Performance.PerformerDto.PerformerType.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Performance.PerformerDto.PerformerType.Name)
+            </dd>
+
+            @if (Model.Performance.PerformerDto.PerformerTypeId < 5)
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.Performance.PerformerDto.GenreDto.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Performance.PerformerDto.GenreDto.Name)
+                </dd>
+            }
+            else
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.Performance.PerformerDto.TopicDto.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Performance.PerformerDto.TopicDto.Name)
+                </dd>
+            }
+
+            @if (!Model.Performance.PerformerDto.TourName.IsNullOrWhiteSpace())
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.Performance.PerformerDto.TourName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Performance.PerformerDto.TourName)
+                </dd>
+            }
+
+            @if (!Model.Performance.PerformerDto.Description.IsNullOrWhiteSpace())
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.Performance.PerformerDto.Description)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Performance.PerformerDto.Description)
+                </dd>
+            }
+        </dl>
+        <div class="clearfix"></div>
+    </div>
+
+
+    @* Begin Venue Section *@
+    <div class="row">
+        <div class="col-lg-6">
+            <img src="@Model.Performance.VenueDto.ImageUrl" id="venue-img" />
+        </div>
+        <dl class="col-lg-6 container-fluid dl-horizontal">
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Performance.VenueDto.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Performance.VenueDto.Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Performance.VenueDto.AddressDto.StreetAddress)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Performance.VenueDto.AddressDto.StreetAddress, new { @id="street-address" })
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Performance.VenueDto.AddressDto.City)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Performance.VenueDto.AddressDto.City, new { @id = "city" })
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Performance.VenueDto.AddressDto.State)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Performance.VenueDto.AddressDto.State, new { @id = "state" })
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Performance.VenueDto.AddressDto.ZipCode)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Performance.VenueDto.AddressDto.ZipCode)
+            </dd>
+        </dl>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <div class="pt-lg-4">
+        @* PURCHASE TICKETS WILL CHANGE WHEN PURCHASE FUNCTIONS ADDED *@
+        @Html.ActionLink("Purchase Tickets", "Edit", new { id = Model.Performance.Id }, new { @class = "btn btn-success" })
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Performance.Id }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+</div>
+
+@section scripts 
+{
+    <script>
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12,
+                center: { lat: 39.7392, lng: -104.9903 }
+            });
+            var geocoder = new google.maps.Geocoder();
+
+            geocodeAddress(geocoder, map);
+        }
+
+        function geocodeAddress(geocoder, resultsMap) {
+            var streetAddress = '@(Model.Performance.VenueDto.AddressDto.StreetAddress)';
+            var city = '@(Model.Performance.VenueDto.AddressDto.City)';
+            var state = '@(Model.Performance.VenueDto.AddressDto.State)';
+            var address = `${streetAddress} ${city}, ${state}`;
+            console.log(address);
+            geocoder.geocode({ 'address': address }, function (results, status) {
+                if (status === 'OK') {
+                    resultsMap.setCenter(results[0].geometry.location);
+                    var marker = new google.maps.Marker({
+                        map: resultsMap,
+                        position: results[0].geometry.location
+                    });
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxZbqDjao9387kU1zK-_GwcUJ1-EiEqdQ=initMap">
+    </script>
+}

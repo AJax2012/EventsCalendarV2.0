@@ -1,0 +1,118 @@
+﻿@model EventsCalendar.Core.ViewModels.VenueViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="jumbotron">
+    <div class="display-4">Performer Details</div>
+
+    <div class="lead">
+        @Html.DisplayFor(model => model.Venue.Name)
+    </div>
+
+    <hr class="my-3" />
+
+    <div class="row">
+        <div class="col-md-6">
+            <img src="@Model.Venue.ImageUrl" id="details-image" />
+        </div>
+
+        <div class="col-md-6">
+            <dl class="dl-horizontal">
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Venue.Capacity)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Venue.Capacity)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Venue.AddressDto.StreetAddress)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Venue.AddressDto.StreetAddress)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Venue.AddressDto.City)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Venue.AddressDto.City)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Venue.AddressDto.State)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Venue.AddressDto.State)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Venue.AddressDto.ZipCode)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Venue.AddressDto.ZipCode)
+                </dd>
+            </dl>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <div class="pt-lg-4">
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Venue.Id }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+
+</div>
+
+@section scripts 
+{
+    <script>
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12,
+                center: { lat: 39.7392, lng: -104.9903 }
+            });
+            var geocoder = new google.maps.Geocoder();
+
+            geocodeAddress(geocoder, map);
+        }
+
+        function geocodeAddress(geocoder, resultsMap) {
+            var streetAddress = '@(Model.Venue.AddressDto.StreetAddress)';
+            var city = '@(Model.Venue.AddressDto.City)';
+            var state = '@(Model.Venue.AddressDto.State)';
+            var address = `${streetAddress} ${city}, ${state}`;
+            console.log(@(Model.GoogleMapsSrcUrl));
+            geocoder.geocode({ 'address': address }, function (results, status) {
+                if (status === 'OK') {
+                    resultsMap.setCenter(results[0].geometry.location);
+                    var marker = new google.maps.Marker({
+                        map: resultsMap,
+                        position: results[0].geometry.location
+                    });
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+    </script>
+    <script async defer            
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxZbqDjao9387kU1zK-_GwcUJ1-EiEqdQ=initMap">
+    </script>
+}

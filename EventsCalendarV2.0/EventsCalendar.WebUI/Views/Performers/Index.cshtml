@@ -1,0 +1,101 @@
+﻿@model IEnumerable<EventsCalendar.Core.ViewModels.PerformerViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="custom-control-inline">Performers coming to Denver!</h1>
+
+<p class="custom-control-inline float-right">
+    @Html.ActionLink("New Performer", "Create", "Performers", null, new { @class = "btn btn-primary btn-sm" })
+</p>
+<table class="table table-hover table-responsive-lg table-striped table-dark" id="myTable">
+    <thead>
+        <tr>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Performer.Name)
+            </th>
+            <th scope="col">
+                Genre / Topic
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Performer.PerformerTypeId)
+            </th>
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.Performer.TourName)
+            </th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Performer.Name)
+            </td>
+            <td>
+                @if (item.Performer.PerformerTypeId < 5)
+                {
+                    @Html.DisplayFor(modelItem => item.Performer.GenreDto.Name)
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.Performer.TopicDto.Name)
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Performer.PerformerType.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Performer.TourName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "Performers", new { id = item.Performer.Id }, new { @class = "btn btn-xs btn-secondary", @style = "display: inline;" })
+                @Html.ActionLink("Details", "Details", new { id = item.Performer.Id }, new { @class = "btn btn-xs btn-secondary", @style = "display: inline;" })
+                @using (Html.BeginForm(null, null, FormMethod.Post, new {@class = "__AjaxAntiForgeryForm"}))
+                {
+                    @Html.ActionLink("Delete", "Delete", "Performers", null, 
+                        new { data_performerId = item.Performer.Id, @class = "btn btn-xs btn-dark js-delete",
+                            @style = "display: inline;", @value = "Delete" })
+                    @Html.AntiForgeryToken()
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#myTable");
+            table.DataTable();
+
+            table.on("click",
+                ".js-delete",
+                function () {
+                    event.preventDefault();
+                    var button = $(this);
+//                    var form = $(".__AjaxAntiForgeryForm");
+//                    var token = $("input[name='__RequestVerificationToken']", form).val();
+
+                    bootbox.confirm("Are you sure you want to delete this performer?",
+                        function (result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "/Performers/Delete/" + button.data("performerid"),
+//                                    data: { __RequestVerificationToken: token },
+                                    method: "DELETE",
+                                    success: function () {
+                                        button.closest("tr").remove().draw();
+                                    }
+                                });
+                            };
+                        });
+                });
+        });
+    </script>
+}

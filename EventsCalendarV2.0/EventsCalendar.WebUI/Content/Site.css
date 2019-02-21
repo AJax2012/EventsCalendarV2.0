@@ -1,0 +1,149 @@
+﻿body {
+    padding-bottom: 20px;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("./images/RedRocks_Flag.jpg") no-repeat;
+    background-size: cover;
+    color: #BDBDBD;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea,
+.custom-file,
+#performer-image,
+#venue-image,
+#details-image {
+    max-width: 400px;
+    overflow: hidden;
+}
+
+#performer-image,
+#venue-image {
+    padding-top: 1em;
+}
+
+
+.body-content {
+    margin-top: .5%;
+    padding-top: .5%;
+}
+
+.navbar.transparent.navbar-inverse {
+    background-color: rgba(0,0,0,0.0) !important;
+    background-image: -webkit-gradient(linear, 50.00% 0.00%, 50.00% 100.00%, color-stop( 0%, rgba(0,0,0,0.00)),color-stop( 100%, rgba(0,0,0,0.00))) !important;
+    background-image: -webkit-linear-gradient(270deg,rgba(0,0,0,0.00) 0%,rgba(0,0,0,0.00) 100%) !important;
+    background-image: linear-gradient(180deg,rgba(0,0,0,0.00) 0%,rgba(0,0,0,0.00) 100%) !important;
+}
+
+.field-validation-error {
+    color: red;
+}
+
+.input-validation-error {
+    border: 4px solid red;
+}
+
+.btn-xs, .btn-group-xs > .btn {
+    padding: 0.15rem 0.4rem !important;
+    font-size: 0.8rem !important;
+    line-height: 1.5 !important;
+    border-radius: 0.2rem !important;
+    display: flex;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.jumbotron {
+    background-color: rgba(39, 43, 48, .9) !important;
+    padding-top: 1.7em !important;
+}
+
+.my-3 {
+    background-color: #bdbdbd;
+}
+
+#performer-img,
+#venue-img {
+    width: 100% !important;
+    height: auto !important;
+    margin-top: 10px !important;
+}
+
+/* TABLE SECTION */
+
+table {
+    margin-top: 2%;
+}
+
+td {
+    vertical-align: middle !important;
+    font-weight: 400;
+}
+
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.075) !important;
+}
+
+.table-active,
+.table-active > th,
+.table-active > td {
+    background-color: rgba(255, 255, 255, 0.075) !important;
+}
+
+.table-dark {
+    color: #C6C6C6;
+    background-color: rgba(39, 43, 48, .9) !important;
+}
+
+    .table-dark th,
+    .table-dark td,
+    .table-dark thead th {
+        border-color: rgba(0, 0, 0, 0.6) !important;
+    }
+
+    .table-dark.table-bordered {
+        border: 0;
+    }
+
+    .table-dark.table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(105, 105, 105, .05) !important;
+    }
+
+    .table-dark.table-hover tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.15) !important;
+    }
+
+#map {
+    width: 80%;
+    height: 20vh;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 3%;
+}
