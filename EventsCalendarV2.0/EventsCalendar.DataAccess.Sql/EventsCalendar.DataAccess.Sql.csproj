@@ -57,6 +57,10 @@
     <Compile Include="Migrations\201902201706481_RemoveImageUpload.Designer.cs">
       <DependentUpon>201902201706481_RemoveImageUpload.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902230431080_AddSeats.cs" />
+    <Compile Include="Migrations\201902230431080_AddSeats.Designer.cs">
+      <DependentUpon>201902230431080_AddSeats.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MsSqlGenericRepository.cs" />
     <Compile Include="MsSqlPerformanceRepository.cs" />
@@ -80,6 +84,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902201706481_RemoveImageUpload.resx">
       <DependentUpon>201902201706481_RemoveImageUpload.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902230431080_AddSeats.resx">
+      <DependentUpon>201902230431080_AddSeats.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

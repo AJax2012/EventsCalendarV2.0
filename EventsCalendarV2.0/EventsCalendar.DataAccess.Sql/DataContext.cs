@@ -17,6 +17,7 @@ namespace EventsCalendar.DataAccess.Sql
         public DbSet<Performance> Performances { get; set; }
         public DbSet<Performer> Performers { get; set; }
         public DbSet<PerformerType> PerformerTypes { get; set; }
+        public DbSet<Seat> Seats { get; set; }
         public DbSet<Topic> Topics { get; set; }
         public DbSet<Venue> Venues { get; set; }
     }
