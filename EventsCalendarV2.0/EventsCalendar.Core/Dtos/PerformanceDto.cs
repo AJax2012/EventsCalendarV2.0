@@ -1,14 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using EventsCalendar.Core.Validation;
 
 namespace EventsCalendar.Core.Dtos
 {
     public class PerformanceDto
     {
         public int Id { get; set; }
-
-        public decimal Price { get; set; }
 
         public string Description { get; set; }
 
@@ -22,5 +20,7 @@ namespace EventsCalendar.Core.Dtos
         public PerformerDto PerformerDto { get; set; }
 
         public VenueDto VenueDto { get; set; }
+
+        public ICollection<SeatDto> Seats { get; set; }
     }
 }

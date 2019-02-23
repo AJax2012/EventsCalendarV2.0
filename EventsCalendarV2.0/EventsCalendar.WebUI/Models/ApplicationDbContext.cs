@@ -19,11 +19,10 @@ namespace EventsCalendar.WebUI.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new AddressConfiguration());
-            modelBuilder.Configurations.Add(new GenreConfiguration());
             modelBuilder.Configurations.Add(new PerformanceConfiguration());
             modelBuilder.Configurations.Add(new PerformerConfiguration());
-            modelBuilder.Configurations.Add(new PerformerTypeConfiguration());
-            modelBuilder.Configurations.Add(new TopicConfiguration());
+            modelBuilder.Configurations.Add(new SeatConfiguration());
+            modelBuilder.Configurations.Add(new SeatTypeConfiguration());
             modelBuilder.Configurations.Add(new VenueConfiguration());
         }
     }

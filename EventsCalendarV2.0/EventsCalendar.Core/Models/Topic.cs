@@ -2,9 +2,11 @@
 
 namespace EventsCalendar.Core.Models
 {
-    public class Topic : BaseEntity
+    public enum Topic
     {
-        [Display(Name = "Topic")]
-        public string Name { get; set; }
+        Politics,
+        Racism,
+        Economics,
+        Economy
     }
 }

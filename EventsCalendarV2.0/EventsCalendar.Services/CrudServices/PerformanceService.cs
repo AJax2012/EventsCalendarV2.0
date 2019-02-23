@@ -13,14 +13,17 @@ namespace EventsCalendar.Services.CrudServices
     {
         private readonly IRepository<Performance> _context;
         private readonly IRepository<Performer> _performerContext;
+        private readonly IRepository<Seat> _seatContext;
         private readonly IRepository<Venue> _venueContext;
 
 
-        public PerformanceService(IRepository<Performance> context, 
+        public PerformanceService(IRepository<Performance> context,
+                                  IRepository<Seat> seatContext,
                                   IRepository<Performer> performerContext, 
                                   IRepository<Venue> venueContext)
         {
             _context = context;
+            _seatContext = seatContext;
             _performerContext = performerContext;
             _venueContext = venueContext;
         }
@@ -83,10 +86,24 @@ namespace EventsCalendar.Services.CrudServices
                 EventDateTime = performanceViewModel.Performance.EventDateTime,
                 IsActive = true,
                 PerformerId = performanceViewModel.Performance.PerformerDto.Id,
-                Price = performanceViewModel.Performance.Price,
                 SeatsRemaining = performanceViewModel.Performance.VenueDto.Capacity,
                 VenueId = performanceViewModel.Performance.VenueDto.Id
             };
+
+            foreach (SeatDto seatDto in performanceViewModel.Performance.Seats)
+            {
+                var seat = Mapper.Map<SeatDto, Seat>(seatDto);
+                try
+                {
+                    _seatContext.Commit();
+                }
+                catch (System.Exception)
+                {
+
+                    throw;
+                }
+                performance.Seats.Add(seat);
+            }
 
 //            performance.Venue.Performances.Add(performance);
 //            performance.Performer.Performances.Add(performance);
@@ -155,9 +172,10 @@ namespace EventsCalendar.Services.CrudServices
             performanceToEdit.EventDateTime = performanceViewModel.Performance.EventDateTime;
             performanceToEdit.IsActive = true;
             performanceToEdit.PerformerId = performanceViewModel.Performance.PerformerDto.Id;
-            performanceToEdit.Price = performanceViewModel.Performance.Price;
             performanceToEdit.SeatsRemaining = performanceViewModel.Performance.SeatsRemaining;
             performanceToEdit.VenueId = performanceViewModel.Performance.VenueDto.Id;
+
+            Mapper.Map(performanceViewModel.Performance.Seats, performanceToEdit.Seats);
 
             _context.Commit();
         }

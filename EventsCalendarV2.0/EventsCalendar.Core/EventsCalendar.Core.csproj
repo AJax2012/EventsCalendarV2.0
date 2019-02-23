@@ -89,6 +89,7 @@
     <Compile Include="Dtos\CustomImageDto.cs" />
     <Compile Include="Dtos\PerformerTypeDto.cs" />
     <Compile Include="Dtos\SeatDto.cs" />
+    <Compile Include="Dtos\SeatType.cs" />
     <Compile Include="Dtos\TopicDto.cs" />
     <Compile Include="Dtos\PerformanceDto.cs" />
     <Compile Include="Dtos\PerformerDto.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Models\PerformerType.cs" />
     <Compile Include="Models\Seat.cs" />
     <Compile Include="Models\SeatType.cs" />
+    <Compile Include="Models\SeatTypeLevels.cs" />
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Models\Venue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -24,25 +24,14 @@ namespace EventsCalendar.EntityConfigurations
                 .IsRequired()
                 .HasMaxLength(100);
 
-            //HasRequired(p => p.CustomImage)
-            //    .WithMany()
-            //    .HasForeignKey(p => p.CustomImageId)
-            //    .WillCascadeOnDelete(true);
+            Property(p => p.PerformerType)
+                .IsRequired();
 
-            HasRequired(p => p.PerformerType)
-                .WithMany(p => p.Performers)
-                .HasForeignKey(p => p.PerformerTypeId)
-                .WillCascadeOnDelete(false);
+            Property(p => p.Genre)
+                .IsOptional();
 
-            HasOptional(p => p.Genre)
-                .WithMany()
-                .HasForeignKey(p => p.GenreId)
-                .WillCascadeOnDelete(false);
-
-            HasOptional(p => p.Topic)
-                .WithMany()
-                .HasForeignKey(p => p.TopicId)
-                .WillCascadeOnDelete(false);
+            Property(p => p.Topic)
+                .IsOptional();
         }
     }
 }

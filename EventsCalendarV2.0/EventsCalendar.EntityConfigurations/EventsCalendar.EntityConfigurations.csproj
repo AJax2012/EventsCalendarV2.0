@@ -48,13 +48,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressConfiguration.cs" />
-    <Compile Include="GenreConfiguration.cs" />
-    <Compile Include="ModelBuilderConfigurations.cs" />
     <Compile Include="PerformanceConfiguration.cs" />
     <Compile Include="PerformerConfiguration.cs" />
-    <Compile Include="PerformerTypeConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TopicConfiguration.cs" />
+    <Compile Include="SeatConfiguration.cs" />
+    <Compile Include="SeatTypeConfiguration.cs" />
     <Compile Include="VenueConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EventsCalendar.Core.Models
 {
-    public sealed class Venue
+    public class Venue
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -13,10 +13,12 @@ namespace EventsCalendar.Core.Models
         public Address Address { get; set; }
         public string ImageUrl { get; set; }
         public ICollection<Performance> Performances { get; set; }
+        public ICollection<Seat> Seats { get; set; }
 
         public Venue()
         {
             Performances = new List<Performance>();
+            Seats = new List<Seat>();
         }
     }
 }

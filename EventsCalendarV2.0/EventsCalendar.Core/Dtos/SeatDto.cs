@@ -11,5 +11,7 @@ namespace EventsCalendar.Core.Dtos
     {
         public decimal Price { get; set; }
         public SeatType SeatType { get; set; }
+        public int PerformanceId { get; set; }
+        public PerformanceDto PerformanceDto { get; set; }
     }
 }

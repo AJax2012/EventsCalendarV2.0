@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EventsCalendar.Core.Models;
 
 namespace EventsCalendar.EntityConfigurations
@@ -23,8 +18,8 @@ namespace EventsCalendar.EntityConfigurations
             Property(p => p.EventDateTime)
                 .IsRequired();
 
-            Property(p => p.Price)
-                .HasPrecision(6, 2);
+            Property(p => p.SeatsRemaining)
+                .IsRequired();
 
             HasRequired(p => p.Venue)
                 .WithMany(v => v.Performances)
@@ -34,6 +29,10 @@ namespace EventsCalendar.EntityConfigurations
             HasRequired(p => p.Performer)
                 .WithMany(p => p.Performances)
                 .HasForeignKey(p => p.PerformerId)
+                .WillCascadeOnDelete(false);
+
+            HasMany(p => p.Seats)
+                .WithOptional()
                 .WillCascadeOnDelete(false);
         }
     }

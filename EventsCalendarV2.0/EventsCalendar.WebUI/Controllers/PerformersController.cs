@@ -9,7 +9,6 @@ namespace EventsCalendar.WebUI.Controllers
     public class PerformersController : Controller
     {
         private readonly IPerformerService _performerService;
-        private readonly ImageIoService _imageIoService = new ImageIoService();
 
         public PerformersController(IPerformerService performerService)
         {

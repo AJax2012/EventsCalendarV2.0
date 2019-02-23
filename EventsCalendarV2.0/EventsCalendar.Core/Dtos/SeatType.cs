@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using EventsCalendar.Core.Models;
 
-namespace EventsCalendar.Core.Models
+namespace EventsCalendar.Core.Dtos
 {
-    public class SeatType : BaseEntity
+    class SeatType
     {
         public SeatTypeLevels SeatTypeLevels { get; set; }
         public decimal? Price { get; set; }

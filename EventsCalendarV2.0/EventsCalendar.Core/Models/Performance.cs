@@ -1,12 +1,11 @@
 ﻿using System;
-using EventsCalendar.Core.Validation;
+using System.Collections.Generic;
 
 namespace EventsCalendar.Core.Models
 {
     public class Performance
     {
         public int Id { get; set; }
-        public decimal Price { get; set; }
         public int SeatsRemaining { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
@@ -15,5 +14,11 @@ namespace EventsCalendar.Core.Models
         public int PerformerId { get; set; }
         public Venue Venue { get; set; }
         public int VenueId { get; set; }
+        public ICollection<Seat> Seats { get; set; }
+
+        public Performance()
+        {
+            Seats = new List<Seat>();
+        }
     }
 }

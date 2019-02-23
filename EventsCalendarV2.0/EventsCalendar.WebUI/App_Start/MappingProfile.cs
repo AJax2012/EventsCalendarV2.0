@@ -17,6 +17,9 @@ namespace EventsCalendar.WebUI
                 .ForMember(d => d.VenueDto, opt => opt.MapFrom(p => p.Venue))
                 .ReverseMap();
 
+            CreateMap<Seat, SeatDto>()
+                .ReverseMap();
+
             CreateMap<PerformanceDto, PerformanceViewModel > ()
                 .ForMember(d => d.Performance, opt => opt.MapFrom(s => s))
                 .ReverseMap();

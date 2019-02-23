@@ -61,6 +61,14 @@
     <Compile Include="Migrations\201902230431080_AddSeats.Designer.cs">
       <DependentUpon>201902230431080_AddSeats.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902232007136_ChangeSetTypesToEnumsAndAddSeatTypes.cs" />
+    <Compile Include="Migrations\201902232007136_ChangeSetTypesToEnumsAndAddSeatTypes.Designer.cs">
+      <DependentUpon>201902232007136_ChangeSetTypesToEnumsAndAddSeatTypes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902232023375_UpdateSeats.cs" />
+    <Compile Include="Migrations\201902232023375_UpdateSeats.Designer.cs">
+      <DependentUpon>201902232023375_UpdateSeats.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MsSqlGenericRepository.cs" />
     <Compile Include="MsSqlPerformanceRepository.cs" />
@@ -87,6 +95,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902230431080_AddSeats.resx">
       <DependentUpon>201902230431080_AddSeats.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902232007136_ChangeSetTypesToEnumsAndAddSeatTypes.resx">
+      <DependentUpon>201902232007136_ChangeSetTypesToEnumsAndAddSeatTypes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902232023375_UpdateSeats.resx">
+      <DependentUpon>201902232023375_UpdateSeats.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

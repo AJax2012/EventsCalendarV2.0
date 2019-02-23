@@ -34,6 +34,11 @@ namespace EventsCalendar.EntityConfigurations
                 .WithRequired(p => p.Venue)
                 .HasForeignKey(p => p.VenueId)
                 .WillCascadeOnDelete(false);
+
+            HasMany(v => v.Seats)
+                .WithRequired(s => s.Venue)
+                .HasForeignKey(s => s.VenueId)
+                .WillCascadeOnDelete(false);
         }
     }
 }

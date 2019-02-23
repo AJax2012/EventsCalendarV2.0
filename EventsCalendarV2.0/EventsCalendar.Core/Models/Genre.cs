@@ -2,9 +2,13 @@
 
 namespace EventsCalendar.Core.Models
 {
-    public class Genre : BaseEntity
+    public enum Genre
     {
-        [Display(Name = "Genre")]
-        public string Name { get; set; }
+        Rock,
+        Classical,
+        Classic_Rock,
+        Jazz,
+        Blues,
+        Alternative
     }
 }
