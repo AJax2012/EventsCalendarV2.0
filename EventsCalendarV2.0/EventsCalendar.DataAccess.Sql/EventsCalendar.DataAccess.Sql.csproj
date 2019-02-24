@@ -69,10 +69,16 @@
     <Compile Include="Migrations\201902232023375_UpdateSeats.Designer.cs">
       <DependentUpon>201902232023375_UpdateSeats.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902232358322_Reservations.cs" />
+    <Compile Include="Migrations\201902232358322_Reservations.Designer.cs">
+      <DependentUpon>201902232358322_Reservations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MsSqlGenericRepository.cs" />
     <Compile Include="MsSqlPerformanceRepository.cs" />
     <Compile Include="MsSqlPerformerRepository.cs" />
+    <Compile Include="MsSqlReservationRepository.cs" />
+    <Compile Include="MsSqlSeatRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MsSqlVenueRepository.cs" />
   </ItemGroup>
@@ -101,6 +107,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902232023375_UpdateSeats.resx">
       <DependentUpon>201902232023375_UpdateSeats.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902232358322_Reservations.resx">
+      <DependentUpon>201902232358322_Reservations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

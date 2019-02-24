@@ -31,9 +31,10 @@ namespace EventsCalendar.EntityConfigurations
                 .HasForeignKey(p => p.PerformerId)
                 .WillCascadeOnDelete(false);
 
-            HasMany(p => p.Seats)
-                .WithOptional()
-                .WillCascadeOnDelete(false);
+            HasMany(p => p.Reservations)
+                .WithRequired(r => r.Performance)
+                .HasForeignKey(r => r.PerformanceId)
+                .WillCascadeOnDelete(true);
         }
     }
 }

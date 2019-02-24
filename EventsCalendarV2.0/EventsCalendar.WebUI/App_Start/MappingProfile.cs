@@ -50,6 +50,9 @@ namespace EventsCalendar.WebUI
 
             CreateMap<PerformerType, PerformerTypeDto>()
                 .ReverseMap();
+
+            CreateMap<Reservation, ReservationDto>()
+                .ReverseMap();
         }
     }
 }

@@ -18,7 +18,6 @@ namespace EventsCalendar.DataAccess.Sql
         public IEnumerable<Performer> Collection()
         {
             return Context.Performers
-                //.Include(path => path.CustomImage)
                 .Include(p => p.PerformerType)
                 .Include(p => p.Genre)
                 .Include(p => p.Topic)
@@ -43,7 +42,6 @@ namespace EventsCalendar.DataAccess.Sql
         public Performer Find(int id)
         {
             return Context.Performers
-                //.Include(p => p.CustomImage)
                 .Include(p => p.PerformerType)
                 .Include(p => p.Genre)
                 .Include(p => p.Topic)

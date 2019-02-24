@@ -29,6 +29,7 @@ namespace EventsCalendar.DataAccess.Sql
         {
             var venue = Context.Venues
                 .Include(v => v.Address)
+                .Include(v => v.Seats)
                 .Single(v => v.Id == id);
 
             if (Context.Entry(venue).State == EntityState.Detached)

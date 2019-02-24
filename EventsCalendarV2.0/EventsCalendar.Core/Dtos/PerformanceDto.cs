@@ -21,6 +21,6 @@ namespace EventsCalendar.Core.Dtos
 
         public VenueDto VenueDto { get; set; }
 
-        public ICollection<SeatDto> Seats { get; set; }
+        public ICollection<ReservationDto> ReservationDtos { get; set; }
     }
 }

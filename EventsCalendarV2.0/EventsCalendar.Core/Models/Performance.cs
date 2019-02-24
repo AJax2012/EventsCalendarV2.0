@@ -14,11 +14,11 @@ namespace EventsCalendar.Core.Models
         public int PerformerId { get; set; }
         public Venue Venue { get; set; }
         public int VenueId { get; set; }
-        public ICollection<Seat> Seats { get; set; }
+        public ICollection<Reservation> Reservations { get; set; }
 
         public Performance()
         {
-            Seats = new List<Seat>();
+            Reservations = new List<Reservation>();
         }
     }
 }

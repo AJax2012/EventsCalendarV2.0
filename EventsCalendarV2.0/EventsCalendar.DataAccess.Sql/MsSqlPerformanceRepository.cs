@@ -20,6 +20,7 @@ namespace EventsCalendar.DataAccess.Sql
             return Context.Performances
                 .Include(p => p.Performer)
                 .Include(p => p.Venue)
+                .Include(p => p.Reservations)
                 .ToList();
         }
 
@@ -43,6 +44,7 @@ namespace EventsCalendar.DataAccess.Sql
             return Context.Performances
                 .Include(p => p.Performer)
                 .Include(p => p.Venue)
+                .Include(p => p.Reservations)
                 .SingleOrDefault(v => v.Id == id);
         }
 

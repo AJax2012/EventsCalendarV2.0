@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace EventsCalendar.Core.Contracts
 {
-    public interface IRepository<T>
+    public interface IGuidRepository<T>
     {
         IEnumerable<T> Collection();
         void Commit();
-        void Delete(int id);
-        T Find(int id);
+        void Delete(Guid id);
+        T Find(Guid id);
         void Insert(T t);
         void Update(T t);
     }

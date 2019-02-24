@@ -51,6 +51,7 @@
     <Compile Include="PerformanceConfiguration.cs" />
     <Compile Include="PerformerConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReservationConfiguration.cs" />
     <Compile Include="SeatConfiguration.cs" />
     <Compile Include="SeatTypeConfiguration.cs" />
     <Compile Include="VenueConfiguration.cs" />

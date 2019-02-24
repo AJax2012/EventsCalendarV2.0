@@ -14,10 +14,6 @@ namespace EventsCalendar.EntityConfigurations
 
             Property(s => s.SeatTypeLevels)
                 .IsRequired();
-
-            Property(s => s.Price)
-                .HasPrecision(6, 2)
-                .IsOptional();
         }
     }
 }

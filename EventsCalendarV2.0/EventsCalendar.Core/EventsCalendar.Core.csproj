@@ -80,16 +80,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contracts\IImageIoService.cs" />
+    <Compile Include="Contracts\IGuidRepository.cs" />
     <Compile Include="Contracts\IPerformanceService.cs" />
     <Compile Include="Contracts\IPerformerService.cs" />
     <Compile Include="Contracts\IRepository.cs" />
+    <Compile Include="Contracts\IReservationService.cs" />
+    <Compile Include="Contracts\ISeatService.cs" />
     <Compile Include="Contracts\IVenueService.cs" />
     <Compile Include="Dtos\AddressDto.cs" />
     <Compile Include="Dtos\CustomImageDto.cs" />
     <Compile Include="Dtos\PerformerTypeDto.cs" />
+    <Compile Include="Dtos\ReservationDto.cs" />
     <Compile Include="Dtos\SeatDto.cs" />
-    <Compile Include="Dtos\SeatType.cs" />
+    <Compile Include="Dtos\SeatTypeDto.cs" />
     <Compile Include="Dtos\TopicDto.cs" />
     <Compile Include="Dtos\PerformanceDto.cs" />
     <Compile Include="Dtos\PerformerDto.cs" />
@@ -102,6 +105,7 @@
     <Compile Include="Models\Performance.cs" />
     <Compile Include="Models\Performer.cs" />
     <Compile Include="Models\PerformerType.cs" />
+    <Compile Include="Models\Reservation.cs" />
     <Compile Include="Models\Seat.cs" />
     <Compile Include="Models\SeatType.cs" />
     <Compile Include="Models\SeatTypeLevels.cs" />

@@ -14,17 +14,20 @@ namespace EventsCalendar.Services.CrudServices
         private readonly IRepository<Performance> _context;
         private readonly IRepository<Performer> _performerContext;
         private readonly IRepository<Seat> _seatContext;
+        private readonly IGuidRepository<Reservation> _reservationContext;
         private readonly IRepository<Venue> _venueContext;
 
 
         public PerformanceService(IRepository<Performance> context,
                                   IRepository<Seat> seatContext,
                                   IRepository<Performer> performerContext, 
+                                  IGuidRepository<Reservation> reservationContext,
                                   IRepository<Venue> venueContext)
         {
             _context = context;
             _seatContext = seatContext;
             _performerContext = performerContext;
+            _reservationContext = reservationContext;
             _venueContext = venueContext;
         }
 
@@ -90,23 +93,20 @@ namespace EventsCalendar.Services.CrudServices
                 VenueId = performanceViewModel.Performance.VenueDto.Id
             };
 
-            foreach (SeatDto seatDto in performanceViewModel.Performance.Seats)
+            foreach (ReservationDto reservationDto in performanceViewModel.Performance.ReservationDtos)
             {
-                var seat = Mapper.Map<SeatDto, Seat>(seatDto);
+                var reservation = Mapper.Map<ReservationDto, Reservation>(reservationDto);
                 try
                 {
-                    _seatContext.Commit();
+                    _reservationContext.Commit();
                 }
                 catch (System.Exception)
                 {
 
                     throw;
                 }
-                performance.Seats.Add(seat);
+                performance.Reservations.Add(reservation);
             }
-
-//            performance.Venue.Performances.Add(performance);
-//            performance.Performer.Performances.Add(performance);
 
             _context.Insert(performance);
             _context.Commit();
@@ -175,7 +175,7 @@ namespace EventsCalendar.Services.CrudServices
             performanceToEdit.SeatsRemaining = performanceViewModel.Performance.SeatsRemaining;
             performanceToEdit.VenueId = performanceViewModel.Performance.VenueDto.Id;
 
-            Mapper.Map(performanceViewModel.Performance.Seats, performanceToEdit.Seats);
+            Mapper.Map(performanceViewModel.Performance.ReservationDtos, performanceToEdit.Reservations);
 
             _context.Commit();
         }

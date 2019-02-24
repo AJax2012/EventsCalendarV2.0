@@ -1,12 +1,17 @@
 ﻿using EventsCalendar.Core.Models;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace EventsCalendar.EntityConfigurations
 {
-    public class SeatConfiguration : EntityTypeConfiguration<Seat>
+    class ReservationConfiguration : EntityTypeConfiguration<Reservation>
     {
-        public SeatConfiguration()
+        public ReservationConfiguration()
         {
             HasIndex(s => s.Id)
                 .IsUnique();
@@ -15,10 +20,12 @@ namespace EventsCalendar.EntityConfigurations
                 .HasDatabaseGeneratedOption(
                     DatabaseGeneratedOption.Identity);
 
-            HasMany(s => s.Reservations)
-                .WithRequired(r => r.Seat)
-                .HasForeignKey(r => r.SeatId)
-                .WillCascadeOnDelete(true);
+            Property(s => s.Price)
+                .HasPrecision(6, 2)
+                .IsRequired();
+
+            Property(s => s.IsTaken)
+                .IsRequired();
         }
     }
 }
