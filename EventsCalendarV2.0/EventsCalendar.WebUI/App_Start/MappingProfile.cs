@@ -52,6 +52,8 @@ namespace EventsCalendar.WebUI
                 .ReverseMap();
 
             CreateMap<Reservation, ReservationDto>()
+                .ForMember(r => r.Performance, opt => opt.MapFrom(s => s.Performance))
+                .ForMember(r => r.Seat, opt => opt.MapFrom(s => s.Seat))
                 .ReverseMap();
         }
     }

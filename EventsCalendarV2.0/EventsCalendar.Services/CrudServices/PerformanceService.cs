@@ -13,19 +13,15 @@ namespace EventsCalendar.Services.CrudServices
     {
         private readonly IRepository<Performance> _context;
         private readonly IRepository<Performer> _performerContext;
-        private readonly IRepository<Seat> _seatContext;
         private readonly IGuidRepository<Reservation> _reservationContext;
         private readonly IRepository<Venue> _venueContext;
 
-
         public PerformanceService(IRepository<Performance> context,
-                                  IRepository<Seat> seatContext,
                                   IRepository<Performer> performerContext, 
                                   IGuidRepository<Reservation> reservationContext,
                                   IRepository<Venue> venueContext)
         {
             _context = context;
-            _seatContext = seatContext;
             _performerContext = performerContext;
             _reservationContext = reservationContext;
             _venueContext = venueContext;
@@ -72,11 +68,11 @@ namespace EventsCalendar.Services.CrudServices
                 Performance = new PerformanceDto(),
                 Performers = Mapper.Map
                     <IEnumerable<Performer>, ICollection<PerformerDto>>
-                    (_performerContext.Collection()),
+                        (_performerContext.Collection()),
 
                 Venues = Mapper.Map
                     <IEnumerable<Venue>, ICollection<VenueDto>>
-                    (_venueContext.Collection())
+                        (_venueContext.Collection())
             };
             
             return viewModel;
@@ -102,7 +98,6 @@ namespace EventsCalendar.Services.CrudServices
                 }
                 catch (System.Exception)
                 {
-
                     throw;
                 }
                 performance.Reservations.Add(reservation);
