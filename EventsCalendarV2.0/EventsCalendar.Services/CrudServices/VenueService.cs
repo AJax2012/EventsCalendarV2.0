@@ -14,14 +14,17 @@ namespace EventsCalendar.Services.CrudServices
         private readonly IRepository<Venue> _context;
         private readonly IRepository<Address> _addressContext;
         private readonly IRepository<Performance> _performanceContext;
+        private readonly IRepository<Seat> _seatContext;
         private readonly string DefaultImgSrc = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJa4VlErDGxyBl-tQu41odZDe-qLvI1xNDALRMYxTITZOb3DslFg";
 
         public VenueService(IRepository<Venue> context, 
                             IRepository<Address> addressContext, 
+                            IRepository<Seat> seatContext,
                             IRepository<Performance> performanceContext)
         {
             _context = context;
             _addressContext = addressContext;
+            _seatContext = seatContext;
             _performanceContext = performanceContext;
         }
 
@@ -86,6 +89,8 @@ namespace EventsCalendar.Services.CrudServices
                 }
             };
 
+            Mapper.Map(venueViewModel.Venue.SeatsDto, venue.Seats);
+
             if (string.IsNullOrWhiteSpace(venue.ImageUrl))
                 venue.ImageUrl = DefaultImgSrc;
 
@@ -121,6 +126,8 @@ namespace EventsCalendar.Services.CrudServices
             venueToEdit.Address.ZipCode = venueViewModel.Venue.AddressDto.ZipCode;
             venueToEdit.IsActive = true;
 
+            Mapper.Map(venueViewModel.Venue.SeatsDto, venueToEdit.Seats);
+
             _context.Commit();
             _addressContext.Commit();
         }
@@ -140,6 +147,15 @@ namespace EventsCalendar.Services.CrudServices
             {
                 _performanceContext.Delete(performance.Id);
                 _performanceContext.Commit();
+            }
+
+            List<Seat> seats = _seatContext.Collection()
+                .Where(s => s.VenueId == id).ToList();
+
+            foreach (var seat in seats)
+            {
+                _seatContext.Delete(seat.Id);
+                _seatContext.Commit();
             }
 
             _context.Delete(id);

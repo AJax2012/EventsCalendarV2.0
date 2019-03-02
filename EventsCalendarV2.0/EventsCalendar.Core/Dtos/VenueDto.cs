@@ -11,8 +11,6 @@ namespace EventsCalendar.Core.Dtos
         [Display(Name = "Venue")]
         public string Name { get; set; }
 
-        public int Capacity { get; set; }
-
         [Display(Name="Image")]
         public string ImageUrl { get; set; }
 
@@ -24,5 +22,7 @@ namespace EventsCalendar.Core.Dtos
         public AddressDto AddressDto { get; set; }
 
         public ICollection<PerformanceDto> Performances { get; set; }
+
+        public ICollection<SeatDto> SeatsDto { get; set; }
     }
 }
