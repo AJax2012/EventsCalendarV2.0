@@ -70,7 +70,7 @@ namespace EventsCalendar.DataAccess.Sql
             for (var i = 0; i <= numberOfSeats; i++)
             {
                 DataRow row = dt.NewRow();
-                row["SeatType_Id"] = level;
+                row["SeatType_Id"] = (int) level;
                 row["VenueId"] = venueId;
                 dt.Rows.Add(row);
             }
@@ -103,6 +103,28 @@ namespace EventsCalendar.DataAccess.Sql
                     }
                 }
             } 
+        }
+
+        public void BulkDeleteVenueSeats(int venueId)
+        {
+            using (SqlConnection sourceConnection = new SqlConnection(connectionString))
+            {
+                sourceConnection.Open();
+
+                try
+                {
+                    var venueIdParam = new SqlParameter("@venueId", venueId);
+                    Context.Database.ExecuteSqlCommand("EXEC dbo.BulkDeleteVenueSeats @venueId", venueIdParam);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    sourceConnection.Close();
+                }
+            }
         }
 
         private DataTable MakeTable()

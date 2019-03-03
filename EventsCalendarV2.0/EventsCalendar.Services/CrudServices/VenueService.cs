@@ -113,12 +113,12 @@ namespace EventsCalendar.Services.CrudServices
             var moderate = venueViewModel.SeatCapacity.Moderate;
             var premier = venueViewModel.SeatCapacity.Premier;
 
-            _seatRepository.BulkInsertSeats(budget, SeatTypeLevel.Budget, venueViewModel.SeatCapacity.Budget);
-            _seatRepository.BulkInsertSeats(moderate, SeatTypeLevel.Moderate, venueViewModel.SeatCapacity.Moderate);
-            _seatRepository.BulkInsertSeats(premier, SeatTypeLevel.Premier, venueViewModel.SeatCapacity.Premier);
-
             _repository.Insert(venue);
             _repository.Commit();
+
+            _seatRepository.BulkInsertSeats(budget, SeatTypeLevel.Budget, venue.Id);
+            _seatRepository.BulkInsertSeats(moderate, SeatTypeLevel.Moderate, venue.Id);
+            _seatRepository.BulkInsertSeats(premier, SeatTypeLevel.Premier, venue.Id);
         }
 
         public VenueViewModel ReturnVenueViewModel(int id)
@@ -171,17 +171,9 @@ namespace EventsCalendar.Services.CrudServices
                 _performanceRepository.Commit();
             }
 
-            List<Seat> seats = _seatRepository.Collection()
-                .Where(s => s.VenueId == id).ToList();
-
-            foreach (var seat in seats)
-            {
-                _seatRepository.Delete(seat.Id);
-                _seatRepository.Commit();
-            }
-
             _repository.Delete(id);
             _addressRepository.Delete(venue.AddressId);
+            _seatRepository.BulkDeleteVenueSeats(id);
             _repository.Commit();
             _addressRepository.Commit();
         }
