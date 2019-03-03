@@ -50,12 +50,10 @@ namespace EventsCalendar.WebUI
 
             CreateMap<Venue, VenueDto>()
                 .ForMember(d => d.AddressDto, opt => opt.MapFrom(v => v.Address))
-                .ForMember(d => d.SeatsDto, opt => opt.MapFrom(v => v.Seats))
                 .ReverseMap();
 
             CreateMap<VenueDto, VenueViewModel>()
                 .ForMember(d => d.Venue, opt => opt.MapFrom(s => s))
-                .ForMember(d => d.Venue.SeatsDto, opt => opt.MapFrom(v => v.SeatsDto))
                 .ReverseMap();
         }
     }

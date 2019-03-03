@@ -54,6 +54,11 @@ namespace EventsCalendar.DataAccess.InMemory
             _items.Add(t);
         }
 
+        public void ToggleChangeDetection(bool enabled)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Update(T performer)
         {
             T tToUpdate = _items.Find(i => i.Id == performer.Id);

@@ -26,9 +26,6 @@
             <th scope="col">
                 @Html.DisplayNameFor(model => model.Performance.VenueDto.Name)
             </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.Performance.Price)
-            </th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -55,9 +52,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Performance.VenueDto.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Performance.Price)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", "Performances", new { id = item.Performance.Id }, new { @class = "btn btn-xs btn-secondary", @style = "display: inline;" })

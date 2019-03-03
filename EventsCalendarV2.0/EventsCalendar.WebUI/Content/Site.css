@@ -26,8 +26,14 @@ textarea,
 #performer-image,
 #venue-image,
 #details-image {
-    max-width: 400px;
+    max-width: 50vw;
+    margin-left: auto;
+    margin-right: auto;
     overflow: hidden;
+}
+
+.seats {
+    text-align: center;
 }
 
 #performer-image,

@@ -5,59 +5,63 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit</h2>
+<div class="offset-2 col-lg-6">
+    <h2>Edit</h2>
 
 
-@using (Html.BeginForm("Save", "Performances"))
-{
-    @Html.AntiForgeryToken()
-    @Html.HiddenFor(model => model.Performance.Id)
+    @using (Html.BeginForm("Save", "Performances"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Performance.Id)
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Performance.PerformerDto.Name)
-        @Html.DropDownListFor(model => model.Performance.PerformerDto.Id, new SelectList(Model.Performers, "Id", "Name"), "Select Performer", new { @class = "form-control" })
-    </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Performance.PerformerDto.Name)
+            @Html.DropDownListFor(model => model.Performance.PerformerDto.Id, new SelectList(Model.Performers, "Id", "Name"), "Select Performer", new { @class = "form-control" })
+        </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.EventDate)
-        @Html.EditorFor(model => model.EventDate, new {htmlAttributes = new {@class = "form-control", @id = "datepicker", @placeholder = DateTime.Today.ToString("M/d/yyyy") } })
-        @Html.ValidationMessageFor(model => model.EventDate, "", new {@class = "text-danger"})                
-    </div>
+        <div class="row">
+            <div class="form-group col">
+                @Html.LabelFor(model => model.EventDate)
+                @Html.EditorFor(model => model.EventDate, new { htmlAttributes = new { @class = "form-control", @id = "datepicker", @placeholder = DateTime.Today.ToString("M/d/yyyy") } })
+                @Html.ValidationMessageFor(model => model.EventDate, "", new { @class = "text-danger" })
+            </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.EventTime)
-        @Html.EditorFor(model => model.EventTime, new { htmlAttributes = new { @class = "form-control timepicker", @id = "timepicker", @placeholder = DateTime.Today.AddHours(19).AddMinutes(30).ToString("h:m tt") } })
-        @Html.ValidationMessageFor(model => model.Performance.EventDateTime, "", new { @class = "text-danger" })
-    </div>
+            <div class="form-group col">
+                @Html.LabelFor(model => model.EventTime)
+                @Html.EditorFor(model => model.EventTime, new { htmlAttributes = new { @class = "form-control timepicker", @id = "timepicker", @placeholder = DateTime.Today.AddHours(19).AddMinutes(30).ToString("h:m tt") } })
+                @Html.ValidationMessageFor(model => model.Performance.EventDateTime, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Performance.Price)
-        @Html.EditorFor(model => model.Performance.Price, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.Performance.Price, "", new { @class = "text-danger" })
-    </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.Performance.Price)
+                @Html.EditorFor(model => model.Performance.Price, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Performance.Price, "", new { @class = "text-danger" })
+            </div>*@
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Performance.VenueDto.Id)
-        @Html.DropDownListFor(model => model.Performance.VenueDto.Id, new SelectList(Model.Venues, "Id", "Name"), "Select Venue", new { @class = "form-control" })
-    </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Performance.VenueDto.Id)
+            @Html.DropDownListFor(model => model.Performance.VenueDto.Id, new SelectList(Model.Venues, "Id", "Name"), "Select Venue", new { @class = "form-control" })
+        </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Performance.Description)
-        @Html.TextAreaFor(model => model.Performance.Description, 6, 50, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Performance.Description, "", new { @class = "text-danger" })
-    </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Performance.Description)
+            @Html.TextAreaFor(model => model.Performance.Description, 6, 50, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Performance.Description, "", new { @class = "text-danger" })
+        </div>
 
-    
 
-    <button type="submit" class="btn btn-primary">Submit</button>
-    @Html.ActionLink("Cancel", "Index", "Performances", null, new { @class = "btn btn-dark" })
-}
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+        @Html.ActionLink("Cancel", "Index", "Performances", null, new { @class = "btn btn-dark" })
+    }
+</div>
 
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
-        $(document).ready( function() {
+        $(document).ready(function () {
             $('#datepicker').datepicker({
                 minDate: 0,
                 dateFormat: 'm/d/yy'

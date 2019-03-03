@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using AutoMapper;
@@ -6,6 +7,7 @@ using EventsCalendar.Core.Contracts;
 using EventsCalendar.Core.Dtos;
 using EventsCalendar.Core.Models;
 using EventsCalendar.Core.ViewModels;
+using EventsCalendar.Services.Helpers;
 
 namespace EventsCalendar.Services.CrudServices
 {
@@ -14,23 +16,14 @@ namespace EventsCalendar.Services.CrudServices
         private readonly IRepository<Performer> _context;
         private readonly IRepository<CustomImage> _imageContext;
         private readonly IRepository<Performance> _performanceContext;
-        private readonly IRepository<PerformerType> _performerTypeContext;
-        private readonly IRepository<Genre> _genreContext;
-        private readonly IRepository<Topic> _topicContext;
         private readonly string DefaultImgSrc = "https://static1.squarespace.com/static/5ba45d79ab1a620ab25a33da/t/5bf46b1f0e2e72ab66b383f1/1543426766008/Blank+Profile+Pic.png?format=300w";
 
         public PerformerService(IRepository<Performer> context,
                                 IRepository<CustomImage> imageContext,
-                                IRepository<Genre> genreContext, 
-                                IRepository<Topic> topicContext, 
-                                IRepository<PerformerType> performerTypeContext, 
                                 IRepository<Performance> performanceContext)
         {
             _context = context;
             _imageContext = imageContext;
-            _genreContext = genreContext;
-            _topicContext = topicContext;
-            _performerTypeContext = performerTypeContext;
             _performanceContext = performanceContext;
         }
 
@@ -69,19 +62,12 @@ namespace EventsCalendar.Services.CrudServices
             {
                 Performer = new PerformerDto(),
                 //Image = image,
-                ImgSrc = DefaultImgSrc,
-                PerformerTypes = Mapper.Map
-                    <IEnumerable<PerformerType>, ICollection<PerformerTypeDto>>
-                        (_performerTypeContext.Collection()),
-
-                Genres = Mapper.Map
-                    <IEnumerable<Genre>, ICollection<GenreDto>>
-                    (_genreContext.Collection()),
-
-                Topics = Mapper.Map
-                    <IEnumerable<Topic>, ICollection<TopicDto>>
-                    (_topicContext.Collection())
+                ImgSrc = DefaultImgSrc
             };
+
+            Mapper.Map(EnumUtil.GetValues<PerformerType>(), viewModel.PerformerTypes);
+            Mapper.Map(EnumUtil.GetValues<Genre>(), viewModel.Genres);
+            Mapper.Map(EnumUtil.GetValues<Topic>(), viewModel.Topics);
 
             return viewModel;
         }
@@ -128,22 +114,13 @@ namespace EventsCalendar.Services.CrudServices
 
             var viewModel = new PerformerViewModel
             {
-                Performer = Mapper.Map<Performer, PerformerDto>(performer),
-                ImgSrc = performer.ImageUrl,
-
-                Genres = Mapper.Map
-                    <IEnumerable<Genre>, ICollection<GenreDto>>
-                    (_genreContext.Collection()),
-
-                Topics = Mapper.Map
-                    <IEnumerable<Topic>, ICollection<TopicDto>>
-                    (_topicContext.Collection()),
-
-                PerformerTypes = 
-                    Mapper.Map<IEnumerable<PerformerType>, 
-                               ICollection<PerformerTypeDto>>
-                        (_performerTypeContext.Collection())
+                ImgSrc = performer.ImageUrl
             };
+
+            Mapper.Map(performer, viewModel.Performer);
+            Mapper.Map(EnumUtil.GetValues<PerformerType>(), viewModel.PerformerTypes);
+            Mapper.Map(EnumUtil.GetValues<Genre>(), viewModel.Genres);
+            Mapper.Map(EnumUtil.GetValues<Topic>(), viewModel.Topics);
 
             return viewModel;
         }

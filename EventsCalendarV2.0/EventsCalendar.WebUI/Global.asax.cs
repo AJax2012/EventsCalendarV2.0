@@ -35,6 +35,8 @@ namespace EventsCalendar.WebUI
             builder.RegisterType(typeof(MsSqlVenueRepository)).As(typeof(IRepository<Venue>));
             builder.RegisterType(typeof(MsSqlPerformerRepository)).As(typeof(IRepository<Performer>));
             builder.RegisterType(typeof(MsSqlPerformanceRepository)).As(typeof(IRepository<Performance>));
+            builder.RegisterType(typeof(MsSqlSeatRepository)).As(typeof(ISeatRepository));
+            builder.RegisterType(typeof(MsSqlReservationRepository)).As(typeof(IGuidRepository<Reservation>));
             builder.RegisterType(typeof(PerformanceService)).As(typeof(IPerformanceService));
             builder.RegisterType(typeof(PerformerService)).As(typeof(IPerformerService));
             builder.RegisterType(typeof(VenueService)).As(typeof(IVenueService));

@@ -3,12 +3,17 @@ using EventsCalendar.Core.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+using System;
 
 namespace EventsCalendar.DataAccess.Sql
 {
-    class MsSqlSeatRepository : IRepository<Seat>
+    public class MsSqlSeatRepository : ISeatRepository
     {
         internal DataContext Context;
+        internal readonly string connectionString = ConfigurationManager.ConnectionStrings["EventCalendarDataContext"].ConnectionString;
 
         public MsSqlSeatRepository(DataContext context)
         {
@@ -51,6 +56,72 @@ namespace EventsCalendar.DataAccess.Sql
         {
             Context.Seats.Attach(seat);
             Context.Entry(seat).State = EntityState.Modified;
+        }
+
+        public void ToggleChangeDetection(bool enabled)
+        {
+            Context.Configuration.AutoDetectChangesEnabled = enabled;
+        }
+
+        public void BulkInsertSeats(int numberOfSeats, SeatTypeLevel level, int venueId)
+        {
+            var dt = MakeTable();
+
+            for (var i = 0; i <= numberOfSeats; i++)
+            {
+                DataRow row = dt.NewRow();
+                row["SeatType_Id"] = level;
+                row["VenueId"] = venueId;
+                dt.Rows.Add(row);
+            }
+
+            using (SqlConnection sourceConnection = new SqlConnection(connectionString))
+            {
+                sourceConnection.Open();
+
+                using (SqlBulkCopy bulkCopy = new SqlBulkCopy(
+                    connectionString, SqlBulkCopyOptions.KeepIdentity))
+                {
+                    bulkCopy.BatchSize = numberOfSeats;
+
+                    bulkCopy.DestinationTableName = "Seats";
+
+                    try
+                    {
+                        bulkCopy.ColumnMappings.Add("SeatType_Id", "SeatType_Id");
+                        bulkCopy.ColumnMappings.Add("VenueId", "VenueId");
+                        bulkCopy.WriteToServerAsync(dt);
+                        Console.WriteLine("Bulk data stored successfully");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    finally
+                    {
+                        sourceConnection.Close();
+                    }
+                }
+            } 
+        }
+
+        private DataTable MakeTable()
+        {
+            var dt = new DataTable();
+
+            dt.Columns.Add(new DataColumn()
+            {
+                DataType = typeof(int),
+                ColumnName = "SeatType_Id"
+            });
+
+            dt.Columns.Add(new DataColumn()
+            {
+                DataType = typeof(int),
+                ColumnName = "VenueId"
+            });
+
+            return dt;
         }
     }
 }

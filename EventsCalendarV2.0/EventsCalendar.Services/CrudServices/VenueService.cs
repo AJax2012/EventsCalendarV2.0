@@ -1,36 +1,40 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Web;
+using System.Web.UI.WebControls;
 using AutoMapper;
 using EventsCalendar.Core.Contracts;
 using EventsCalendar.Core.Dtos;
 using EventsCalendar.Core.Models;
 using EventsCalendar.Core.ViewModels;
+using EventsCalendar.DataAccess.Sql;
 
 namespace EventsCalendar.Services.CrudServices
 {
     public class VenueService : IVenueService
     {
-        private readonly IRepository<Venue> _context;
-        private readonly IRepository<Address> _addressContext;
-        private readonly IRepository<Performance> _performanceContext;
-        private readonly IRepository<Seat> _seatContext;
+        private readonly IRepository<Venue> _repository;
+        private readonly IRepository<Address> _addressRepository;
+        private readonly IRepository<Performance> _performanceRepository;
+        private readonly ISeatRepository _seatRepository;
         private readonly string DefaultImgSrc = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJa4VlErDGxyBl-tQu41odZDe-qLvI1xNDALRMYxTITZOb3DslFg";
 
-        public VenueService(IRepository<Venue> context, 
-                            IRepository<Address> addressContext, 
-                            IRepository<Seat> seatContext,
-                            IRepository<Performance> performanceContext)
+        public VenueService(IRepository<Venue> repo, 
+                            IRepository<Address> addressRepo, 
+                            ISeatRepository seatRepo,
+                            IRepository<Performance> performanceRepo)
         {
-            _context = context;
-            _addressContext = addressContext;
-            _seatContext = seatContext;
-            _performanceContext = performanceContext;
+            _repository = repo;
+            _addressRepository = addressRepo;
+            _seatRepository = seatRepo;
+            _performanceRepository = performanceRepo;
         }
 
         private Venue FindVenueDto(int id)
         {
-            return _context.Find(id);
+            return _repository.Find(id);
         }
 
         private Venue CheckVenueNullValue(int id)
@@ -42,9 +46,23 @@ namespace EventsCalendar.Services.CrudServices
             return venue;
         }
 
+        /**
+         * loops through amounts in seats array. sets essential values for each seat
+         */ 
+        private void CreateSeatsForNewVenue(int capacity, SeatTypeLevel level, Venue venue)
+        {
+            for (var i = 0; i >= capacity; i++)
+            {
+                var seat = new Seat();
+                seat.SeatType.SeatTypeLevel = level;
+                venue.Seats.Add(seat);
+            };
+        }
+
+
         public IEnumerable<VenueViewModel> ListVenues()
         {
-            IEnumerable<Venue> venues = _context.Collection().ToList();
+            IEnumerable<Venue> venues = _repository.Collection().ToList();
 
             var venueDtos =
                 Mapper.Map<IEnumerable<Venue>, IEnumerable<VenueDto>>
@@ -75,7 +93,6 @@ namespace EventsCalendar.Services.CrudServices
         {
             var venue = new Venue
             {
-                Capacity = venueViewModel.Venue.Capacity,
                 IsActive = true,
                 Name = venueViewModel.Venue.Name,
                 ImageUrl = venueViewModel.Venue.ImageUrl,
@@ -89,19 +106,25 @@ namespace EventsCalendar.Services.CrudServices
                 }
             };
 
-            Mapper.Map(venueViewModel.Venue.SeatsDto, venue.Seats);
-
             if (string.IsNullOrWhiteSpace(venue.ImageUrl))
                 venue.ImageUrl = DefaultImgSrc;
 
-            _context.Insert(venue);
-            _context.Commit();
+            var budget = venueViewModel.SeatCapacity.Budget;
+            var moderate = venueViewModel.SeatCapacity.Moderate;
+            var premier = venueViewModel.SeatCapacity.Premier;
+
+            _seatRepository.BulkInsertSeats(budget, SeatTypeLevel.Budget, venueViewModel.SeatCapacity.Budget);
+            _seatRepository.BulkInsertSeats(moderate, SeatTypeLevel.Moderate, venueViewModel.SeatCapacity.Moderate);
+            _seatRepository.BulkInsertSeats(premier, SeatTypeLevel.Premier, venueViewModel.SeatCapacity.Premier);
+
+            _repository.Insert(venue);
+            _repository.Commit();
         }
 
         public VenueViewModel ReturnVenueViewModel(int id)
         {
             Venue venue = CheckVenueNullValue(id);
-            venue.Address = _addressContext.Find(venue.AddressId);
+            venue.Address = _addressRepository.Find(venue.AddressId);
 
             var viewModel = new VenueViewModel
             {
@@ -117,7 +140,6 @@ namespace EventsCalendar.Services.CrudServices
             Venue venueToEdit = CheckVenueNullValue(id);
 
             venueToEdit.AddressId = venueViewModel.Venue.AddressId;
-            venueToEdit.Capacity = venueViewModel.Venue.Capacity;
             venueToEdit.Name = venueViewModel.Venue.Name;
             venueToEdit.ImageUrl = venueViewModel.Venue.ImageUrl;
             venueToEdit.Address.StreetAddress = venueViewModel.Venue.AddressDto.StreetAddress;
@@ -126,10 +148,10 @@ namespace EventsCalendar.Services.CrudServices
             venueToEdit.Address.ZipCode = venueViewModel.Venue.AddressDto.ZipCode;
             venueToEdit.IsActive = true;
 
-            Mapper.Map(venueViewModel.Venue.SeatsDto, venueToEdit.Seats);
+            Mapper.Map(venueViewModel.Venue.Seats, venueToEdit.Seats);
 
-            _context.Commit();
-            _addressContext.Commit();
+            _repository.Commit();
+            _addressRepository.Commit();
         }
 
         public void DeleteVenue(int id)
@@ -137,7 +159,7 @@ namespace EventsCalendar.Services.CrudServices
             var venue = CheckVenueNullValue(id);
 
             List<Performance> performances = 
-                _performanceContext.Collection()
+                _performanceRepository.Collection()
                     .Where(p => p.VenueId == id).ToList();
 
 //            venue.IsActive = false;
@@ -145,23 +167,23 @@ namespace EventsCalendar.Services.CrudServices
            
             foreach (var performance in performances)
             {
-                _performanceContext.Delete(performance.Id);
-                _performanceContext.Commit();
+                _performanceRepository.Delete(performance.Id);
+                _performanceRepository.Commit();
             }
 
-            List<Seat> seats = _seatContext.Collection()
+            List<Seat> seats = _seatRepository.Collection()
                 .Where(s => s.VenueId == id).ToList();
 
             foreach (var seat in seats)
             {
-                _seatContext.Delete(seat.Id);
-                _seatContext.Commit();
+                _seatRepository.Delete(seat.Id);
+                _seatRepository.Commit();
             }
 
-            _context.Delete(id);
-            _addressContext.Delete(venue.AddressId);
-            _context.Commit();
-            _addressContext.Commit();
+            _repository.Delete(id);
+            _addressRepository.Delete(venue.AddressId);
+            _repository.Commit();
+            _addressRepository.Commit();
         }
     }
 }

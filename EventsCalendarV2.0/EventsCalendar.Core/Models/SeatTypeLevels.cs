@@ -1,6 +1,6 @@
 ﻿namespace EventsCalendar.Core.Models
 {
-    public enum SeatTypeLevels
+    public enum SeatTypeLevel
     {
         Budget,
         Moderate,

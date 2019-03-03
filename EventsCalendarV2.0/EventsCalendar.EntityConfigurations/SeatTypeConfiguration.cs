@@ -12,7 +12,7 @@ namespace EventsCalendar.EntityConfigurations
                 .HasDatabaseGeneratedOption(
                     DatabaseGeneratedOption.Identity);
 
-            Property(s => s.SeatTypeLevels)
+            Property(s => s.SeatTypeLevel)
                 .IsRequired();
         }
     }

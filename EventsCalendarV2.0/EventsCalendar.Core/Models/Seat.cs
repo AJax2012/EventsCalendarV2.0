@@ -13,6 +13,7 @@ namespace EventsCalendar.Core.Models
         public Seat()
         {
             Reservations = new List<Reservation>();
+            SeatType = new SeatType();
         }
     }
 }

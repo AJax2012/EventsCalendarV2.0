@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using EventsCalendar.Core.ViewModels;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace EventsCalendar.Core.Dtos
@@ -23,6 +24,6 @@ namespace EventsCalendar.Core.Dtos
 
         public ICollection<PerformanceDto> Performances { get; set; }
 
-        public ICollection<SeatDto> SeatsDto { get; set; }
+        public ICollection<SeatDto> Seats { get; set; }
     }
 }

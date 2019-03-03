@@ -58,5 +58,10 @@ namespace EventsCalendar.DataAccess.Sql
             Context.Performances.Attach(performance);
             Context.Entry(performance).State = EntityState.Modified;
         }
+
+        public void ToggleChangeDetection(bool enabled)
+        {
+            Context.Configuration.AutoDetectChangesEnabled = enabled;
+        }
     }
 }

@@ -85,7 +85,7 @@ namespace EventsCalendar.Services.CrudServices
                 EventDateTime = performanceViewModel.Performance.EventDateTime,
                 IsActive = true,
                 PerformerId = performanceViewModel.Performance.PerformerDto.Id,
-                SeatsRemaining = performanceViewModel.Performance.VenueDto.Capacity,
+                //SeatsRemaining = performanceViewModel.Performance.VenueDto.Seats.,
                 VenueId = performanceViewModel.Performance.VenueDto.Id
             };
 

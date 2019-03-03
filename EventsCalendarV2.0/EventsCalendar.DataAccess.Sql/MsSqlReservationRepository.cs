@@ -54,5 +54,10 @@ namespace EventsCalendar.DataAccess.Sql
             Context.Reservations.Attach(reservation);
             Context.Entry(reservation).State = EntityState.Modified;
         }
+
+        public void ToggleChangeDetection(bool enabled)
+        {
+            Context.Configuration.AutoDetectChangesEnabled = enabled;
+        }
     }
 }

@@ -17,11 +17,7 @@ namespace EventsCalendar.DataAccess.Sql
 
         public IEnumerable<Performer> Collection()
         {
-            return Context.Performers
-                .Include(p => p.PerformerType)
-                .Include(p => p.Genre)
-                .Include(p => p.Topic)
-                .ToList();
+            return Context.Performers.ToList();
         }
 
         public void Commit()
@@ -57,6 +53,11 @@ namespace EventsCalendar.DataAccess.Sql
         {
             Context.Performers.Attach(performer);
             Context.Entry(performer).State = EntityState.Modified;
+        }
+
+        public void ToggleChangeDetection(bool enabled)
+        {
+            Context.Configuration.AutoDetectChangesEnabled = enabled;
         }
     }
 }

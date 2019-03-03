@@ -55,5 +55,10 @@ namespace EventsCalendar.DataAccess.Sql
             Context.Venues.Attach(venue);
             Context.Entry(venue).State = EntityState.Modified;
         }
+
+        public void ToggleChangeDetection(bool enabled)
+        {
+            Context.Configuration.AutoDetectChangesEnabled = enabled;
+        }
     }
 }

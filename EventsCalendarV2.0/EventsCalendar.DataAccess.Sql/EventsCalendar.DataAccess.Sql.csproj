@@ -38,6 +38,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
@@ -72,6 +73,14 @@
     <Compile Include="Migrations\201902232358322_Reservations.cs" />
     <Compile Include="Migrations\201902232358322_Reservations.Designer.cs">
       <DependentUpon>201902232358322_Reservations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903021820372_RemoveCapacity.cs" />
+    <Compile Include="Migrations\201903021820372_RemoveCapacity.Designer.cs">
+      <DependentUpon>201903021820372_RemoveCapacity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903022259485_ChangeNameOfSeatTypeLevels.cs" />
+    <Compile Include="Migrations\201903022259485_ChangeNameOfSeatTypeLevels.Designer.cs">
+      <DependentUpon>201903022259485_ChangeNameOfSeatTypeLevels.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MsSqlGenericRepository.cs" />
@@ -110,6 +119,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902232358322_Reservations.resx">
       <DependentUpon>201902232358322_Reservations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903021820372_RemoveCapacity.resx">
+      <DependentUpon>201903021820372_RemoveCapacity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903022259485_ChangeNameOfSeatTypeLevels.resx">
+      <DependentUpon>201903022259485_ChangeNameOfSeatTypeLevels.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

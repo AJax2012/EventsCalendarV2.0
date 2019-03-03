@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="CrudServices\PerformanceService.cs" />
     <Compile Include="CrudServices\PerformerService.cs" />
+    <Compile Include="Helpers\EnumUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CrudServices\VenueService.cs" />
   </ItemGroup>
@@ -62,6 +63,10 @@
     <ProjectReference Include="..\EventsCalendar.DataAccess.InMemory\EventsCalendar.DataAccess.InMemory.csproj">
       <Project>{5b6c742e-51d1-441d-b29a-67db4c71ccbc}</Project>
       <Name>EventsCalendar.DataAccess.InMemory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventsCalendar.DataAccess.Sql\EventsCalendar.DataAccess.Sql.csproj">
+      <Project>{1140237F-B97F-419B-B9E0-6B12F73E223E}</Project>
+      <Name>EventsCalendar.DataAccess.Sql</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
