@@ -138,7 +138,7 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <div id="map"></div>
+            <iframe id="map" frameborder="0" style="border:0" src="" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -152,35 +152,14 @@
 @section scripts 
 {
     <script>
-        function initMap() {
-            var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 12,
-                center: { lat: 39.7392, lng: -104.9903 }
-            });
-            var geocoder = new google.maps.Geocoder();
-
-            geocodeAddress(geocoder, map);
-        }
-
-        function geocodeAddress(geocoder, resultsMap) {
-            var streetAddress = '@(Model.Venue.AddressDto.StreetAddress)';
-            var city = '@(Model.Venue.AddressDto.City)';
-            var state = '@(Model.Venue.AddressDto.State)';
-            var address = `${streetAddress} ${city}, ${state}`;
-            geocoder.geocode({ 'address': address }, function (results, status) {
-                if (status === 'OK') {
-                    resultsMap.setCenter(results[0].geometry.location);
-                    var marker = new google.maps.Marker({
-                        map: resultsMap,
-                        position: results[0].geometry.location
-                    });
-                } else {
-                    alert('Geocode was not successful: ' + status);
-                }
-            });
-        }
-    </script>
-    <script async defer            
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEvGqWLKAT14Nk_NVCtqKE-AuchnT1OU8=initMap">
+        $(document).ready(function () {
+            var streetAddress = '@(Model.Venue.AddressDto.StreetAddress)'.trim();
+            var city = '@(Model.Venue.AddressDto.City)'.trim();
+            var state = '@(Model.Venue.AddressDto.State)'.trim();
+            var address = `${streetAddress},+${city},+${state}`;
+            address = address.replace(/\s/g, '+')
+            var src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBEvGqWLKAT14Nk_NVCtqKE-AuchnT1OU8&q=${address}&zoom=11`;
+            $("#map").attr('src', src);
+        });
     </script>
 }
