@@ -32,7 +32,8 @@ textarea,
     overflow: hidden;
 }
 
-.seats {
+.seats,
+#capacity {
     text-align: center;
 }
 
