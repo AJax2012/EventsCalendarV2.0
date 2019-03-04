@@ -59,12 +59,12 @@ namespace EventsCalendar.Services.CrudServices
             };
         }
 
-        private SeatCapacity GetSeatCapacities(VenueViewModel viewModel, Venue venue)
+        private SeatCapacity GetSeatCapacities(int venueId)
         {
             var capacity = new SeatCapacity();
             var allSeats = _seatRepository
                 .Collection()
-                .Where(seat => seat.VenueId == venue.Id)
+                .Where(seat => seat.VenueId == venueId)
                 .ToList();
 
             capacity.Budget = allSeats
@@ -86,6 +86,7 @@ namespace EventsCalendar.Services.CrudServices
 
         private void RemoveSeatsFromSeatContext(int budget, int moderate, int premier, int id)
         {
+
             if (budget > 0)
                 _seatRepository.BulkInsertSeats(budget, SeatType.Budget, id);
             else if (budget  < 0)
@@ -174,7 +175,7 @@ namespace EventsCalendar.Services.CrudServices
                 ImgSrc = venue.ImageUrl
             };
 
-            viewModel.SeatCapacity = GetSeatCapacities(viewModel, venue);
+            viewModel.SeatCapacity = GetSeatCapacities(venue.Id);
 
             return viewModel;
         }
@@ -192,21 +193,14 @@ namespace EventsCalendar.Services.CrudServices
             venueToEdit.Address.ZipCode = venueViewModel.Venue.AddressDto.ZipCode;
             venueToEdit.IsActive = true;
 
-            var budget = venueToEdit.Seats
-                .Where(seat => seat.SeatType == SeatType.Budget)
-                .Count();
+            var capacity = GetSeatCapacities(id);
+            var budget = venueViewModel.SeatCapacity.Budget;
+            var moderate = venueViewModel.SeatCapacity.Moderate;
+            var premier = venueViewModel.SeatCapacity.Premier;
 
-            var moderate = venueToEdit.Seats
-                .Where(seat => seat.SeatType == SeatType.Moderate)
-                .Count();
-
-            var premier = venueToEdit.Seats
-                .Where(seat => seat.SeatType == SeatType.Premier)
-                .Count();
-
-            var budgetNew = venueViewModel.SeatCapacity.Budget - budget;
-            var moderateNew = venueViewModel.SeatCapacity.Moderate - moderate;
-            var premierNew = venueViewModel.SeatCapacity.Premier - premier;
+            var budgetNew = budget - capacity.Budget;
+            var moderateNew = moderate - capacity.Moderate;
+            var premierNew = premier - capacity.Premier;
 
             RemoveSeatsFromSeatContext(budgetNew, moderateNew, premierNew, venueToEdit.Id);
 

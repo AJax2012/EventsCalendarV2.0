@@ -135,10 +135,13 @@ namespace EventsCalendar.DataAccess.Sql
 
                 try
                 {
+                    numberOfSeats = Math.Abs(numberOfSeats);
+                    int typeInt = (int) type;
                     var numberOfSeatsParam = new SqlParameter("@numberOfSeats", numberOfSeats);
-                    var seatTypeParam = new SqlParameter("@seatType", type);
+                    var seatTypeParam = new SqlParameter("@seatType", typeInt);
                     var venueIdParam = new SqlParameter("@venueId", venueId);
-                    Context.Database.ExecuteSqlCommand("EXEC dbo.BulkDeleteVenueSeats @numberOfSeats @seatType @venueId", numberOfSeatsParam, seatTypeParam, venueIdParam);
+                    Context.Database.ExecuteSqlCommand("dbo.BulkDeleteSeats @numberOfSeats, @seatType, @venueId", numberOfSeatsParam, seatTypeParam, venueIdParam);
+                    Console.WriteLine("Seats successfully deleted.");
                 }
                 catch (Exception e)
                 {
