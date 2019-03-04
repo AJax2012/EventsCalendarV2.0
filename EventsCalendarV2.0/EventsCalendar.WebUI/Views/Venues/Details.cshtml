@@ -21,72 +21,117 @@
         </div>
 
         <div class="col-md-6">
-            <dl class="dl-horizontal">
+            <div class="row">
+                <div class="col">
+                    <dl class="dl-horizontal">
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.SeatCapacity.Budget)
-                </dt>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.SeatCapacity.Budget)
+                        </dt>
 
-                <dd>
-                    @Html.DisplayFor(model => model.SeatCapacity.Budget)
-                </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.SeatCapacity.Budget)
+                        </dd>
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.SeatCapacity.Moderate)
-                </dt>
+                    </dl>
+                </div>
+                <div class="col">
+                    <dl class="dl-horizontal">
 
-                <dd>
-                    @Html.DisplayFor(model => model.SeatCapacity.Moderate)
-                </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.SeatCapacity.Moderate)
+                        </dt>
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.SeatCapacity.Premier)
-                </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.SeatCapacity.Moderate)
+                        </dd>
 
-                <dd>
-                    @Html.DisplayFor(model => model.SeatCapacity.Premier)
-                </dd>
+                    </dl>
+                </div>
+                <div class="col">
+                    <dl class="dl-horizontal">
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.SeatCapacity.Total)
-                </dt>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.SeatCapacity.Premier)
+                        </dt>
 
-                <dd>
-                    @Html.DisplayFor(model => model.SeatCapacity.Total)
-                </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.SeatCapacity.Premier)
+                        </dd>
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.Venue.AddressDto.StreetAddress)
-                </dt>
+                    </dl>
+                </div>
+                <div class="col">
+                    <dl class="dl-horizontal">
 
-                <dd>
-                    @Html.DisplayFor(model => model.Venue.AddressDto.StreetAddress)
-                </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.SeatCapacity.Total)
+                        </dt>
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.Venue.AddressDto.City)
-                </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.SeatCapacity.Total)
+                        </dd>
 
-                <dd>
-                    @Html.DisplayFor(model => model.Venue.AddressDto.City)
-                </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row">
+                <div class="col-md-12">
+                    <dl class="dl-horizontal">
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.Venue.AddressDto.State)
-                </dt>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Venue.AddressDto.StreetAddress)
+                        </dt>
 
-                <dd>
-                    @Html.DisplayFor(model => model.Venue.AddressDto.State)
-                </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.Venue.AddressDto.StreetAddress)
+                        </dd>
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.Venue.AddressDto.ZipCode)
-                </dt>
+                    </dl>
+                </div>                
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="dl-horizontal">
 
-                <dd>
-                    @Html.DisplayFor(model => model.Venue.AddressDto.ZipCode)
-                </dd>
-            </dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Venue.AddressDto.City)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Venue.AddressDto.City)
+                        </dd>
+
+                    </dl>
+                </div>
+                <div class="col-md-2">
+                    <dl class="dl-horizontal">
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Venue.AddressDto.State)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Venue.AddressDto.State)
+                        </dd>
+
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Venue.AddressDto.ZipCode)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Venue.AddressDto.ZipCode)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            
         </div>
         <div class="clearfix"></div>
     </div>

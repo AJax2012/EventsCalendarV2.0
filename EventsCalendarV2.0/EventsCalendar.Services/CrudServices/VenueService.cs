@@ -49,14 +49,39 @@ namespace EventsCalendar.Services.CrudServices
         /**
          * loops through amounts in seats array. sets essential values for each seat
          */ 
-        private void CreateSeatsForNewVenue(int capacity, SeatTypeLevel level, Venue venue)
+        private void CreateSeatsForNewVenue(int capacity, SeatType type, Venue venue)
         {
             for (var i = 0; i >= capacity; i++)
             {
                 var seat = new Seat();
-                seat.SeatType.SeatTypeLevel = level;
+                seat.SeatType = type;
                 venue.Seats.Add(seat);
             };
+        }
+
+        private SeatCapacity GetSeatCapacities(VenueViewModel viewModel, Venue venue)
+        {
+            var capacity = new SeatCapacity();
+            var allSeats = _seatRepository
+                .Collection()
+                .Where(seat => seat.VenueId == venue.Id)
+                .ToList();
+
+            capacity.Budget = allSeats
+                .Where(seat => seat.SeatType.Equals(SeatType.Budget))
+                .Count();
+
+            capacity.Moderate = allSeats
+                .Where(seat => seat.SeatType == SeatType.Moderate)
+                .Count();
+
+            capacity.Premier = allSeats
+                .Where(seat => seat.SeatType == SeatType.Premier)
+                .Count();
+
+            capacity.Total = allSeats.Count();
+
+            return capacity;
         }
 
 
@@ -109,16 +134,16 @@ namespace EventsCalendar.Services.CrudServices
             if (string.IsNullOrWhiteSpace(venue.ImageUrl))
                 venue.ImageUrl = DefaultImgSrc;
 
+            _repository.Insert(venue);
+            _repository.Commit();
+
             var budget = venueViewModel.SeatCapacity.Budget;
             var moderate = venueViewModel.SeatCapacity.Moderate;
             var premier = venueViewModel.SeatCapacity.Premier;
 
-            _repository.Insert(venue);
-            _repository.Commit();
-
-            _seatRepository.BulkInsertSeats(budget, SeatTypeLevel.Budget, venue.Id);
-            _seatRepository.BulkInsertSeats(moderate, SeatTypeLevel.Moderate, venue.Id);
-            _seatRepository.BulkInsertSeats(premier, SeatTypeLevel.Premier, venue.Id);
+            _seatRepository.BulkInsertSeats(budget, SeatType.Budget, venue.Id);
+            _seatRepository.BulkInsertSeats(moderate, SeatType.Moderate, venue.Id);
+            _seatRepository.BulkInsertSeats(premier, SeatType.Premier, venue.Id);
         }
 
         public VenueViewModel ReturnVenueViewModel(int id)
@@ -129,8 +154,10 @@ namespace EventsCalendar.Services.CrudServices
             var viewModel = new VenueViewModel
             {
                 Venue = Mapper.Map<Venue, VenueDto>(venue),
-                ImgSrc = venue.ImageUrl,
+                ImgSrc = venue.ImageUrl
             };
+
+            viewModel.SeatCapacity = GetSeatCapacities(viewModel, venue);
 
             return viewModel;
         }

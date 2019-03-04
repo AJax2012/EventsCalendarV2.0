@@ -50,37 +50,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext.cs" />
-    <Compile Include="Migrations\201902192008251_InitialMigration.cs" />
-    <Compile Include="Migrations\201902192008251_InitialMigration.Designer.cs">
-      <DependentUpon>201902192008251_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201903040404430_InitialMigration.cs" />
+    <Compile Include="Migrations\201903040404430_InitialMigration.Designer.cs">
+      <DependentUpon>201903040404430_InitialMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201902201706481_RemoveImageUpload.cs" />
-    <Compile Include="Migrations\201902201706481_RemoveImageUpload.Designer.cs">
-      <DependentUpon>201902201706481_RemoveImageUpload.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201902230431080_AddSeats.cs" />
-    <Compile Include="Migrations\201902230431080_AddSeats.Designer.cs">
-      <DependentUpon>201902230431080_AddSeats.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201902232007136_ChangeSetTypesToEnumsAndAddSeatTypes.cs" />
-    <Compile Include="Migrations\201902232007136_ChangeSetTypesToEnumsAndAddSeatTypes.Designer.cs">
-      <DependentUpon>201902232007136_ChangeSetTypesToEnumsAndAddSeatTypes.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201902232023375_UpdateSeats.cs" />
-    <Compile Include="Migrations\201902232023375_UpdateSeats.Designer.cs">
-      <DependentUpon>201902232023375_UpdateSeats.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201902232358322_Reservations.cs" />
-    <Compile Include="Migrations\201902232358322_Reservations.Designer.cs">
-      <DependentUpon>201902232358322_Reservations.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201903021820372_RemoveCapacity.cs" />
-    <Compile Include="Migrations\201903021820372_RemoveCapacity.Designer.cs">
-      <DependentUpon>201903021820372_RemoveCapacity.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201903022259485_ChangeNameOfSeatTypeLevels.cs" />
-    <Compile Include="Migrations\201903022259485_ChangeNameOfSeatTypeLevels.Designer.cs">
-      <DependentUpon>201903022259485_ChangeNameOfSeatTypeLevels.cs</DependentUpon>
+    <Compile Include="Migrations\201903040442210_RemoveSeatType.cs" />
+    <Compile Include="Migrations\201903040442210_RemoveSeatType.Designer.cs">
+      <DependentUpon>201903040442210_RemoveSeatType.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MsSqlGenericRepository.cs" />
@@ -102,29 +78,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201902192008251_InitialMigration.resx">
-      <DependentUpon>201902192008251_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201903040404430_InitialMigration.resx">
+      <DependentUpon>201903040404430_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201902201706481_RemoveImageUpload.resx">
-      <DependentUpon>201902201706481_RemoveImageUpload.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201902230431080_AddSeats.resx">
-      <DependentUpon>201902230431080_AddSeats.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201902232007136_ChangeSetTypesToEnumsAndAddSeatTypes.resx">
-      <DependentUpon>201902232007136_ChangeSetTypesToEnumsAndAddSeatTypes.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201902232023375_UpdateSeats.resx">
-      <DependentUpon>201902232023375_UpdateSeats.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201902232358322_Reservations.resx">
-      <DependentUpon>201902232358322_Reservations.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903021820372_RemoveCapacity.resx">
-      <DependentUpon>201903021820372_RemoveCapacity.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903022259485_ChangeNameOfSeatTypeLevels.resx">
-      <DependentUpon>201903022259485_ChangeNameOfSeatTypeLevels.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201903040442210_RemoveSeatType.resx">
+      <DependentUpon>201903040442210_RemoveSeatType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -7,13 +7,13 @@ namespace EventsCalendar.DataAccess.Sql.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class RemoveCapacity : IMigrationMetadata
+    public sealed partial class RemoveSeatType : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(RemoveCapacity));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(RemoveSeatType));
         
         string IMigrationMetadata.Id
         {
-            get { return "201903021820372_RemoveCapacity"; }
+            get { return "201903040442210_RemoveSeatType"; }
         }
         
         string IMigrationMetadata.Source

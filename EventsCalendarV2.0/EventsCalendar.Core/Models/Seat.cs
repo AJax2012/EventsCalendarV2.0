@@ -5,6 +5,7 @@ namespace EventsCalendar.Core.Models
     public class Seat
     {
         public int Id { get; set; }
+        //public int SeatTypeId { get; set; }
         public SeatType SeatType { get; set; }
         public int VenueId { get; set; }
         public Venue Venue { get; set; }

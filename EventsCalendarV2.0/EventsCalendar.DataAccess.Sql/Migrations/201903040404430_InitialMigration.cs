@@ -21,20 +21,10 @@ namespace EventsCalendar.DataAccess.Sql.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.Genres",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                    })
-                .PrimaryKey(t => t.Id);
-            
-            CreateTable(
                 "dbo.Performances",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Price = c.Decimal(nullable: false, precision: 18, scale: 2),
                         SeatsRemaining = c.Int(nullable: false),
                         Description = c.String(),
                         IsActive = c.Boolean(nullable: false),
@@ -58,45 +48,53 @@ namespace EventsCalendar.DataAccess.Sql.Migrations
                         TourName = c.String(),
                         IsActive = c.Boolean(nullable: false),
                         GenreId = c.Int(),
-                        CustomImageId = c.Int(nullable: false),
+                        Genre = c.Int(nullable: false),
+                        ImageUrl = c.String(),
+                        Topic = c.Int(nullable: false),
                         TopicId = c.Int(),
                         PerformerTypeId = c.Int(nullable: false),
+                        PerformerType = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.Reservations",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        Price = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        SeatId = c.Int(nullable: false),
+                        PerformanceId = c.Int(nullable: false),
+                        IsTaken = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.CustomImages", t => t.CustomImageId, cascadeDelete: true)
-                .ForeignKey("dbo.Genres", t => t.GenreId)
-                .ForeignKey("dbo.PerformerTypes", t => t.PerformerTypeId, cascadeDelete: true)
-                .ForeignKey("dbo.Topics", t => t.TopicId)
-                .Index(t => t.GenreId)
-                .Index(t => t.CustomImageId)
-                .Index(t => t.TopicId)
-                .Index(t => t.PerformerTypeId);
+                .ForeignKey("dbo.Performances", t => t.PerformanceId, cascadeDelete: true)
+                .ForeignKey("dbo.Seats", t => t.SeatId, cascadeDelete: true)
+                .Index(t => t.SeatId)
+                .Index(t => t.PerformanceId);
             
             CreateTable(
-                "dbo.CustomImages",
+                "dbo.Seats",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                        Location = c.String(),
+                        SeatTypeId = c.Int(nullable: false),
+                        VenueId = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.SeatTypes", t => t.SeatTypeId, cascadeDelete: true)
+                .ForeignKey("dbo.Venues", t => t.VenueId, cascadeDelete: false)
+                .Index(t => t.SeatTypeId)
+                .Index(t => t.VenueId);
             
             CreateTable(
-                "dbo.PerformerTypes",
+                "dbo.SeatTypes",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                    })
-                .PrimaryKey(t => t.Id);
-            
-            CreateTable(
-                "dbo.Topics",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
+                        SeatTypeLevel = c.Int(nullable: false),
+                        Price = c.Decimal(precision: 18, scale: 2),
+                        NumberOfSeats = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -106,7 +104,6 @@ namespace EventsCalendar.DataAccess.Sql.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Name = c.String(),
-                        Capacity = c.Int(nullable: false),
                         IsActive = c.Boolean(nullable: false),
                         AddressId = c.Int(nullable: false),
                         ImageUrl = c.String(),
@@ -119,27 +116,26 @@ namespace EventsCalendar.DataAccess.Sql.Migrations
         
         public override void Down()
         {
+            DropForeignKey("dbo.Seats", "VenueId", "dbo.Venues");
             DropForeignKey("dbo.Performances", "VenueId", "dbo.Venues");
             DropForeignKey("dbo.Venues", "AddressId", "dbo.Addresses");
-            DropForeignKey("dbo.Performers", "TopicId", "dbo.Topics");
-            DropForeignKey("dbo.Performers", "PerformerTypeId", "dbo.PerformerTypes");
+            DropForeignKey("dbo.Seats", "SeatTypeId", "dbo.SeatTypes");
+            DropForeignKey("dbo.Reservations", "SeatId", "dbo.Seats");
+            DropForeignKey("dbo.Reservations", "PerformanceId", "dbo.Performances");
             DropForeignKey("dbo.Performances", "PerformerId", "dbo.Performers");
-            DropForeignKey("dbo.Performers", "GenreId", "dbo.Genres");
-            DropForeignKey("dbo.Performers", "CustomImageId", "dbo.CustomImages");
             DropIndex("dbo.Venues", new[] { "AddressId" });
-            DropIndex("dbo.Performers", new[] { "PerformerTypeId" });
-            DropIndex("dbo.Performers", new[] { "TopicId" });
-            DropIndex("dbo.Performers", new[] { "CustomImageId" });
-            DropIndex("dbo.Performers", new[] { "GenreId" });
+            DropIndex("dbo.Seats", new[] { "VenueId" });
+            DropIndex("dbo.Seats", new[] { "SeatTypeId" });
+            DropIndex("dbo.Reservations", new[] { "PerformanceId" });
+            DropIndex("dbo.Reservations", new[] { "SeatId" });
             DropIndex("dbo.Performances", new[] { "VenueId" });
             DropIndex("dbo.Performances", new[] { "PerformerId" });
             DropTable("dbo.Venues");
-            DropTable("dbo.Topics");
-            DropTable("dbo.PerformerTypes");
-            DropTable("dbo.CustomImages");
+            DropTable("dbo.SeatTypes");
+            DropTable("dbo.Seats");
+            DropTable("dbo.Reservations");
             DropTable("dbo.Performers");
             DropTable("dbo.Performances");
-            DropTable("dbo.Genres");
             DropTable("dbo.Addresses");
         }
     }

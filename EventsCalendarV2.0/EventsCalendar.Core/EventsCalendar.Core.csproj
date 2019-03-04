@@ -110,8 +110,8 @@
     <Compile Include="Models\Reservation.cs" />
     <Compile Include="Models\Seat.cs" />
     <Compile Include="Models\SeatCapacity.cs" />
+    <Compile Include="Models\Temp.cs" />
     <Compile Include="Models\SeatType.cs" />
-    <Compile Include="Models\SeatTypeLevels.cs" />
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Models\Venue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

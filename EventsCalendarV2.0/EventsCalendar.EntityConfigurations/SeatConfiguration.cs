@@ -15,6 +15,9 @@ namespace EventsCalendar.EntityConfigurations
                 .HasDatabaseGeneratedOption(
                     DatabaseGeneratedOption.Identity);
 
+            Property(s => s.SeatType)
+                .IsRequired();
+
             HasMany(s => s.Reservations)
                 .WithRequired(r => r.Seat)
                 .HasForeignKey(r => r.SeatId)

@@ -63,14 +63,14 @@ namespace EventsCalendar.DataAccess.Sql
             Context.Configuration.AutoDetectChangesEnabled = enabled;
         }
 
-        public void BulkInsertSeats(int numberOfSeats, SeatTypeLevel level, int venueId)
+        public void BulkInsertSeats(int numberOfSeats, SeatType type, int venueId)
         {
             var dt = MakeTable();
 
             for (var i = 0; i <= numberOfSeats; i++)
             {
                 DataRow row = dt.NewRow();
-                row["SeatType_Id"] = (int) level;
+                row["SeatType"] = (int) type;
                 row["VenueId"] = venueId;
                 dt.Rows.Add(row);
             }
@@ -88,7 +88,7 @@ namespace EventsCalendar.DataAccess.Sql
 
                     try
                     {
-                        bulkCopy.ColumnMappings.Add("SeatType_Id", "SeatType_Id");
+                        bulkCopy.ColumnMappings.Add("SeatType", "SeatType");
                         bulkCopy.ColumnMappings.Add("VenueId", "VenueId");
                         bulkCopy.WriteToServerAsync(dt);
                         Console.WriteLine("Bulk data stored successfully");
@@ -134,7 +134,7 @@ namespace EventsCalendar.DataAccess.Sql
             dt.Columns.Add(new DataColumn()
             {
                 DataType = typeof(int),
-                ColumnName = "SeatType_Id"
+                ColumnName = "SeatType"
             });
 
             dt.Columns.Add(new DataColumn()
