@@ -105,7 +105,7 @@ namespace EventsCalendar.DataAccess.Sql
             } 
         }
 
-        public void BulkDeleteVenueSeats(int venueId)
+        public void DeleteAllVenueSeats(int venueId)
         {
             using (SqlConnection sourceConnection = new SqlConnection(connectionString))
             {
@@ -114,7 +114,31 @@ namespace EventsCalendar.DataAccess.Sql
                 try
                 {
                     var venueIdParam = new SqlParameter("@venueId", venueId);
-                    Context.Database.ExecuteSqlCommand("EXEC dbo.BulkDeleteVenueSeats @venueId", venueIdParam);
+                    Context.Database.ExecuteSqlCommand("EXEC dbo.BulkDeleteSeats @venueId", venueIdParam);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    sourceConnection.Close();
+                }
+            }
+        }
+
+        public void BulkDeleteSeats(int numberOfSeats, SeatType type, int venueId)
+        {
+            using (SqlConnection sourceConnection = new SqlConnection(connectionString))
+            {
+                sourceConnection.Open();
+
+                try
+                {
+                    var numberOfSeatsParam = new SqlParameter("@numberOfSeats", numberOfSeats);
+                    var seatTypeParam = new SqlParameter("@seatType", type);
+                    var venueIdParam = new SqlParameter("@venueId", venueId);
+                    Context.Database.ExecuteSqlCommand("EXEC dbo.BulkDeleteVenueSeats @numberOfSeats @seatType @venueId", numberOfSeatsParam, seatTypeParam, venueIdParam);
                 }
                 catch (Exception e)
                 {

@@ -84,6 +84,23 @@ namespace EventsCalendar.Services.CrudServices
             return capacity;
         }
 
+        private void RemoveSeatsFromSeatContext(int budget, int moderate, int premier, int id)
+        {
+            if (budget > 0)
+                _seatRepository.BulkInsertSeats(budget, SeatType.Budget, id);
+            else if (budget  < 0)
+                _seatRepository.BulkDeleteSeats(budget, SeatType.Budget, id);
+
+            if (moderate > 0)
+                _seatRepository.BulkInsertSeats(moderate, SeatType.Moderate, id);
+            else if (moderate < 0)
+                _seatRepository.BulkDeleteSeats(moderate, SeatType.Moderate, id);
+
+            if (premier > 0)
+                _seatRepository.BulkInsertSeats(premier, SeatType.Premier, id);
+            else if (premier < 0)
+                _seatRepository.BulkDeleteSeats(premier, SeatType.Premier, id);
+        }
 
         public IEnumerable<VenueViewModel> ListVenues()
         {
@@ -175,7 +192,23 @@ namespace EventsCalendar.Services.CrudServices
             venueToEdit.Address.ZipCode = venueViewModel.Venue.AddressDto.ZipCode;
             venueToEdit.IsActive = true;
 
-            Mapper.Map(venueViewModel.Venue.Seats, venueToEdit.Seats);
+            var budget = venueToEdit.Seats
+                .Where(seat => seat.SeatType == SeatType.Budget)
+                .Count();
+
+            var moderate = venueToEdit.Seats
+                .Where(seat => seat.SeatType == SeatType.Moderate)
+                .Count();
+
+            var premier = venueToEdit.Seats
+                .Where(seat => seat.SeatType == SeatType.Premier)
+                .Count();
+
+            var budgetNew = venueViewModel.SeatCapacity.Budget - budget;
+            var moderateNew = venueViewModel.SeatCapacity.Moderate - moderate;
+            var premierNew = venueViewModel.SeatCapacity.Premier - premier;
+
+            RemoveSeatsFromSeatContext(budgetNew, moderateNew, premierNew, venueToEdit.Id);
 
             _repository.Commit();
             _addressRepository.Commit();
@@ -200,7 +233,7 @@ namespace EventsCalendar.Services.CrudServices
 
             _repository.Delete(id);
             _addressRepository.Delete(venue.AddressId);
-            _seatRepository.BulkDeleteVenueSeats(id);
+            _seatRepository.DeleteAllVenueSeats(id);
             _repository.Commit();
             _addressRepository.Commit();
         }
