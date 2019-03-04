@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using AutoMapper;
 using EventsCalendar.Core.Contracts;
@@ -56,18 +57,17 @@ namespace EventsCalendar.Services.CrudServices
             return performerViewModels;
         }
 
-        public PerformerViewModel NewPerformerViewModel(/*HttpPostedFileBase image*/)
+        public PerformerViewModel NewPerformerViewModel()
         {
             var viewModel = new PerformerViewModel
             {
                 Performer = new PerformerDto(),
-                //Image = image,
                 ImgSrc = DefaultImgSrc
             };
 
-            Mapper.Map(EnumUtil.GetValues<PerformerType>(), viewModel.PerformerTypes);
-            Mapper.Map(EnumUtil.GetValues<Genre>(), viewModel.Genres);
-            Mapper.Map(EnumUtil.GetValues<Topic>(), viewModel.Topics);
+            viewModel.PerformerTypes = EnumUtil.GetValues<PerformerType>();
+            viewModel.Genres = EnumUtil.GetValues<Genre>();
+            viewModel.Topics = EnumUtil.GetValues<Topic>();
 
             return viewModel;
         }
@@ -79,8 +79,7 @@ namespace EventsCalendar.Services.CrudServices
                 Description = performerViewModel.Performer.Description,
                 IsActive = true,
                 Name = performerViewModel.Performer.Name,
-                PerformerTypeId = performerViewModel.Performer.PerformerTypeId,
-                //CustomImageId = performerViewModel.Performer.CustomImageDto.Id,
+                PerformerType = performerViewModel.Performer.PerformerType,
                 ImageUrl = performerViewModel.Performer.ImageUrl,
                 TourName = performerViewModel.Performer.TourName
             };
@@ -88,20 +87,10 @@ namespace EventsCalendar.Services.CrudServices
             if (string.IsNullOrWhiteSpace(performer.ImageUrl))
                 performer.ImageUrl = DefaultImgSrc;
             
-
-            //performer.CustomImage.Location = "";
-            //performer.CustomImage.Name = "";
-
-            if (performer.PerformerTypeId < 5)
-            {
-                performer.GenreId = performerViewModel.Performer.GenreId;
-                performer.TopicId = null;
-            }
+            if (performer.PerformerType.Equals(PerformerType.Musician))
+                performer.Genre = performerViewModel.Performer.Genre;
             else
-            {
-                performer.TopicId = performerViewModel.Performer.TopicId;
-                performer.GenreId = null;
-            }
+                performer.Topic = performerViewModel.Performer.Topic;
 
             performer.IsActive = true;
             _context.Insert(performer);
@@ -132,20 +121,14 @@ namespace EventsCalendar.Services.CrudServices
             performerToEdit.Description = performerViewModel.Performer.Description;
             performerToEdit.IsActive = true;
             performerToEdit.Name = performerViewModel.Performer.Name;
-            performerToEdit.PerformerTypeId = performerViewModel.Performer.PerformerTypeId;
+            performerToEdit.PerformerType = performerViewModel.Performer.PerformerType;
             performerToEdit.TourName = performerViewModel.Performer.TourName;
             performerToEdit.ImageUrl = performerViewModel.Performer.ImageUrl;
 
-            if (performerToEdit.PerformerTypeId < 5)
-            {
-                performerToEdit.GenreId = performerViewModel.Performer.GenreId;
-                performerToEdit.TopicId = null;
-            }
+            if (performerToEdit.PerformerType.Equals(PerformerType.Musician))
+                performerToEdit.Genre = performerViewModel.Performer.Genre;
             else
-            {
-                performerToEdit.TopicId = performerViewModel.Performer.TopicId;
-                performerToEdit.GenreId = null;
-            }
+                performerToEdit.Topic = performerViewModel.Performer.Topic;
 
             _context.Commit();
         }

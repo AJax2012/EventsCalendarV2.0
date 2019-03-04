@@ -58,6 +58,10 @@
     <Compile Include="Migrations\201903040442210_RemoveSeatType.Designer.cs">
       <DependentUpon>201903040442210_RemoveSeatType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903042011348_ChangeTopicGenrePerformerTypeToEnums.cs" />
+    <Compile Include="Migrations\201903042011348_ChangeTopicGenrePerformerTypeToEnums.Designer.cs">
+      <DependentUpon>201903042011348_ChangeTopicGenrePerformerTypeToEnums.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MsSqlGenericRepository.cs" />
     <Compile Include="MsSqlPerformanceRepository.cs" />
@@ -83,6 +87,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903040442210_RemoveSeatType.resx">
       <DependentUpon>201903040442210_RemoveSeatType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903042011348_ChangeTopicGenrePerformerTypeToEnums.resx">
+      <DependentUpon>201903042011348_ChangeTopicGenrePerformerTypeToEnums.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

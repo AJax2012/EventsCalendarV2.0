@@ -12,9 +12,6 @@ namespace EventsCalendar.WebUI
             CreateMap<AddressDto, Address>()
                 .ReverseMap();
 
-            CreateMap<Genre, GenreDto>()
-                .ReverseMap();
-
             CreateMap<Performance, PerformanceDto>()
                 .ForMember(d => d.PerformerDto, opt => opt.MapFrom(p => p.Performer))
                 .ForMember(d => d.VenueDto, opt => opt.MapFrom(p => p.Venue))
@@ -25,16 +22,10 @@ namespace EventsCalendar.WebUI
                 .ReverseMap();
 
             CreateMap<PerformerDto, Performer>()
-                .ForMember(d => d.GenreId, opt => opt.MapFrom(p => p.GenreId))
-                .ForMember(d => d.Genre, opt => opt.MapFrom(s => s.GenreDto))
-                .ForMember(d => d.Topic, opt => opt.MapFrom(s => s.TopicDto))
                 .ReverseMap();
 
             CreateMap<PerformerDto, PerformerViewModel>()
                 .ForMember(d => d.Performer, opt => opt.MapFrom(s => s))
-                .ReverseMap();
-
-            CreateMap<PerformerType, PerformerTypeDto>()
                 .ReverseMap();
 
             CreateMap<Reservation, ReservationDto>()
@@ -43,9 +34,6 @@ namespace EventsCalendar.WebUI
                 .ReverseMap();
 
             CreateMap<Seat, SeatDto>()
-                .ReverseMap();
-
-            CreateMap<Topic, TopicDto>()
                 .ReverseMap();
 
             CreateMap<Venue, VenueDto>()

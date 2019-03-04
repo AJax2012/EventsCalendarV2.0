@@ -94,7 +94,6 @@
     <Compile Include="Dtos\PerformerTypeDto.cs" />
     <Compile Include="Dtos\ReservationDto.cs" />
     <Compile Include="Dtos\SeatDto.cs" />
-    <Compile Include="Dtos\SeatTypeDto.cs" />
     <Compile Include="Dtos\TopicDto.cs" />
     <Compile Include="Dtos\PerformanceDto.cs" />
     <Compile Include="Dtos\PerformerDto.cs" />

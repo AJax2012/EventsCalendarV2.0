@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using EventsCalendar.Core.Models;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace EventsCalendar.Core.Dtos
@@ -17,26 +18,15 @@ namespace EventsCalendar.Core.Dtos
 
         public bool IsActive { get; set; }
 
-        public PerformerTypeDto PerformerType { get; set; }
-
-        public GenreDto GenreDto { get; set; }
-
-        //public int CustomImageId { get; set; }
-
-        [Display(Name ="Image")]
+        [Display(Name = "Image")]
         public string ImageUrl { get; set; }
 
-        public TopicDto TopicDto { get; set; }
+        public Genre Genre { get; set; }
+
+        public Topic Topic { get; set; }
+
+        public PerformerType PerformerType { get; set; }
 
         public ICollection<PerformanceDto> Performances { get; set; }
-
-        [Display(Name = "Performer Type")]
-        public int PerformerTypeId { get; set; }
-
-        [Display(Name = "Genre")]
-        public int? GenreId { get; set; }
-
-        [Display(Name = "Topic")]
-        public int? TopicId { get; set; }
     }
 }

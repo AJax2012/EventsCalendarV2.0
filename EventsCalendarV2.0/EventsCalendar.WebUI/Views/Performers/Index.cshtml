@@ -20,7 +20,7 @@
                 Genre / Topic
             </th>
             <th scope="col">
-                @Html.DisplayNameFor(model => model.Performer.PerformerTypeId)
+                @Html.DisplayNameFor(model => model.Performer.PerformerType)
             </th>
             <th scope="col">
                 @Html.DisplayNameFor(model => model.Performer.TourName)
@@ -36,17 +36,17 @@
                 @Html.DisplayFor(modelItem => item.Performer.Name)
             </td>
             <td>
-                @if (item.Performer.PerformerTypeId < 5)
+                @if (item.Performer.PerformerType == EventsCalendar.Core.Models.PerformerType.Musician)
                 {
-                    @Html.DisplayFor(modelItem => item.Performer.GenreDto.Name)
+                    @Html.DisplayFor(modelItem => item.Performer.Genre)
                 }
                 else
                 {
-                    @Html.DisplayFor(modelItem => item.Performer.TopicDto.Name)
+                    @Html.DisplayFor(modelItem => item.Performer.Topic)
                 }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Performer.PerformerType.Name)
+                @Html.DisplayFor(modelItem => item.Performer.PerformerType)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Performer.TourName)

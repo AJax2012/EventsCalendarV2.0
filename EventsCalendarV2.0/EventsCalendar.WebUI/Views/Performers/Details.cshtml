@@ -25,31 +25,31 @@
         <div class="col-md-6">
             <dl class="dl-horizontal">
                 <dt>
-                    @Html.DisplayNameFor(model => model.Performer.PerformerType.Name)
+                    @Html.DisplayNameFor(model => model.Performer.PerformerType)
                 </dt>
 
                 <dd>
-                    @Html.DisplayFor(model => model.Performer.PerformerType.Name)
+                    @Html.DisplayFor(model => model.Performer.PerformerType)
                 </dd>
 
-                @if (Model.Performer.PerformerTypeId < 5)
+                @if (Model.Performer.PerformerType == EventsCalendar.Core.Models.PerformerType.Musician)
                 {
                     <dt>
-                        @Html.DisplayNameFor(model => model.Performer.GenreDto.Name)
+                        @Html.DisplayNameFor(model => model.Performer.Genre)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.Performer.GenreDto.Name)
+                        @Html.DisplayFor(model => model.Performer.Genre)
                     </dd>
                 }
                 else
                 {
                     <dt>
-                        @Html.DisplayNameFor(model => model.Performer.TopicDto.Name)
+                        @Html.DisplayNameFor(model => model.Performer.Topic)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.Performer.TopicDto.Name)
+                        @Html.DisplayFor(model => model.Performer.Topic)
                     </dd>
                 }
 
