@@ -112,7 +112,24 @@ namespace EventsCalendar.DataAccess.Sql
 
         public void DeleteAllPerformanceReservations(int performanceId)
         {
-            throw new NotImplementedException();
+            using (SqlConnection sourceConnection = new SqlConnection(connectionString))
+            {
+                sourceConnection.Open();
+
+                try
+                {
+                    var performanceIdParam = new SqlParameter("@performanceId", performanceId);
+                    Context.Database.ExecuteSqlCommand("dbo.BulkDeletePerformanceReservations @performanceId", performanceIdParam);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    sourceConnection.Close();
+                }
+            }
         }
 
         public void BulkDeleteReservations(int numberOfReservations, SeatType type, int performanceId)

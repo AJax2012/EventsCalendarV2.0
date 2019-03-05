@@ -209,7 +209,8 @@ namespace EventsCalendar.Services.CrudServices
         {
             CheckPerformanceNullValue(id);
 
-//            performance.IsActive = false;
+            //            performance.IsActive = false;
+            _reservationRepository.DeleteAllPerformanceReservations(id);
             _repository.Delete(id);
             _repository.Commit();
         }
