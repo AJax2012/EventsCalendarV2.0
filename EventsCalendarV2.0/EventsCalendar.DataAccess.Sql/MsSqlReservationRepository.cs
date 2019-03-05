@@ -7,7 +7,6 @@ using System.Data.Entity;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
-using System.Data.OleDb;
 
 namespace EventsCalendar.DataAccess.Sql
 {

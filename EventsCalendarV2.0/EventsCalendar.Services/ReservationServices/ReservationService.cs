@@ -1,6 +1,5 @@
 ﻿using EventsCalendar.Core.Contracts;
 using EventsCalendar.Core.Models;
-using EventsCalendar.Services.SeatServices;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,9 +18,21 @@ namespace EventsCalendar.Services.ReservationServices
         }
 
         /**
+         * Combines Reservations, originally separated by SeatType/Price
+         */
+        public IEnumerable<SimpleReservation> CombineReservations(IEnumerable<SimpleReservation> budget, IEnumerable<SimpleReservation> moderate, IEnumerable<SimpleReservation> premier)
+        {
+            List<SimpleReservation> all = new List<SimpleReservation>();
+            all.AddRange(budget);
+            all.AddRange(moderate);
+            all.AddRange(premier);
+            return all;
+        }
+
+        /**
          * Creates SimpleReservations from seats.
          * SimpleReservations = Price & ID
-         */ 
+         */
         public IEnumerable<SimpleReservation> GetSimpleReservations(int venueId, SeatType type, decimal price)
         {
             IEnumerable<Seat> seats = seatUtil.GetSeatsBySeatType(venueId, type);
@@ -37,28 +48,6 @@ namespace EventsCalendar.Services.ReservationServices
             }
 
             return reservations;
-        }
-
-        /**
-         * Combines Reservations, originally separated by SeatType/Price
-         */ 
-        public IEnumerable<SimpleReservation> CombineReservations(IEnumerable<SimpleReservation> budget, IEnumerable<SimpleReservation> moderate, IEnumerable<SimpleReservation> premier)
-        {
-            List<SimpleReservation> all = new List<SimpleReservation>();
-            all.AddRange(budget);
-            all.AddRange(moderate);
-            all.AddRange(premier);
-            return all;
-        }
-
-        /**
-         * Retrieves all Reservations at a Performance
-         */ 
-        public IEnumerable<Reservation> GetReservations(int performanceId)
-        {
-            return _reservationRepository.Collection()
-                .Where(res => res.PerformanceId == performanceId)
-                .ToList();
         }
 
         /**
@@ -91,6 +80,16 @@ namespace EventsCalendar.Services.ReservationServices
             _reservationRepository.ChangeReservationPrices(budget);
             _reservationRepository.ChangeReservationPrices(moderate);
             _reservationRepository.ChangeReservationPrices(premier);
+        }
+
+        /**
+         * Retrieves all Reservations at a Performance
+         */
+        private IEnumerable<Reservation> GetReservations(int performanceId)
+        {
+            return _reservationRepository.Collection()
+                .Where(res => res.PerformanceId == performanceId)
+                .ToList();
         }
     }
 }
