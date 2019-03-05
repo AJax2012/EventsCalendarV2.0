@@ -43,11 +43,27 @@
                 </dd>
 
                 <dt>
-                    @Html.DisplayNameFor(model => model.Performance.Price)
+                    @Html.DisplayNameFor(model => model.BudgetPrice)
                 </dt>
 
                 <dd>
-                    @Html.DisplayFor(model => model.Performance.Price)
+                    @Html.DisplayFor(model => model.BudgetPrice)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ModeratePrice)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ModeratePrice)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.PremierPrice)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.PremierPrice)
                 </dd>
             </dl>
 
@@ -85,12 +101,30 @@
                 </dd>
             </dl>
             <dl class="col-lg-3">
+
+
                 <dt>
-                    @Html.DisplayNameFor(model => model.Performance.Price)
+                    @Html.DisplayNameFor(model => model.BudgetPrice)
                 </dt>
 
                 <dd>
-                    @Html.DisplayFor(model => model.Performance.Price)
+                    @Html.DisplayFor(model => model.BudgetPrice)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ModeratePrice)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ModeratePrice)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.PremierPrice)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.PremierPrice)
                 </dd>
             </dl>
 
@@ -113,31 +147,31 @@
             </dd>
 
             <dt>
-                @Html.DisplayNameFor(model => model.Performance.PerformerDto.PerformerType.Name)
+                @Html.DisplayNameFor(model => model.Performance.PerformerDto.PerformerType)
             </dt>
 
             <dd>
-                @Html.DisplayFor(model => model.Performance.PerformerDto.PerformerType.Name)
+                @Html.DisplayFor(model => model.Performance.PerformerDto.PerformerType)
             </dd>
 
-            @if (Model.Performance.PerformerDto.PerformerTypeId < 5)
+            @if (Model.Performance.PerformerDto.PerformerType < 0)
             {
                 <dt>
-                    @Html.DisplayNameFor(model => model.Performance.PerformerDto.GenreDto.Name)
+                    @Html.DisplayNameFor(model => model.Performance.PerformerDto.Genre)
                 </dt>
 
                 <dd>
-                    @Html.DisplayFor(model => model.Performance.PerformerDto.GenreDto.Name)
+                    @Html.DisplayFor(model => model.Performance.PerformerDto.Genre)
                 </dd>
             }
             else
             {
                 <dt>
-                    @Html.DisplayNameFor(model => model.Performance.PerformerDto.TopicDto.Name)
+                    @Html.DisplayNameFor(model => model.Performance.PerformerDto.Topic)
                 </dt>
 
                 <dd>
-                    @Html.DisplayFor(model => model.Performance.PerformerDto.TopicDto.Name)
+                    @Html.DisplayFor(model => model.Performance.PerformerDto.Topic)
                 </dd>
             }
 

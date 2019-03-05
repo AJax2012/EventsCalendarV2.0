@@ -4,7 +4,7 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace EventsCalendar.EntityConfigurations
 {
-    class ReservationConfiguration : EntityTypeConfiguration<Reservation>
+    public class ReservationConfiguration : EntityTypeConfiguration<Reservation>
     {
         public ReservationConfiguration()
         {

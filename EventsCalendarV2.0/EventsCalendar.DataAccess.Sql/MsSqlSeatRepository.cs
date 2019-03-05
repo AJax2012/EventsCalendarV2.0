@@ -90,7 +90,7 @@ namespace EventsCalendar.DataAccess.Sql
                     {
                         bulkCopy.ColumnMappings.Add("SeatType", "SeatType");
                         bulkCopy.ColumnMappings.Add("VenueId", "VenueId");
-                        bulkCopy.WriteToServerAsync(dt);
+                        bulkCopy.WriteToServer(dt);
                         Console.WriteLine("Bulk data stored successfully");
                     }
                     catch (Exception e)

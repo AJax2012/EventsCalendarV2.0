@@ -34,7 +34,7 @@ namespace EventsCalendar.EntityConfigurations
             HasMany(p => p.Reservations)
                 .WithRequired(r => r.Performance)
                 .HasForeignKey(r => r.PerformanceId)
-                .WillCascadeOnDelete(true);
+                .WillCascadeOnDelete(false);
         }
     }
 }
