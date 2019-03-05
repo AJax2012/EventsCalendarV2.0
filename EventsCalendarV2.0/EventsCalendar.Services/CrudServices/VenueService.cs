@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using System.Web;
-using System.Web.UI.WebControls;
 using AutoMapper;
 using EventsCalendar.Core.Contracts;
 using EventsCalendar.Core.Dtos;
 using EventsCalendar.Core.Models;
 using EventsCalendar.Core.ViewModels;
-using EventsCalendar.DataAccess.Sql;
+using EventsCalendar.Services.SeatServices;
 
 namespace EventsCalendar.Services.CrudServices
 {
@@ -19,17 +16,20 @@ namespace EventsCalendar.Services.CrudServices
         private readonly IRepository<Address> _addressRepository;
         private readonly IRepository<Performance> _performanceRepository;
         private readonly ISeatRepository _seatRepository;
+        private readonly ISeatService seatService;
         private readonly string DefaultImgSrc = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJa4VlErDGxyBl-tQu41odZDe-qLvI1xNDALRMYxTITZOb3DslFg";
 
         public VenueService(IRepository<Venue> repo, 
                             IRepository<Address> addressRepo, 
                             ISeatRepository seatRepo,
-                            IRepository<Performance> performanceRepo)
+                            IRepository<Performance> performanceRepo,
+                            ISeatService _seatService)
         {
             _repository = repo;
             _addressRepository = addressRepo;
             _seatRepository = seatRepo;
             _performanceRepository = performanceRepo;
+            seatService = _seatService;
         }
 
         private Venue FindVenueDto(int id)
@@ -44,63 +44,6 @@ namespace EventsCalendar.Services.CrudServices
                 throw new HttpException(404, "Venue Not Found");
 
             return venue;
-        }
-
-        /**
-         * loops through amounts in seats array. sets essential values for each seat
-         */ 
-        private void CreateSeatsForNewVenue(int capacity, SeatType type, Venue venue)
-        {
-            for (var i = 0; i >= capacity; i++)
-            {
-                var seat = new Seat();
-                seat.SeatType = type;
-                venue.Seats.Add(seat);
-            };
-        }
-
-        private SeatCapacity GetSeatCapacities(int venueId)
-        {
-            var capacity = new SeatCapacity();
-            var allSeats = _seatRepository
-                .Collection()
-                .Where(seat => seat.VenueId == venueId)
-                .ToList();
-
-            capacity.Budget = allSeats
-                .Where(seat => seat.SeatType.Equals(SeatType.Budget))
-                .Count();
-
-            capacity.Moderate = allSeats
-                .Where(seat => seat.SeatType == SeatType.Moderate)
-                .Count();
-
-            capacity.Premier = allSeats
-                .Where(seat => seat.SeatType == SeatType.Premier)
-                .Count();
-
-            capacity.Total = allSeats.Count();
-
-            return capacity;
-        }
-
-        private void RemoveSeatsFromSeatContext(int budget, int moderate, int premier, int id)
-        {
-
-            if (budget > 0)
-                _seatRepository.BulkInsertSeats(budget, SeatType.Budget, id);
-            else if (budget  < 0)
-                _seatRepository.BulkDeleteSeats(budget, SeatType.Budget, id);
-
-            if (moderate > 0)
-                _seatRepository.BulkInsertSeats(moderate, SeatType.Moderate, id);
-            else if (moderate < 0)
-                _seatRepository.BulkDeleteSeats(moderate, SeatType.Moderate, id);
-
-            if (premier > 0)
-                _seatRepository.BulkInsertSeats(premier, SeatType.Premier, id);
-            else if (premier < 0)
-                _seatRepository.BulkDeleteSeats(premier, SeatType.Premier, id);
         }
 
         public IEnumerable<VenueViewModel> ListVenues()
@@ -175,7 +118,7 @@ namespace EventsCalendar.Services.CrudServices
                 ImgSrc = venue.ImageUrl
             };
 
-            viewModel.SeatCapacity = GetSeatCapacities(venue.Id);
+            viewModel.SeatCapacity = seatService.GetSeatCapacities(venue.Id);
 
             return viewModel;
         }
@@ -193,7 +136,7 @@ namespace EventsCalendar.Services.CrudServices
             venueToEdit.Address.ZipCode = venueViewModel.Venue.AddressDto.ZipCode;
             venueToEdit.IsActive = true;
 
-            var capacity = GetSeatCapacities(id);
+            var capacity = seatService.GetSeatCapacities(id);
             var budget = venueViewModel.SeatCapacity.Budget;
             var moderate = venueViewModel.SeatCapacity.Moderate;
             var premier = venueViewModel.SeatCapacity.Premier;
@@ -202,7 +145,7 @@ namespace EventsCalendar.Services.CrudServices
             var moderateNew = moderate - capacity.Moderate;
             var premierNew = premier - capacity.Premier;
 
-            RemoveSeatsFromSeatContext(budgetNew, moderateNew, premierNew, venueToEdit.Id);
+            seatService.ChangeAmountOfSeatsInContext(budgetNew, moderateNew, premierNew, venueToEdit.Id);
 
             _repository.Commit();
             _addressRepository.Commit();

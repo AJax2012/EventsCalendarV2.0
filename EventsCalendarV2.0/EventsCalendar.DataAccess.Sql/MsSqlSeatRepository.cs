@@ -115,6 +115,7 @@ namespace EventsCalendar.DataAccess.Sql
                 {
                     var venueIdParam = new SqlParameter("@venueId", venueId);
                     Context.Database.ExecuteSqlCommand("dbo.BulkDeleteSeats @venueId", venueIdParam);
+                    Console.WriteLine("All seats for venue deleted successfully.");
                 }
                 catch (Exception e)
                 {

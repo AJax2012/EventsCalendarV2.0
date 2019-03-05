@@ -8,6 +8,8 @@ using EventsCalendar.Core.Contracts;
 using EventsCalendar.Core.Models;
 using EventsCalendar.DataAccess.Sql;
 using EventsCalendar.Services.CrudServices;
+using EventsCalendar.Services.ReservationServices;
+using EventsCalendar.Services.SeatServices;
 
 namespace EventsCalendar.WebUI
 {
@@ -40,7 +42,8 @@ namespace EventsCalendar.WebUI
             builder.RegisterType(typeof(PerformanceService)).As(typeof(IPerformanceService));
             builder.RegisterType(typeof(PerformerService)).As(typeof(IPerformerService));
             builder.RegisterType(typeof(VenueService)).As(typeof(IVenueService));
-            //builder.RegisterType(typeof(ImageIoService)).As(typeof(IImageIoService));
+            builder.RegisterType(typeof(SeatService)).As(typeof(ISeatService));
+            builder.RegisterType(typeof(ReservationService)).As(typeof(IReservationService));
 
             // Register Api Controllers
 //            builder.RegisterApiControllers(Assembly.GetExecutingAssembly());

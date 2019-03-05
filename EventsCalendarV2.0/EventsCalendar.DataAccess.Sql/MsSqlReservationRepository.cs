@@ -7,6 +7,7 @@ using System.Data.Entity;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Data.OleDb;
 
 namespace EventsCalendar.DataAccess.Sql
 {
@@ -22,7 +23,10 @@ namespace EventsCalendar.DataAccess.Sql
 
         public IEnumerable<Reservation> Collection()
         {
-            return Context.Reservations.ToList();
+            return Context.Reservations
+                .Include(res => res.Seat)
+                .Include(res => res.Performance)
+                .ToList();
         }
 
         public void Commit()
@@ -110,7 +114,7 @@ namespace EventsCalendar.DataAccess.Sql
             }
         }
 
-        public void DeleteAllPerformanceReservations(int performanceId)
+        public void ChangeReservationPrices(UpdatePricesObject update)
         {
             using (SqlConnection sourceConnection = new SqlConnection(connectionString))
             {
@@ -118,8 +122,11 @@ namespace EventsCalendar.DataAccess.Sql
 
                 try
                 {
-                    var performanceIdParam = new SqlParameter("@performanceId", performanceId);
-                    Context.Database.ExecuteSqlCommand("dbo.BulkDeletePerformanceReservations @performanceId", performanceIdParam);
+                    var priceParam = new SqlParameter("@price", update.Price);
+                    var seatTypeParam = new SqlParameter("@seatType", update.Type);
+                    var performanceIdParam = new SqlParameter("@performanceId", update.PerformanceId);
+                    Context.Database.ExecuteSqlCommand("dbo.BulkUpdatePrices @price, @seatType, @performanceId", priceParam, seatTypeParam, performanceIdParam);
+                    Console.WriteLine("Reservation prices updated successfully.");
                 }
                 catch (Exception e)
                 {
@@ -132,9 +139,53 @@ namespace EventsCalendar.DataAccess.Sql
             }
         }
 
-        public void BulkDeleteReservations(int numberOfReservations, SeatType type, int performanceId)
+        public void DeleteAllPerformanceReservations(int performanceId)
         {
-            throw new NotImplementedException();
+            using (SqlConnection sourceConnection = new SqlConnection(connectionString))
+            {
+                sourceConnection.Open();
+
+                try
+                {
+                    var performanceIdParam = new SqlParameter("@performanceId", performanceId);
+                    Context.Database.ExecuteSqlCommand("dbo.BulkDeletePerformanceReservations @performanceId", performanceIdParam);
+                    Console.WriteLine("All reservations for performance deleted successfully.");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    sourceConnection.Close();
+                }
+            }
+        }
+
+        public void BulkDeleteReservations(int numberOfReservations, decimal price, int performanceId)
+        {
+            using (SqlConnection sourceConnection = new SqlConnection(connectionString))
+            {
+                sourceConnection.Open();
+
+                try
+                {
+                    numberOfReservations = Math.Abs(numberOfReservations);
+                    var numberOfSeatsParam = new SqlParameter("@numberOfReservations", numberOfReservations);
+                    var seatTypeParam = new SqlParameter("@price", price);
+                    var venueIdParam = new SqlParameter("@performanceId", performanceId);
+                    Context.Database.ExecuteSqlCommand("dbo.BulkDeleteReservations @numberOfSeats, @seatType, @venueId", numberOfSeatsParam, seatTypeParam, venueIdParam);
+                    Console.WriteLine("Reservations successfully deleted.");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    sourceConnection.Close();
+                }
+            }
         }
 
         private DataTable MakeTable()

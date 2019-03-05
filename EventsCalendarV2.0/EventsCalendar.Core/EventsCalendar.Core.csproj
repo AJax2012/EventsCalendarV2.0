@@ -88,6 +88,7 @@
     <Compile Include="Contracts\IReservationService.cs" />
     <Compile Include="Contracts\IReservationRepository.cs" />
     <Compile Include="Contracts\ISeatRepository.cs" />
+    <Compile Include="Contracts\ISeatService.cs" />
     <Compile Include="Contracts\IVenueService.cs" />
     <Compile Include="Dtos\AddressDto.cs" />
     <Compile Include="Dtos\CustomImageDto.cs" />
@@ -107,10 +108,13 @@
     <Compile Include="Models\Performer.cs" />
     <Compile Include="Models\PerformerType.cs" />
     <Compile Include="Models\Reservation.cs" />
+    <Compile Include="Models\ReservationPrices.cs" />
     <Compile Include="Models\Seat.cs" />
     <Compile Include="Models\SeatCapacity.cs" />
-    <Compile Include="Models\SimpleReservation.cs" />
-    <Compile Include="Models\Temp.cs" />
+    <Compile Include="Models\ReservationsByType.cs" />
+    <Compile Include="Models\SimpleNewReservation.cs" />
+    <Compile Include="Models\UpdatePricesObject.cs" />
+    <Compile Include="Models\SimpleSeat.cs" />
     <Compile Include="Models\SeatType.cs" />
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Models\Venue.cs" />

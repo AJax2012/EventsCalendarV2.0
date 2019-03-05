@@ -1,17 +1,13 @@
-﻿using EventsCalendar.Core.Dtos;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using EventsCalendar.Core.Models;
 
 namespace EventsCalendar.Core.Contracts
 {
-    interface IReservationService
+    public interface IReservationService
     {
-        IEnumerable<ReservationDto> ListReservations();
-        ReservationDto NewReservationDto();
-        void CreateReservation(ReservationDto ReservationDto);
-        ReservationDto ReturnReservationDto(Guid id);
-        ReservationDto ReturnReservationDetails(Guid id);
-        void EditReservation(ReservationDto ReservationDto, Guid id);
-        void DeleteReservation(Guid id);
+        IEnumerable<SimpleReservation> CombineReservations(IEnumerable<SimpleReservation> budget, IEnumerable<SimpleReservation> moderate, IEnumerable<SimpleReservation> premier);
+        IEnumerable<Reservation> GetReservations(int performanceId);
+        IEnumerable<SimpleReservation> GetSimpleReservations(int venueId, SeatType type, decimal price);
+        void SetNewReservationPrices(int performanceId, ReservationPrices prices);
     }
 }

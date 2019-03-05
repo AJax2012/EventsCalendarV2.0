@@ -16,18 +16,24 @@ namespace EventsCalendar.Services.CrudServices
         private readonly IReservationRepository _reservationRepository;
         private readonly ISeatRepository _seatRepository;
         private readonly IRepository<Venue> _venueRepository;
+        private readonly ISeatService seatService;
+        private readonly IReservationService reservationService;
 
         public PerformanceService(IRepository<Performance> repository,
                                   IRepository<Performer> performerRepository, 
                                   IReservationRepository reservationRepository,
                                   ISeatRepository seatRepository,
-                                  IRepository<Venue> venueRepository)
+                                  IRepository<Venue> venueRepository,
+                                  ISeatService _seatService,
+                                  IReservationService _reservationService)
         {
             _repository = repository;
             _performerRepository = performerRepository;
             _seatRepository = seatRepository;
             _reservationRepository = reservationRepository;
             _venueRepository = venueRepository;
+            seatService = _seatService;
+            reservationService = _reservationService;
         }
 
         private Performance FindPerformanceDto(int id)
@@ -42,40 +48,6 @@ namespace EventsCalendar.Services.CrudServices
                 throw new HttpException(404, "Performance Not Found");
 
             return performance;
-        }
-
-        private IEnumerable<Seat> GetSeatsBySeatType(int id, SeatType type)
-        {
-            return _seatRepository.Collection()
-                .Where(seat => seat.VenueId == id)
-                .Where(seat => seat.SeatType == type)
-                .ToList();
-        }
-
-        private IEnumerable<SimpleReservation> GetSimpleReservations(int venueId, SeatType type, decimal price)
-        {
-            IEnumerable<Seat> seats = GetSeatsBySeatType(venueId, type);
-            List<SimpleReservation> reservations = new List<SimpleReservation>();
-
-            foreach (var seat in seats)
-            {
-                reservations.Add(new SimpleReservation
-                {
-                    SeatId = seat.Id,
-                    Price = price
-                });
-            }
-
-            return reservations;
-        }
-
-        private IEnumerable<SimpleReservation> CombineReservations(IEnumerable<SimpleReservation> list1, IEnumerable<SimpleReservation> list2, IEnumerable<SimpleReservation> list3)
-        {
-            List<SimpleReservation> all = new List<SimpleReservation>();
-            all.AddRange(list1);
-            all.AddRange(list2);
-            all.AddRange(list3);
-            return all;
         }
 
         public IEnumerable<PerformanceViewModel> ListPerformances()
@@ -125,11 +97,11 @@ namespace EventsCalendar.Services.CrudServices
                 VenueId = performanceViewModel.Performance.VenueDto.Id
             };
 
-            IEnumerable<SimpleReservation> budgetReservations = GetSimpleReservations(performance.VenueId, SeatType.Budget, performanceViewModel.BudgetPrice);
-            IEnumerable<SimpleReservation> moderateReservations = GetSimpleReservations(performance.VenueId, SeatType.Moderate, performanceViewModel.ModeratePrice);
-            IEnumerable<SimpleReservation> premierReservations = GetSimpleReservations(performance.VenueId, SeatType.Premier, performanceViewModel.PremierPrice);
+            IEnumerable<SimpleReservation> budgetReservations = reservationService.GetSimpleReservations(performance.VenueId, SeatType.Budget, performanceViewModel.BudgetPrice);
+            IEnumerable<SimpleReservation> moderateReservations = reservationService.GetSimpleReservations(performance.VenueId, SeatType.Moderate, performanceViewModel.ModeratePrice);
+            IEnumerable<SimpleReservation> premierReservations = reservationService.GetSimpleReservations(performance.VenueId, SeatType.Premier, performanceViewModel.PremierPrice);
 
-            IEnumerable<SimpleReservation> allReservations = CombineReservations(budgetReservations, moderateReservations, premierReservations);
+            IEnumerable<SimpleReservation> allReservations = reservationService.CombineReservations(budgetReservations, moderateReservations, premierReservations);
 
             _repository.Insert(performance);
             _repository.Commit();
@@ -200,7 +172,14 @@ namespace EventsCalendar.Services.CrudServices
             performanceToEdit.SeatsRemaining = performanceViewModel.Performance.SeatsRemaining;
             performanceToEdit.VenueId = performanceViewModel.Performance.VenueDto.Id;
 
-            Mapper.Map(performanceViewModel.Performance.ReservationDtos, performanceToEdit.Reservations);
+            ReservationPrices prices = new ReservationPrices
+            {
+                Budget = performanceViewModel.BudgetPrice,
+                Moderate = performanceViewModel.ModeratePrice,
+                Premier = performanceViewModel.PremierPrice
+            };
+
+            reservationService.SetNewReservationPrices(id, prices);
 
             _repository.Commit();
         }

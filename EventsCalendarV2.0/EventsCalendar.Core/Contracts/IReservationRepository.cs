@@ -7,6 +7,7 @@ namespace EventsCalendar.Core.Contracts
     {
         void BulkInsertReservations(IEnumerable<SimpleReservation> reservations, int performanceId);
         void DeleteAllPerformanceReservations(int performanceId);
-        void BulkDeleteReservations(int numberOfReservations, SeatType type, int performanceId);
+        void BulkDeleteReservations(int numberOfReservations, decimal price, int performanceId);
+        void ChangeReservationPrices(UpdatePricesObject update);
     }
 }

@@ -54,6 +54,8 @@
     <Compile Include="Helpers\EnumUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CrudServices\VenueService.cs" />
+    <Compile Include="ReservationServices\ReservationService.cs" />
+    <Compile Include="SeatServices\SeatService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EventsCalendar.Core\EventsCalendar.Core.csproj">
