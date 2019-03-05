@@ -86,8 +86,8 @@
     <Compile Include="Contracts\IPerformerService.cs" />
     <Compile Include="Contracts\IRepository.cs" />
     <Compile Include="Contracts\IReservationService.cs" />
+    <Compile Include="Contracts\IReservationRepository.cs" />
     <Compile Include="Contracts\ISeatRepository.cs" />
-    <Compile Include="Contracts\ISeatService.cs" />
     <Compile Include="Contracts\IVenueService.cs" />
     <Compile Include="Dtos\AddressDto.cs" />
     <Compile Include="Dtos\CustomImageDto.cs" />
