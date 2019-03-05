@@ -21,7 +21,7 @@ namespace EventsCalendar.EntityConfigurations
             HasMany(s => s.Reservations)
                 .WithRequired(r => r.Seat)
                 .HasForeignKey(r => r.SeatId)
-                .WillCascadeOnDelete(true);
+                .WillCascadeOnDelete(false);
         }
     }
 }

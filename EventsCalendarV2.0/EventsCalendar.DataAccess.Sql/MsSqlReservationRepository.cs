@@ -4,12 +4,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
 
 namespace EventsCalendar.DataAccess.Sql
 {
-    public class MsSqlReservationRepository : IGuidRepository<Reservation>
+    public class MsSqlReservationRepository : IReservationRepository
     {
         internal DataContext Context;
+        internal readonly string connectionString = ConfigurationManager.ConnectionStrings["EventCalendarDataContext"].ConnectionString;
 
         public MsSqlReservationRepository(DataContext context)
         {
@@ -58,6 +62,93 @@ namespace EventsCalendar.DataAccess.Sql
         public void ToggleChangeDetection(bool enabled)
         {
             Context.Configuration.AutoDetectChangesEnabled = enabled;
+        }
+
+        public void BulkInsertReservations(IEnumerable<SimpleReservation> reservations, int performanceId)
+        {
+            var dt = MakeTable();
+
+            foreach (var reservation in reservations)
+            {
+                DataRow row = dt.NewRow();
+                row["Price"] = reservation.Price;
+                row["SeatId"] = reservation.SeatId;
+                row["PerformanceId"] = performanceId;
+                row["IsTaken"] = false;
+                dt.Rows.Add(row);
+            }
+
+            using (SqlConnection sourceConnection = new SqlConnection(connectionString))
+            {
+                sourceConnection.Open();
+
+                using (SqlBulkCopy bulkCopy = new SqlBulkCopy(
+                    connectionString, SqlBulkCopyOptions.KeepIdentity))
+                {
+                    bulkCopy.BatchSize = reservations.Count();
+
+                    bulkCopy.DestinationTableName = "Reservations";
+
+                    try
+                    {
+                        bulkCopy.ColumnMappings.Add("Price", "Price");
+                        bulkCopy.ColumnMappings.Add("SeatId", "SeatId");
+                        bulkCopy.ColumnMappings.Add("PerformanceId", "PerformanceId");
+                        bulkCopy.ColumnMappings.Add("IsTaken", "IsTaken");
+                        bulkCopy.WriteToServer(dt);
+                        Console.WriteLine("Bulk data stored successfully");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    finally
+                    {
+                        sourceConnection.Close();
+                    }
+                }
+            }
+        }
+
+        public void DeleteAllPerformanceReservations(int performanceId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void BulkDeleteReservations(int numberOfReservations, SeatType type, int performanceId)
+        {
+            throw new NotImplementedException();
+        }
+
+        private DataTable MakeTable()
+        {
+            var dt = new DataTable();
+
+            dt.Columns.Add(new DataColumn()
+            {
+                DataType = typeof(decimal),
+                ColumnName = "Price"
+            });
+
+            dt.Columns.Add(new DataColumn()
+            {
+                DataType = typeof(int),
+                ColumnName = "SeatId"
+            });
+
+            dt.Columns.Add(new DataColumn()
+            {
+                DataType = typeof(int),
+                ColumnName = "PerformanceId"
+            });
+
+            dt.Columns.Add(new DataColumn()
+            {
+                DataType = typeof(bool),
+                ColumnName = "IsTaken"
+            });
+
+            return dt;
         }
     }
 }

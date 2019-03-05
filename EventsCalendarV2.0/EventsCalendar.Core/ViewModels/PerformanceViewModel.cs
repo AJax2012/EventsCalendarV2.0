@@ -12,6 +12,15 @@ namespace EventsCalendar.Core.ViewModels
         public PerformanceDto Performance { get; set; }
         public string GoogleMapsSrcUrl { get; set; }
 
+        [Display(Name = "Budget Price")]
+        public decimal BudgetPrice { get; set; }
+
+        [Display(Name = "Moderate Price")]
+        public decimal ModeratePrice { get; set; }
+
+        [Display(Name = "Premier Price")]
+        public decimal PremierPrice { get; set; }
+
         [AfterToday]
         [Display(Name = "Event Date")]
         public string EventDate { get; set; }
