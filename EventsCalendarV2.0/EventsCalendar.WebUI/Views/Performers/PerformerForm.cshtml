@@ -4,53 +4,53 @@
     ViewBag.Title = "PerformerForm";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="offset-2 col-lg-6">
+    <h2>Performer Form</h2>
 
-<h2>Performer Form</h2>
+    @using (Html.BeginForm("Save", "Performers"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Performer.Id)
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-@using (Html.BeginForm("Save", "Performers"))
-{
-    @Html.AntiForgeryToken()
-    @Html.HiddenFor(model => model.Performer.Id)
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Performer.Name)
+            @Html.EditorFor(model => model.Performer.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Performer.Name, "", new { @class = "text-danger" })
+        </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Performer.Name)
-        @Html.EditorFor(model => model.Performer.Name, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.Performer.Name, "", new { @class = "text-danger" })
-    </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Performer.PerformerType)
+            @Html.EnumDropDownListFor(model => model.Performer.PerformerType, null, new { @class = "form-control", @id = "performerType" })
+        </div>
+                
+        <div class="form-group" id="genre-js">
+            @Html.LabelFor(model => model.Performer.Genre)
+            @Html.EnumDropDownListFor(model => model.Performer.Genre, null, new { @class = "form-control" })
+        </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Performer.PerformerType)
-        @Html.EnumDropDownListFor(model => model.Performer.PerformerType, null, new { @class = "form-control", @id = "performerType" })
-    </div>
+        <div class="form-group hidden" id="topic-js">
+            @Html.LabelFor(model => model.Performer.Topic)
+            @Html.EnumDropDownListFor(model => model.Performer.Topic, null, new { @class = "form-control" })
+        </div>
 
-    <div class="form-group" id="genre-js">
-        @Html.LabelFor(model => model.Performer.Genre)
-        @Html.EnumDropDownListFor(model => model.Performer.Genre, null, new { @class = "form-control" })
-    </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Performer.TourName)
+            @Html.EditorFor(model => model.Performer.TourName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Performer.TourName, "", new { @class = "text-danger" })
+        </div>
 
-    <div class="form-group hidden" id="topic-js">
-        @Html.LabelFor(model => model.Performer.Topic)
-        @Html.EnumDropDownListFor(model => model.Performer.Topic, null, new { @class = "form-control" })
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Performer.TourName)
-        @Html.EditorFor(model => model.Performer.TourName, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.Performer.TourName, "", new { @class = "text-danger" })
-    </div>
-
-    <div class="form-group" id="performer-image">
+        <div class="form-group" id="performer-image">
             <img src="@Model.ImgSrc" class="img-thumbnail" />
-    </div>
+        </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Performer.ImageUrl)
-        @Html.EditorFor(model => model.Performer.ImageUrl, new { htmlAttributes = new { @class = "form-control", @placeholder = "http://" } })
-        @Html.ValidationMessageFor(model => model.Performer.ImageUrl, "", new { @class = "text-danger" })
-    </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Performer.ImageUrl)
+            @Html.EditorFor(model => model.Performer.ImageUrl, new { htmlAttributes = new { @class = "form-control", @placeholder = "http://" } })
+            @Html.ValidationMessageFor(model => model.Performer.ImageUrl, "", new { @class = "text-danger" })
+        </div>
 
-    @*<div class="form-group">
+        @*<div class="form-group">
             <div class="input-group">
                 <div class="custom-file">
                     <label class="custom-file-label" for="inputGroupFile">@Model.Image.FileName</label>
@@ -59,15 +59,16 @@
             </div>
         </div>*@
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Performer.Description)
-        @Html.TextAreaFor(model => model.Performer.Description, 6, 50, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Performer.Description, "", new { @class = "text-danger" })
-    </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Performer.Description)
+            @Html.TextAreaFor(model => model.Performer.Description, 6, 50, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Performer.Description, "", new { @class = "text-danger" })
+        </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
-    @Html.ActionLink("Cancel", "Index", "Performers", null, new { @class = "btn btn-dark" })
-}
+        <button type="submit" class="btn btn-primary">Submit</button>
+        @Html.ActionLink("Cancel", "Index", "Performers", null, new { @class = "btn btn-dark" })
+        }
+</div>
 
 
 @section Scripts {
