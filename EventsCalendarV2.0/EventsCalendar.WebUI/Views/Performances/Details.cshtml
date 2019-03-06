@@ -100,33 +100,7 @@
                     @Html.DisplayFor(model => model.Performance.SeatsRemaining)
                 </dd>
             </dl>
-            <dl class="col-lg-3">
 
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.BudgetPrice)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.BudgetPrice)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.ModeratePrice)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.ModeratePrice)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.PremierPrice)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.PremierPrice)
-                </dd>
-            </dl>
 
             <div class="clearfix"></div>
         </div>
@@ -134,8 +108,8 @@
 
     @* Begin Performer Section *@
     <div class="row mt-lg-4">
-        <div class="col-lg-6" id="performer-img">
-            <img src="@Model.Performance.PerformerDto.ImageUrl" />
+        <div class="col-lg-6">
+            <img src="@Model.Performance.PerformerDto.ImageUrl" id="performer-img" />
         </div>
         <dl class="col-lg-6 dl-horizontal">
             <dt>
@@ -206,54 +180,124 @@
         <div class="col-lg-6">
             <img src="@Model.Performance.VenueDto.ImageUrl" id="venue-img" />
         </div>
-        <dl class="col-lg-6 container-fluid dl-horizontal">
+        <div class="col-lg-6" id="venue-info">
+            <div class="row">
+                <dl class="dl-horizontal col">
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Performance.VenueDto.Name)
-            </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Performance.VenueDto.Name)
+                    </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Performance.VenueDto.Name)
-            </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Performance.VenueDto.Name)
+                    </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Performance.VenueDto.AddressDto.StreetAddress)
-            </dt>
+                </dl>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row">
+                <dl class="dl-horizontal col">
 
-            <dd>
-                @Html.DisplayFor(model => model.Performance.VenueDto.AddressDto.StreetAddress, new { @id="street-address" })
-            </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Performance.VenueDto.AddressDto.StreetAddress)
+                    </dt>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Performance.VenueDto.AddressDto.City)
-            </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Performance.VenueDto.AddressDto.StreetAddress, new { @id = "street-address" })
+                    </dd>
 
-            <dd>
-                @Html.DisplayFor(model => model.Performance.VenueDto.AddressDto.City, new { @id = "city" })
-            </dd>
+                </dl>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <dl class="dl-horizontal">
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Performance.VenueDto.AddressDto.State)
-            </dt>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Performance.VenueDto.AddressDto.City)
+                        </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Performance.VenueDto.AddressDto.State, new { @id = "state" })
-            </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.Performance.VenueDto.AddressDto.City, new { @id = "city" })
+                        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Performance.VenueDto.AddressDto.ZipCode)
-            </dt>
+                    </dl>
+                </div>
+                <div class="col">
+                    <dl class="dl-horizontal">
 
-            <dd>
-                @Html.DisplayFor(model => model.Performance.VenueDto.AddressDto.ZipCode)
-            </dd>
-        </dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Performance.VenueDto.AddressDto.State)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Performance.VenueDto.AddressDto.State, new { @id = "state" })
+                        </dd>
+
+                    </dl>
+                </div>
+                <div class="col">
+                    <dl class="dl-horizontal">
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Performance.VenueDto.AddressDto.ZipCode)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Performance.VenueDto.AddressDto.ZipCode)
+                        </dd>
+
+                    </dl>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row">
+                <div class="col">
+                    <dl class="dl-horizontal">
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.BudgetPrice)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.BudgetPrice)
+                        </dd>
+
+                    </dl>
+                </div>
+                <div class="col">
+                    <dl class="dl-horizontal">
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ModeratePrice)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.ModeratePrice)
+                        </dd>
+
+                    </dl>
+                </div>
+                <div class="col">
+                    <dl class="dl-horizontal">
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.PremierPrice)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.PremierPrice)
+                        </dd>
+
+                    </dl>
+                </div>
+            </div>
+        </div>
         <div class="clearfix"></div>
     </div>
 
     <div class="row">
         <div class="col-lg-12">
-            <div id="map"></div>
+            <iframe id="map" src=""></iframe>
         </div>
     </div>
 
@@ -265,38 +309,17 @@
     </div>
 </div>
 
-@section scripts 
+@section scripts
 {
     <script>
-        function initMap() {
-            var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 12,
-                center: { lat: 39.7392, lng: -104.9903 }
-            });
-            var geocoder = new google.maps.Geocoder();
-
-            geocodeAddress(geocoder, map);
-        }
-
-        function geocodeAddress(geocoder, resultsMap) {
-            var streetAddress = '@(Model.Performance.VenueDto.AddressDto.StreetAddress)';
-            var city = '@(Model.Performance.VenueDto.AddressDto.City)';
-            var state = '@(Model.Performance.VenueDto.AddressDto.State)';
-            var address = `${streetAddress} ${city}, ${state}`;
-            geocoder.geocode({ 'address': address }, function (results, status) {
-                if (status === 'OK') {
-                    resultsMap.setCenter(results[0].geometry.location);
-                    var marker = new google.maps.Marker({
-                        map: resultsMap,
-                        position: results[0].geometry.location
-                    });
-                } else {
-                    alert('Geocode was not successful: ' + status);
-                }
-            });
-        }
-    </script>
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEvGqWLKAT14Nk_NVCtqKE-AuchnT1OU8&callback=initMap">
+        $(document).ready(function () {
+            var streetAddress = '@(Model.Performance.VenueDto.AddressDto.StreetAddress)'.trim();
+            var city = '@(Model.Performance.VenueDto.AddressDto.City)'.trim();
+            var state = '@(Model.Performance.VenueDto.AddressDto.State)'.trim();
+            var address = `${streetAddress},+${city},+${state}`;
+            address = address.replace(/\s/g, '+')
+            var src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBEvGqWLKAT14Nk_NVCtqKE-AuchnT1OU8&q=${address}&zoom=11`;
+            $("#map").attr('src', src);
+        });
     </script>
 }

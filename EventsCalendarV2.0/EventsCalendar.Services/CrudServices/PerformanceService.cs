@@ -97,9 +97,9 @@ namespace EventsCalendar.Services.CrudServices
                 VenueId = performanceViewModel.Performance.VenueDto.Id
             };
 
-            IEnumerable<SimpleReservation> budgetReservations = reservationService.GetSimpleReservations(performance.VenueId, SeatType.Budget, performanceViewModel.BudgetPrice);
-            IEnumerable<SimpleReservation> moderateReservations = reservationService.GetSimpleReservations(performance.VenueId, SeatType.Moderate, performanceViewModel.ModeratePrice);
-            IEnumerable<SimpleReservation> premierReservations = reservationService.GetSimpleReservations(performance.VenueId, SeatType.Premier, performanceViewModel.PremierPrice);
+            IEnumerable<SimpleReservation> budgetReservations = reservationService.CreateSimpleReservations(performance.VenueId, SeatType.Budget, performanceViewModel.BudgetPrice);
+            IEnumerable<SimpleReservation> moderateReservations = reservationService.CreateSimpleReservations(performance.VenueId, SeatType.Moderate, performanceViewModel.ModeratePrice);
+            IEnumerable<SimpleReservation> premierReservations = reservationService.CreateSimpleReservations(performance.VenueId, SeatType.Premier, performanceViewModel.PremierPrice);
 
             IEnumerable<SimpleReservation> allReservations = reservationService.CombineReservations(budgetReservations, moderateReservations, premierReservations);
 
@@ -131,6 +131,10 @@ namespace EventsCalendar.Services.CrudServices
                     EventTime = performance.EventDateTime.ToShortTimeString(),
                 };
 
+            viewModel.BudgetPrice = _reservationRepository.GetPrices(id).Budget;
+            viewModel.ModeratePrice = _reservationRepository.GetPrices(id).Moderate;
+            viewModel.PremierPrice = _reservationRepository.GetPrices(id).Premier;
+
             return viewModel;
         }
 
@@ -155,6 +159,10 @@ namespace EventsCalendar.Services.CrudServices
                     EventDate = performance.EventDateTime.ToShortDateString(),
                     EventTime = performance.EventDateTime.ToShortTimeString(),
                 };
+
+            viewModel.BudgetPrice = _reservationRepository.GetPrices(id).Budget;
+            viewModel.ModeratePrice = _reservationRepository.GetPrices(id).Moderate;
+            viewModel.PremierPrice = _reservationRepository.GetPrices(id).Premier;
 
             Mapper.Map(_performerRepository.Find(performance.PerformerId), viewModel.Performance.PerformerDto);
             Mapper.Map(_venueRepository.Find(performance.VenueId), viewModel.Performance.VenueDto);

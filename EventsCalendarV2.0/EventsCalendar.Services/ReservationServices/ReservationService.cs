@@ -33,7 +33,7 @@ namespace EventsCalendar.Services.ReservationServices
          * Creates SimpleReservations from seats.
          * SimpleReservations = Price & ID
          */
-        public IEnumerable<SimpleReservation> GetSimpleReservations(int venueId, SeatType type, decimal price)
+        public IEnumerable<SimpleReservation> CreateSimpleReservations(int venueId, SeatType type, decimal price)
         {
             IEnumerable<Seat> seats = seatUtil.GetSeatsBySeatType(venueId, type);
             List<SimpleReservation> reservations = new List<SimpleReservation>();

@@ -42,7 +42,8 @@ textarea,
 }
 
 #performer-image,
-#venue-image {
+#venue-image,
+#venue-info {
     padding-top: 1em;
 }
 

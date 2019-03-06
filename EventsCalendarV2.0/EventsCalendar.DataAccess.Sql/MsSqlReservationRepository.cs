@@ -51,6 +51,31 @@ namespace EventsCalendar.DataAccess.Sql
                 .SingleOrDefault(r => r.Id == id);
         }
 
+        public ReservationPrices GetPrices(int performanceId)
+        {
+            var capacity = new ReservationPrices();
+
+            capacity.Budget = Context.Reservations
+                .Where(res => res.Seat.SeatType == SeatType.Budget &&
+                               res.PerformanceId == performanceId)
+                .First()
+                .Price;
+
+            capacity.Moderate = Context.Reservations
+                .Where(res => res.Seat.SeatType == SeatType.Moderate &&
+                               res.PerformanceId == performanceId)
+                .First()
+                .Price;
+
+           capacity.Premier = Context.Reservations
+                .Where(res => res.Seat.SeatType == SeatType.Premier &&
+                               res.PerformanceId == performanceId)
+                .First()
+                .Price;
+
+            return capacity;
+        }
+
         public void Insert(Reservation reservation)
         {
             Context.Reservations.Add(reservation);
