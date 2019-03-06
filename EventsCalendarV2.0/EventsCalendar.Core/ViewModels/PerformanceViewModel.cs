@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using EventsCalendar.Core.Dtos;
+using EventsCalendar.Core.Models;
 using EventsCalendar.Core.Validation;
 
 namespace EventsCalendar.Core.ViewModels
@@ -11,6 +12,7 @@ namespace EventsCalendar.Core.ViewModels
         public IEnumerable<VenueDto> Venues { get; set; }
         public PerformanceDto Performance { get; set; }
         public string GoogleMapsSrcUrl { get; set; }
+        public SeatCapacity SeatsRemaining { get; set; }
 
         [Display(Name = "Budget Price")]
         public decimal BudgetPrice { get; set; }

@@ -50,6 +50,15 @@ namespace EventsCalendar.Services.CrudServices
             return performance;
         }
 
+        private SeatCapacity CountRemainingReservations(Performance performance)
+        {
+            SeatCapacity capacity = new SeatCapacity();
+            capacity.Budget = performance.BudgetSeatsRemaining;
+            capacity.Moderate = performance.ModerateSeatsRemaining;
+            capacity.Premier = performance.PremierSeatsRemaining;
+            return capacity;
+        }
+
         public IEnumerable<PerformanceViewModel> ListPerformances()
         {
             IEnumerable<Performance> performances = 
@@ -94,7 +103,7 @@ namespace EventsCalendar.Services.CrudServices
                 EventDateTime = performanceViewModel.Performance.EventDateTime,
                 IsActive = true,
                 PerformerId = performanceViewModel.Performance.PerformerDto.Id,
-                VenueId = performanceViewModel.Performance.VenueDto.Id
+                VenueId = performanceViewModel.Performance.VenueDto.Id,
             };
 
             IEnumerable<SimpleReservation> budgetReservations = reservationService.CreateSimpleReservations(performance.VenueId, SeatType.Budget, performanceViewModel.BudgetPrice);
@@ -102,6 +111,10 @@ namespace EventsCalendar.Services.CrudServices
             IEnumerable<SimpleReservation> premierReservations = reservationService.CreateSimpleReservations(performance.VenueId, SeatType.Premier, performanceViewModel.PremierPrice);
 
             IEnumerable<SimpleReservation> allReservations = reservationService.CombineReservations(budgetReservations, moderateReservations, premierReservations);
+
+            performance.BudgetSeatsRemaining = budgetReservations.Count();
+            performance.ModerateSeatsRemaining = moderateReservations.Count();
+            performance.PremierSeatsRemaining = premierReservations.Count();
 
             _repository.Insert(performance);
             _repository.Commit();
@@ -131,6 +144,7 @@ namespace EventsCalendar.Services.CrudServices
                     EventTime = performance.EventDateTime.ToShortTimeString(),
                 };
 
+            viewModel.SeatsRemaining = CountRemainingReservations(performance);
             viewModel.BudgetPrice = _reservationRepository.GetPrices(id).Budget;
             viewModel.ModeratePrice = _reservationRepository.GetPrices(id).Moderate;
             viewModel.PremierPrice = _reservationRepository.GetPrices(id).Premier;
@@ -158,11 +172,12 @@ namespace EventsCalendar.Services.CrudServices
 
                     EventDate = performance.EventDateTime.ToShortDateString(),
                     EventTime = performance.EventDateTime.ToShortTimeString(),
+                    BudgetPrice = _reservationRepository.GetPrices(id).Budget,
+                    ModeratePrice = _reservationRepository.GetPrices(id).Moderate,
+                    PremierPrice = _reservationRepository.GetPrices(id).Premier,
                 };
 
-            viewModel.BudgetPrice = _reservationRepository.GetPrices(id).Budget;
-            viewModel.ModeratePrice = _reservationRepository.GetPrices(id).Moderate;
-            viewModel.PremierPrice = _reservationRepository.GetPrices(id).Premier;
+            viewModel.SeatsRemaining = CountRemainingReservations(performance);
 
             Mapper.Map(_performerRepository.Find(performance.PerformerId), viewModel.Performance.PerformerDto);
             Mapper.Map(_venueRepository.Find(performance.VenueId), viewModel.Performance.VenueDto);
@@ -177,7 +192,9 @@ namespace EventsCalendar.Services.CrudServices
             performanceToEdit.EventDateTime = performanceViewModel.Performance.EventDateTime;
             performanceToEdit.IsActive = true;
             performanceToEdit.PerformerId = performanceViewModel.Performance.PerformerDto.Id;
-            performanceToEdit.SeatsRemaining = performanceViewModel.Performance.SeatsRemaining;
+            performanceToEdit.BudgetSeatsRemaining = performanceViewModel.SeatsRemaining.Budget;
+            performanceToEdit.ModerateSeatsRemaining = performanceViewModel.SeatsRemaining.Moderate;
+            performanceToEdit.PremierSeatsRemaining = performanceViewModel.SeatsRemaining.Premier;
             performanceToEdit.VenueId = performanceViewModel.Performance.VenueDto.Id;
 
             ReservationPrices prices = new ReservationPrices

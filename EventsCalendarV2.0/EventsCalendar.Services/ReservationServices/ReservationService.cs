@@ -81,7 +81,7 @@ namespace EventsCalendar.Services.ReservationServices
             _reservationRepository.ChangeReservationPrices(moderate);
             _reservationRepository.ChangeReservationPrices(premier);
         }
-
+        
         /**
          * Retrieves all Reservations at a Performance
          */

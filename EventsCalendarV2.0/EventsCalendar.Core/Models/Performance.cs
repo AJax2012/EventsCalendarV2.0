@@ -6,7 +6,9 @@ namespace EventsCalendar.Core.Models
     public class Performance
     {
         public int Id { get; set; }
-        public int SeatsRemaining { get; set; }
+        public int BudgetSeatsRemaining { get; set; }
+        public int ModerateSeatsRemaining { get; set; }
+        public int PremierSeatsRemaining { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
         public DateTime EventDateTime { get; set; }

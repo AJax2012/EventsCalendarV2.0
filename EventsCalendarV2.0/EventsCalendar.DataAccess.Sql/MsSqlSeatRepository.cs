@@ -67,7 +67,7 @@ namespace EventsCalendar.DataAccess.Sql
         {
             var dt = MakeTable();
 
-            for (var i = 0; i <= numberOfSeats; i++)
+            for (var i = 0; i <= numberOfSeats - 1; i++)
             {
                 DataRow row = dt.NewRow();
                 row["SeatType"] = (int) type;

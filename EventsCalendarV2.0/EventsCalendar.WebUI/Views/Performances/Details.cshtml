@@ -34,13 +34,6 @@
             </dl>
 
             <dl class="col-lg-4">
-                <dt>
-                    @Html.DisplayNameFor(model => model.Performance.SeatsRemaining)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Performance.SeatsRemaining)
-                </dd>
 
                 <dt>
                     @Html.DisplayNameFor(model => model.BudgetPrice)
@@ -83,26 +76,98 @@
     else /* NO DESCRIPTION */
     {
         <div class="row">
-            <div class="dl-horizontal col-lg-6">
+            <div class="col-lg-6">
                 <h3>
                     @Convert.ToDateTime(Model.Performance.EventDateTime).ToString("MMMM d, yyyy") at
                     @Convert.ToDateTime(Model.Performance.EventDateTime).ToString("h:mm tt")
                 </h3>
-
             </div>
 
-            <dl class="col-lg-3">
-                <dt>
-                    @Html.DisplayNameFor(model => model.Performance.SeatsRemaining)
-                </dt>
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.SeatsRemaining.Budget)
+                            </dt>
 
-                <dd>
-                    @Html.DisplayFor(model => model.Performance.SeatsRemaining)
-                </dd>
-            </dl>
+                            <dd>
+                                @Html.DisplayFor(model => model.SeatsRemaining.Budget)
+                            </dd>
+                        </dl>
+                    </div>
 
+                    <div class="col-lg-4">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.SeatsRemaining.Moderate)
+                            </dt>
 
-            <div class="clearfix"></div>
+                            <dd>
+                                @Html.DisplayFor(model => model.SeatsRemaining.Moderate)
+                            </dd>
+                        </dl>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.SeatsRemaining.Premier)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.SeatsRemaining.Premier)
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="offset-lg-6 col-lg-6">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <dl class="dl-horizontal">
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.BudgetPrice)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.BudgetPrice)
+                            </dd>
+
+                        </dl>
+                    </div>
+                    <div class="col-lg-4">
+                        <dl class="dl-horizontal">
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.ModeratePrice)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.ModeratePrice)
+                            </dd>
+
+                        </dl>
+                    </div>
+                    <div class="col-lg-4">
+                        <dl class="dl-horizontal">
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.PremierPrice)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.PremierPrice)
+                            </dd>
+
+                        </dl>
+                    </div>
+                </div>
+            </div>
         </div>
     }
 
@@ -250,47 +315,6 @@
                 </div>
             </div>
             <div class="clearfix"></div>
-            <div class="row">
-                <div class="col">
-                    <dl class="dl-horizontal">
-
-                        <dt>
-                            @Html.DisplayNameFor(model => model.BudgetPrice)
-                        </dt>
-
-                        <dd>
-                            @Html.DisplayFor(model => model.BudgetPrice)
-                        </dd>
-
-                    </dl>
-                </div>
-                <div class="col">
-                    <dl class="dl-horizontal">
-
-                        <dt>
-                            @Html.DisplayNameFor(model => model.ModeratePrice)
-                        </dt>
-
-                        <dd>
-                            @Html.DisplayFor(model => model.ModeratePrice)
-                        </dd>
-
-                    </dl>
-                </div>
-                <div class="col">
-                    <dl class="dl-horizontal">
-
-                        <dt>
-                            @Html.DisplayNameFor(model => model.PremierPrice)
-                        </dt>
-
-                        <dd>
-                            @Html.DisplayFor(model => model.PremierPrice)
-                        </dd>
-
-                    </dl>
-                </div>
-            </div>
         </div>
         <div class="clearfix"></div>
     </div>
@@ -303,7 +327,7 @@
 
     <div class="pt-lg-4">
         @* PURCHASE TICKETS WILL CHANGE WHEN PURCHASE FUNCTIONS ADDED *@
-        @Html.ActionLink("Purchase Tickets", "Edit", new { id = Model.Performance.Id }, new { @class = "btn btn-success" })
+        @Html.ActionLink("Purchase Tickets", "Edit", new { id = Model.Performance.Id }, new { @class = "btn btn-success disabled" })
         @Html.ActionLink("Edit", "Edit", new { id = Model.Performance.Id }, new { @class = "btn btn-primary" })
         @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
     </div>

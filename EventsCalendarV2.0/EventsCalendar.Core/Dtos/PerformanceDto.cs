@@ -10,8 +10,6 @@ namespace EventsCalendar.Core.Dtos
 
         public string Description { get; set; }
 
-        public int SeatsRemaining { get; set; }
-
         public bool IsActive { get; set; }
 
         [Display(Name = "Event Date and Time")]

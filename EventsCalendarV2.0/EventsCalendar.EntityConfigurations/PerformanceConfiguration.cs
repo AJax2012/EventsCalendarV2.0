@@ -18,7 +18,13 @@ namespace EventsCalendar.EntityConfigurations
             Property(p => p.EventDateTime)
                 .IsRequired();
 
-            Property(p => p.SeatsRemaining)
+            Property(p => p.BudgetSeatsRemaining)
+                .IsRequired();
+
+            Property(p => p.ModerateSeatsRemaining)
+                .IsRequired();
+
+            Property(p => p.PremierSeatsRemaining)
                 .IsRequired();
 
             HasRequired(p => p.Venue)
