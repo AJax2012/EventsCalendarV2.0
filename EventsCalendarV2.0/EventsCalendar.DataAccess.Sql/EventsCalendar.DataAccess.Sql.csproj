@@ -58,6 +58,10 @@
     <Compile Include="Migrations\201903061735013_EditSeatsRemaining.Designer.cs">
       <DependentUpon>201903061735013_EditSeatsRemaining.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903070440357_RemoveCapacitiesFromPerformance.cs" />
+    <Compile Include="Migrations\201903070440357_RemoveCapacitiesFromPerformance.Designer.cs">
+      <DependentUpon>201903070440357_RemoveCapacitiesFromPerformance.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MsSqlGenericRepository.cs" />
     <Compile Include="MsSqlPerformanceRepository.cs" />
@@ -83,6 +87,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903061735013_EditSeatsRemaining.resx">
       <DependentUpon>201903061735013_EditSeatsRemaining.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903070440357_RemoveCapacitiesFromPerformance.resx">
+      <DependentUpon>201903070440357_RemoveCapacitiesFromPerformance.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

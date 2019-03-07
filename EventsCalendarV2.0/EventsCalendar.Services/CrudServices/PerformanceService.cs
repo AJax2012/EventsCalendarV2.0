@@ -53,10 +53,7 @@ namespace EventsCalendar.Services.CrudServices
         private SeatCapacity CountRemainingReservations(Performance performance)
         {
             SeatCapacity capacity = new SeatCapacity();
-            capacity.Budget = performance.BudgetSeatsRemaining;
-            capacity.Moderate = performance.ModerateSeatsRemaining;
-            capacity.Premier = performance.PremierSeatsRemaining;
-            return capacity;
+            return reservationService.GetSeatsRemaining(performance.Id);
         }
 
         public IEnumerable<PerformanceViewModel> ListPerformances()
@@ -111,11 +108,7 @@ namespace EventsCalendar.Services.CrudServices
             IEnumerable<SimpleReservation> premierReservations = reservationService.CreateSimpleReservations(performance.VenueId, SeatType.Premier, performanceViewModel.PremierPrice);
 
             IEnumerable<SimpleReservation> allReservations = reservationService.CombineReservations(budgetReservations, moderateReservations, premierReservations);
-
-            performance.BudgetSeatsRemaining = budgetReservations.Count();
-            performance.ModerateSeatsRemaining = moderateReservations.Count();
-            performance.PremierSeatsRemaining = premierReservations.Count();
-
+                        
             _repository.Insert(performance);
             _repository.Commit();
 
@@ -192,9 +185,6 @@ namespace EventsCalendar.Services.CrudServices
             performanceToEdit.EventDateTime = performanceViewModel.Performance.EventDateTime;
             performanceToEdit.IsActive = true;
             performanceToEdit.PerformerId = performanceViewModel.Performance.PerformerDto.Id;
-            performanceToEdit.BudgetSeatsRemaining = performanceViewModel.SeatsRemaining.Budget;
-            performanceToEdit.ModerateSeatsRemaining = performanceViewModel.SeatsRemaining.Moderate;
-            performanceToEdit.PremierSeatsRemaining = performanceViewModel.SeatsRemaining.Premier;
             performanceToEdit.VenueId = performanceViewModel.Performance.VenueDto.Id;
 
             ReservationPrices prices = new ReservationPrices

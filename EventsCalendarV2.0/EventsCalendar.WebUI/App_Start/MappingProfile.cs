@@ -21,7 +21,7 @@ namespace EventsCalendar.WebUI
                 .ForMember(d => d.Performance, opt => opt.MapFrom(s => s))
                 .ReverseMap();
 
-            CreateMap<PerformerDto, Performer>()
+            CreateMap<Performer, PerformerDto>()
                 .ReverseMap();
 
             CreateMap<PerformerDto, PerformerViewModel>()

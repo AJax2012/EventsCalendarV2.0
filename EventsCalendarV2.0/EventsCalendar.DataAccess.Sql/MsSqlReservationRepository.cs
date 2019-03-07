@@ -56,20 +56,20 @@ namespace EventsCalendar.DataAccess.Sql
             var capacity = new ReservationPrices();
 
             capacity.Budget = Context.Reservations
-                .Where(res => res.Seat.SeatType == SeatType.Budget &&
-                               res.PerformanceId == performanceId)
+                .Where(res => res.Seat.SeatType == SeatType.Budget)
+                .Where(res => res.PerformanceId == performanceId)
                 .First()
                 .Price;
 
             capacity.Moderate = Context.Reservations
-                .Where(res => res.Seat.SeatType == SeatType.Moderate &&
-                               res.PerformanceId == performanceId)
+                .Where(res => res.Seat.SeatType == SeatType.Moderate)
+                .Where(res => res.PerformanceId == performanceId)
                 .First()
                 .Price;
 
            capacity.Premier = Context.Reservations
-                .Where(res => res.Seat.SeatType == SeatType.Premier &&
-                               res.PerformanceId == performanceId)
+                .Where(res => res.Seat.SeatType == SeatType.Premier)
+                .Where(res => res.PerformanceId == performanceId)
                 .First()
                 .Price;
 

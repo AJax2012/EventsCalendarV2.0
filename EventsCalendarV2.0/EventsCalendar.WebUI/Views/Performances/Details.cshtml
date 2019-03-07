@@ -193,7 +193,7 @@
                 @Html.DisplayFor(model => model.Performance.PerformerDto.PerformerType)
             </dd>
 
-            @if (Model.Performance.PerformerDto.PerformerType < 0)
+            @if (Model.Performance.PerformerDto.PerformerType == EventsCalendar.Core.Models.PerformerType.Musician)
             {
                 <dt>
                     @Html.DisplayNameFor(model => model.Performance.PerformerDto.Genre)

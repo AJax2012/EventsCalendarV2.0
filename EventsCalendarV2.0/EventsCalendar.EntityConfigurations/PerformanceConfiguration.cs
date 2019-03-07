@@ -18,15 +18,6 @@ namespace EventsCalendar.EntityConfigurations
             Property(p => p.EventDateTime)
                 .IsRequired();
 
-            Property(p => p.BudgetSeatsRemaining)
-                .IsRequired();
-
-            Property(p => p.ModerateSeatsRemaining)
-                .IsRequired();
-
-            Property(p => p.PremierSeatsRemaining)
-                .IsRequired();
-
             HasRequired(p => p.Venue)
                 .WithMany(v => v.Performances)
                 .HasForeignKey(p => p.VenueId)

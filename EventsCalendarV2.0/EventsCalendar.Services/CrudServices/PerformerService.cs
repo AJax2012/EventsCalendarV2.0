@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Web;
 using AutoMapper;
 using EventsCalendar.Core.Contracts;
@@ -42,6 +40,23 @@ namespace EventsCalendar.Services.CrudServices
             return performer;
         }
 
+        private PerformerDto MapPerformerToDto(Performer performer)
+        {
+            PerformerDto performerDto = new PerformerDto();
+            performerDto.Id = performer.Id;
+            performerDto.Name = performer.Name;
+            performerDto.ImageUrl = performer.ImageUrl;
+            performerDto.TourName = performer.TourName;
+            performerDto.IsActive = performer.IsActive;
+            performerDto.PerformerType = performer.PerformerType;
+            if (performer.PerformerType == PerformerType.Musician)
+                performerDto.Genre = performer.Genre;
+            else
+                performerDto.Topic = performer.Topic;
+
+            return performerDto;
+        }
+
         public IEnumerable<PerformerViewModel> ListPerformers()
         {
             IEnumerable<Performer> performers = _context.Collection().ToList();
@@ -62,7 +77,6 @@ namespace EventsCalendar.Services.CrudServices
             var viewModel = new PerformerViewModel
             {
                 Performer = new PerformerDto(),
-                ImgSrc = DefaultImgSrc
             };
 
             viewModel.PerformerTypes = EnumUtil.GetValues<PerformerType>();
@@ -103,13 +117,12 @@ namespace EventsCalendar.Services.CrudServices
 
             var viewModel = new PerformerViewModel
             {
-                ImgSrc = performer.ImageUrl
+                PerformerTypes = EnumUtil.GetValues<PerformerType>(),
+                Genres = EnumUtil.GetValues<Genre>(),
+                Topics = EnumUtil.GetValues<Topic>()
             };
 
-            Mapper.Map(performer, viewModel.Performer);
-            Mapper.Map(EnumUtil.GetValues<PerformerType>(), viewModel.PerformerTypes);
-            Mapper.Map(EnumUtil.GetValues<Genre>(), viewModel.Genres);
-            Mapper.Map(EnumUtil.GetValues<Topic>(), viewModel.Topics);
+            viewModel.Performer = MapPerformerToDto(performer);
 
             return viewModel;
         }

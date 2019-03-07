@@ -8,5 +8,6 @@ namespace EventsCalendar.Core.Contracts
         IEnumerable<SimpleReservation> CombineReservations(IEnumerable<SimpleReservation> budget, IEnumerable<SimpleReservation> moderate, IEnumerable<SimpleReservation> premier);
         IEnumerable<SimpleReservation> CreateSimpleReservations(int venueId, SeatType type, decimal price);
         void SetNewReservationPrices(int performanceId, ReservationPrices prices);
+        SeatCapacity GetSeatsRemaining(int performanceId);
     }
 }

@@ -81,6 +81,31 @@ namespace EventsCalendar.Services.ReservationServices
             _reservationRepository.ChangeReservationPrices(moderate);
             _reservationRepository.ChangeReservationPrices(premier);
         }
+
+        public SeatCapacity GetSeatsRemaining(int performanceId)
+        {
+            var capacity = new SeatCapacity();
+
+            capacity.Budget = _reservationRepository.Collection()
+                .Where(res => res.PerformanceId == performanceId)
+                .Where(res => res.Seat.SeatType == SeatType.Budget)
+                .Where(res => res.IsTaken == false)
+                .Count();
+
+            capacity.Moderate = _reservationRepository.Collection()
+                .Where(res => res.PerformanceId == performanceId)
+                .Where(res => res.Seat.SeatType == SeatType.Moderate)
+                .Where(res => res.IsTaken == false)
+                .Count();
+
+            capacity.Premier = _reservationRepository.Collection()
+                .Where(res => res.PerformanceId == performanceId)
+                .Where(res => res.Seat.SeatType == SeatType.Premier)
+                .Where(res => res.IsTaken == false)
+                .Count();
+
+            return capacity;
+        }
         
         /**
          * Retrieves all Reservations at a Performance
