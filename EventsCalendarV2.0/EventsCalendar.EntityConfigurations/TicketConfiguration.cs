@@ -15,6 +15,9 @@ namespace EventsCalendar.EntityConfigurations
                 .HasDatabaseGeneratedOption(
                     DatabaseGeneratedOption.Identity);
 
+            HasIndex(t => t.ConfirmationNumber)
+                .IsUnique();
+
             Property(t => t.Recipient)
                 .IsRequired();
 

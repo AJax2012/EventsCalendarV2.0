@@ -71,6 +71,7 @@
     <Compile Include="MsSqlPerformerRepository.cs" />
     <Compile Include="MsSqlReservationRepository.cs" />
     <Compile Include="MsSqlSeatRepository.cs" />
+    <Compile Include="MsSqlTicketRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MsSqlVenueRepository.cs" />
   </ItemGroup>

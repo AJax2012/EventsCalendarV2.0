@@ -86,6 +86,7 @@
   <ItemGroup>
     <Compile Include="Contracts\IGuidRepository.cs" />
     <Compile Include="Contracts\IPerformanceService.cs" />
+    <Compile Include="Contracts\ITicketService.cs" />
     <Compile Include="Contracts\IPerformerService.cs" />
     <Compile Include="Contracts\IRepository.cs" />
     <Compile Include="Contracts\IReservationService.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Dtos\PerformerTypeDto.cs" />
     <Compile Include="Dtos\ReservationDto.cs" />
     <Compile Include="Dtos\SeatDto.cs" />
+    <Compile Include="Dtos\TicketDto.cs" />
     <Compile Include="Dtos\TopicDto.cs" />
     <Compile Include="Dtos\PerformanceDto.cs" />
     <Compile Include="Dtos\PerformerDto.cs" />
@@ -126,6 +128,7 @@
     <Compile Include="Validation\AfterToday.cs" />
     <Compile Include="ViewModels\PerformanceViewModel.cs" />
     <Compile Include="ViewModels\PerformerViewModel.cs" />
+    <Compile Include="ViewModels\TicketViewModel.cs" />
     <Compile Include="ViewModels\VenueViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

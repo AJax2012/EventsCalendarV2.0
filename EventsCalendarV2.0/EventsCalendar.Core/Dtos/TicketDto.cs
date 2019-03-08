@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace EventsCalendar.Core.Models
+namespace EventsCalendar.Core.Dtos
 {
-    public class Ticket
+    public class TicketDto
     {
         public Guid Id { get; set; }
         public string ConfirmationNumber { get; set; }
         public string Recipient { get; set; }
         public string Email { get; set; }
-        public Reservation Reservation { get; set; }
+        public ReservationDto Reservation { get; set; }
     }
 }
