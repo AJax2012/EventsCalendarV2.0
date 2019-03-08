@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="CrudServices\PerformanceService.cs" />
     <Compile Include="CrudServices\PerformerService.cs" />
+    <Compile Include="CrudServices\TicketService.cs" />
     <Compile Include="Helpers\EnumUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CrudServices\VenueService.cs" />

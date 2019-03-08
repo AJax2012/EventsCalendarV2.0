@@ -23,6 +23,7 @@ namespace EventsCalendar.WebUI.Models
             modelBuilder.Configurations.Add(new PerformerConfiguration());
             modelBuilder.Configurations.Add(new SeatConfiguration());
             modelBuilder.Configurations.Add(new ReservationConfiguration());
+            modelBuilder.Configurations.Add(new TicketConfiguration());
             modelBuilder.Configurations.Add(new VenueConfiguration());
         }
     }

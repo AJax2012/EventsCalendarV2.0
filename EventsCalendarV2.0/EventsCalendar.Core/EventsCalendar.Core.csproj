@@ -116,6 +116,7 @@
     <Compile Include="Models\SeatCapacity.cs" />
     <Compile Include="Models\ReservationsByType.cs" />
     <Compile Include="Models\SimpleNewReservation.cs" />
+    <Compile Include="Models\Ticket.cs" />
     <Compile Include="Models\UpdatePricesObject.cs" />
     <Compile Include="Models\SimpleSeat.cs" />
     <Compile Include="Models\SeatType.cs" />
