@@ -1,4 +1,5 @@
-﻿using EventsCalendar.DataAccess.Sql;
+﻿using EventsCalendar.Core.Models;
+using EventsCalendar.DataAccess.Sql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,25 +17,30 @@ namespace EventsCalendar.Services.Helpers
         }
 
         private static Random random = new Random();
-        public string RandomString(int length)
+        private readonly int numberLength = 10;
+
+        public string CreateConfirmationNumber(ConfirmationNumberData data)
         {
-            const string firstchars = "ABCDEFGH";
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            string datetime = new DateTime().ToString("MMM dd yy HH");
+
+            char month = datetime[0];
+            string date = datetime.Split(' ')[1];
+            string year = datetime.Split(' ')[2];
+            string hour = datetime.Split(' ')[3];
+
             StringBuilder confirmationNumber = new StringBuilder();
-            confirmationNumber.Append(firstchars[random.Next(firstchars.Length)]);
-
-            var remainder = new string(Enumerable.Repeat(chars, length - 1)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
-
-            confirmationNumber.Append(remainder);
+            confirmationNumber.Append(data.PerformerChar);
+            confirmationNumber.Append(date);
+            confirmationNumber.Append(data.VenueChar);
+            confirmationNumber.Append(hour);
+            confirmationNumber.Append(data.LastReservationChar);
+            confirmationNumber.Append(data.SeatDigit);
+            confirmationNumber.Append(data.FirstReservationChar);
+            confirmationNumber.Append(year);
+            confirmationNumber.Append(data.RandomReservationChar);
+            confirmationNumber.Append(data.VenueRandom);
+            
             var stringConfNumb = confirmationNumber.ToString();
-
-            var boolResult = _repository.Collection()
-                .Where(t => t.ConfirmationNumber == stringConfNumb)
-                .Any();
-
-            if (boolResult)
-                RandomString(length);
 
             return stringConfNumb;
         }

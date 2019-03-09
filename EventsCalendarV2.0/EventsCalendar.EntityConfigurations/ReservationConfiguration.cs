@@ -8,19 +8,24 @@ namespace EventsCalendar.EntityConfigurations
     {
         public ReservationConfiguration()
         {
-            HasIndex(s => s.Id)
+            HasIndex(r => r.Id)
                 .IsUnique();
 
-            Property(s => s.Id)
+            Property(r => r.Id)
                 .HasDatabaseGeneratedOption(
                     DatabaseGeneratedOption.Identity);
 
-            Property(s => s.Price)
+            Property(r => r.Price)
                 .HasPrecision(6, 2)
                 .IsRequired();
 
-            Property(s => s.IsTaken)
+            Property(r => r.IsTaken)
                 .IsRequired();
+
+            HasOptional(r => r.Ticket)
+                .WithMany()
+                .HasForeignKey(r => r.TicketId)
+                .WillCascadeOnDelete(false);
         }
     }
 }

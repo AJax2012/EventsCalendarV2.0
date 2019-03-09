@@ -107,13 +107,14 @@
     <Compile Include="Dtos\VenueDto.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\BaseEntity.cs" />
-    <Compile Include="Models\CustomImage.cs" />
+    <Compile Include="Models\ConfirmationNumberData.cs" />
     <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\Performance.cs" />
     <Compile Include="Models\Performer.cs" />
     <Compile Include="Models\PerformerType.cs" />
     <Compile Include="Models\Reservation.cs" />
     <Compile Include="Models\ReservationPrices.cs" />
+    <Compile Include="Models\SimpleReservationsByType.cs" />
     <Compile Include="Models\Seat.cs" />
     <Compile Include="Models\SeatCapacity.cs" />
     <Compile Include="Models\ReservationsByType.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Validation\AfterToday.cs" />
     <Compile Include="ViewModels\PerformanceViewModel.cs" />
     <Compile Include="ViewModels\PerformerViewModel.cs" />
+    <Compile Include="ViewModels\NewTicketViewModel.cs" />
     <Compile Include="ViewModels\TicketViewModel.cs" />
     <Compile Include="ViewModels\VenueViewModel.cs" />
   </ItemGroup>

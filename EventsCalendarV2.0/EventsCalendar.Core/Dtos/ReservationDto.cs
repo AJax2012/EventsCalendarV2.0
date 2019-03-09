@@ -10,6 +10,8 @@ namespace EventsCalendar.Core.Dtos
         public SeatDto Seat { get; set; }
         public int PerformanceID { get; set; }
         public PerformanceDto Performance { get; set; }
+        public int? TicketId { get; set; }
+        public TicketDto Ticket { get; set; }
         public bool IsTaken { get; set; }
     }
 }

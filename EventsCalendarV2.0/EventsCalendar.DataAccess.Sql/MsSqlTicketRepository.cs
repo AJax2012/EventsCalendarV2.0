@@ -19,7 +19,7 @@ namespace EventsCalendar.DataAccess.Sql
         public IEnumerable<Ticket> Collection()
         {
             return Context.Tickets
-                .Include(t => t.Reservation)
+                .Include(t => t.Reservations)
                 .ToList();
         }
 
@@ -42,7 +42,7 @@ namespace EventsCalendar.DataAccess.Sql
         public Ticket Find(Guid id)
         {
             return Context.Tickets
-                .Include(t => t.Reservation)
+                .Include(t => t.Reservations)
                 .SingleOrDefault(t => t.Id == id);
         }
 

@@ -23,10 +23,6 @@ namespace EventsCalendar.EntityConfigurations
 
             Property(t => t.Email)
                 .IsRequired();
-
-            HasRequired(s => s.Reservation)
-                .WithMany()
-                .WillCascadeOnDelete(false);
         }
     }
 }

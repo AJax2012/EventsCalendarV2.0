@@ -1,4 +1,5 @@
-﻿using EventsCalendar.Core.ViewModels;
+﻿using EventsCalendar.Core.Contracts;
+using EventsCalendar.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,13 @@ namespace EventsCalendar.WebUI.Controllers
 {
     public class TicketsController : Controller
     {
+        private readonly ITicketService ticketService;
+
+        public TicketsController(ITicketService _ticketService)
+        {
+            ticketService = _ticketService;
+        }
+
         // Shows User Pre-purchase ticket options page
         public ActionResult TicketDetails()
         {
@@ -36,11 +44,11 @@ namespace EventsCalendar.WebUI.Controllers
             if (!ModelState.IsValid)
                 return View("TicketForm", ticketViewModel);
 
-            if (ticketViewModel.Venue.Id == 0)
-                _venueService.CreateVenue(ticketViewModel);
+            if (ticketViewModel.Ticket.Id == Guid.Empty)
+                ticketService.CreateTicket(ticketViewModel);
             else
             {
-                _venueService.EditVenue(ticketViewModel, ticketViewModel.Venue.Id);
+                ticketService.EditTicket(ticketViewModel);
             }
 
             return RedirectToAction("Index", "Venues");
