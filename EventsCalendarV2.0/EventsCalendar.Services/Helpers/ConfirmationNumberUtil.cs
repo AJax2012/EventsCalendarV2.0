@@ -1,10 +1,7 @@
 ﻿using EventsCalendar.Core.Models;
 using EventsCalendar.DataAccess.Sql;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace EventsCalendar.Services.Helpers
 {
@@ -21,12 +18,12 @@ namespace EventsCalendar.Services.Helpers
 
         public string CreateConfirmationNumber(ConfirmationNumberData data)
         {
-            string datetime = new DateTime().ToString("MMM dd yy HH");
+            var datetime = DateTime.Now;
 
-            char month = datetime[0];
-            string date = datetime.Split(' ')[1];
-            string year = datetime.Split(' ')[2];
-            string hour = datetime.Split(' ')[3];
+            string month = datetime.ToString("MMM", MonthFirstCharFormatter.FormatProvider);
+            string date = datetime.ToString("dd");
+            string year = datetime.ToString("yy");
+            string hour = datetime.ToString("HH");
 
             StringBuilder confirmationNumber = new StringBuilder();
             confirmationNumber.Append(data.PerformerChar);

@@ -57,6 +57,7 @@
     <Compile Include="CrudServices\TicketService.cs" />
     <Compile Include="Helpers\ConfirmationNumberUtil.cs" />
     <Compile Include="Helpers\EnumUtil.cs" />
+    <Compile Include="Helpers\MonthFirstCharFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CrudServices\VenueService.cs" />
     <Compile Include="ReservationServices\ReservationService.cs" />
