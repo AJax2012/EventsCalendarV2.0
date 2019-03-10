@@ -52,46 +52,23 @@ namespace EventsCalendar.Services.CrudServices
             };
 
             SeatCapacity numberRemaining = reservationService.GetSeatsRemaining(performanceId);
-            viewModel.Ticket.NumberOfBudget = numberRemaining.Budget;
-            viewModel.Ticket.NumberOfModerate = numberRemaining.Moderate;
-            viewModel.Ticket.NumberOfPremier = numberRemaining.Premier;
+            Mapper.Map(numberRemaining, viewModel);
 
             return viewModel;
         }
 
         public void CreateTicket(TicketViewModel ticketViewModel)
         {
-            var performerName = ticketViewModel.Ticket.Reservations.FirstOrDefault().Performance.PerformerDto.Name;
-            var seatId = ticketViewModel.Ticket.Reservations.FirstOrDefault().SeatId.ToString();
-            var venueName = ticketViewModel.Ticket.Reservations.FirstOrDefault().Seat.VenueDto.Name;
-            var reservationNumber = ticketViewModel.Ticket.Reservations.FirstOrDefault().Id.ToString();
-            Random random = new Random();
-
-            ConfirmationNumberData data = new ConfirmationNumberData
-            {
-                PerformerChar = performerName[0],
-                SeatDigit = seatId[seatId.Length - 1],
-                VenueChar = venueName[0],
-                VenueRandom = venueName[random.Next(venueName.Length)],
-                FirstReservationChar = reservationNumber[0],
-                LastReservationChar = reservationNumber[reservationNumber.Length - 1],
-                RandomReservationChar = reservationNumber[random.Next(reservationNumber.Length)]
-            };
-
             Ticket ticket = new Ticket
             {
-                ConfirmationNumber = confirmationNumberUtil.CreateConfirmationNumber(data),
+                ConfirmationNumber = confirmationNumberUtil.CreateConfirmationNumber(ticketViewModel),
                 Recipient = ticketViewModel.Ticket.Recipient,
                 Email = ticketViewModel.Ticket.Email
             };
 
-            SeatCapacity capacity = new SeatCapacity
-            {
-                Budget = ticketViewModel.NumberOfBudget,
-                Moderate = ticketViewModel.NumberOfModerate,
-                Premier = ticketViewModel.NumberOfPremier
-            };
-
+            SeatCapacity capacity = new SeatCapacity();
+            Mapper.Map(ticketViewModel, capacity);
+            
             IEnumerable<Reservation> reservations = reservationService.CreateReservations(capacity);
 
             foreach (var reservation in reservations)
@@ -115,11 +92,6 @@ namespace EventsCalendar.Services.CrudServices
         }
 
         public void DeleteTicket(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        TicketViewModel ITicketService.NewTicketViewModel()
         {
             throw new NotImplementedException();
         }

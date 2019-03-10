@@ -7,7 +7,7 @@ namespace EventsCalendar.Core.Contracts
     public interface ITicketService
     {
         IEnumerable<TicketViewModel> ListTickets();
-        TicketViewModel NewTicketViewModel(int performanceId);
+        NewTicketViewModel NewTicketViewModel(int performanceId);
         void CreateTicket(TicketViewModel ticketViewModel);
         TicketViewModel ReturnTicketViewModel(Guid id);
         void EditTicket(TicketViewModel ticketViewModel);
