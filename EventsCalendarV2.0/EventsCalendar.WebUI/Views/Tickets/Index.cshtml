@@ -1,0 +1,50 @@
+﻿@model IEnumerable<EventsCalendar.Core.ViewModels.TicketViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PerformanceId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfBudget)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfModerate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfPremier)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PerformanceId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumberOfBudget)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumberOfModerate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumberOfPremier)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "DetailsFromId", new { /* id=item.PrimaryKey */ }) |
+        </td>
+    </tr>
+}
+
+</table>

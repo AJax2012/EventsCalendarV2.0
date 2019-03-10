@@ -3,7 +3,6 @@ using System.Web.Mvc;
 using EventsCalendar.Core.Contracts;
 using EventsCalendar.Core.Contracts.Services;
 using EventsCalendar.Core.ViewModels;
-using EventsCalendar.Services;
 
 namespace EventsCalendar.WebUI.Controllers
 {

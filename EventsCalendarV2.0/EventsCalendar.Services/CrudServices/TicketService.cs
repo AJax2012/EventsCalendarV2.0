@@ -66,7 +66,8 @@ namespace EventsCalendar.Services.CrudServices
 
         public IEnumerable<TicketViewModel> ListTickets()
         {
-            throw new NotImplementedException();
+            IEnumerable<Ticket> tickets = _repository.Collection().ToList();
+            return tickets.Select(MapTicketToViewModel).ToList();
         }
 
         public NewTicketViewModel NewTicketViewModel(int performanceId)
@@ -124,9 +125,9 @@ namespace EventsCalendar.Services.CrudServices
             return viewModel;
         }
 
-        public void EditTicket(TicketViewModel ticketViewModel, Guid id)
+        public void EditTicket(TicketViewModel ticketViewModel)
         {
-            Ticket ticketToEdit = CheckTicketNullValueById(id);
+            Ticket ticketToEdit = CheckTicketNullValueById(ticketViewModel.Ticket.Id);
 
             ticketToEdit.Email = ticketViewModel.Ticket.Email;
             ticketToEdit.Recipient = ticketViewModel.Ticket.Recipient;

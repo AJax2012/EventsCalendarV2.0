@@ -20,7 +20,13 @@ namespace EventsCalendar.WebUI.Controllers
 
         public ActionResult Index()
         {
+            var tickets = _ticketService.ListTickets();
+            return View(tickets);
+        }
 
+        public ActionResult SearchTickets()
+        {
+            return View();
         }
 
         // Shows User Pre-purchase ticket options page
@@ -40,15 +46,15 @@ namespace EventsCalendar.WebUI.Controllers
         }
 
         // Shows User Pre-purchase ticket options page
-        public ActionResult Create()
+        public ActionResult Create(int performanceId)
         {
-            return View();
+            return View("TicketForm", _ticketService.NewTicketViewModel(performanceId));
         }
 
         // Shows User Pre-purchase ticket options page
         public ActionResult Edit(Guid id)
         {
-            return View();
+            return View("TicketForm", _ticketService.ReturnTicketViewModelById(id));
         }
 
         /*
