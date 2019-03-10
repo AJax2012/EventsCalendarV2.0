@@ -32,14 +32,9 @@ namespace EventsCalendar.Services.CrudServices
             seatService = _seatService;
         }
 
-        private Venue FindVenueDto(int id)
-        {
-            return _repository.Find(id);
-        }
-
         private Venue CheckVenueNullValue(int id)
         {
-            Venue venue = FindVenueDto(id);
+            Venue venue = _repository.Find(id);
             if (venue == null)
                 throw new HttpException(404, "Venue Not Found");
 
@@ -136,16 +131,24 @@ namespace EventsCalendar.Services.CrudServices
             venueToEdit.Address.ZipCode = venueViewModel.Venue.AddressDto.ZipCode;
             venueToEdit.IsActive = true;
 
+
             var capacity = seatService.GetSeatCapacities(id);
-            var budget = venueViewModel.SeatCapacity.Budget;
-            var moderate = venueViewModel.SeatCapacity.Moderate;
-            var premier = venueViewModel.SeatCapacity.Premier;
 
-            var budgetNew = budget - capacity.Budget;
-            var moderateNew = moderate - capacity.Moderate;
-            var premierNew = premier - capacity.Premier;
+            SeatCapacity seatsRemoved = new SeatCapacity
+            {
+                Budget = venueViewModel.SeatCapacity.Budget,
+                Moderate = venueViewModel.SeatCapacity.Moderate,
+                Premier = venueViewModel.SeatCapacity.Premier
+            };
 
-            seatService.ChangeAmountOfSeatsInContext(budgetNew, moderateNew, premierNew, venueToEdit.Id);
+            SeatCapacity newSeatCapacity = new SeatCapacity
+            {
+                Budget = seatsRemoved.Budget - capacity.Budget,
+                Moderate = seatsRemoved.Moderate - capacity.Moderate,
+                Premier = seatsRemoved.Premier - capacity.Premier
+            };
+
+            seatService.ChangeAmountOfSeatsInContext(newSeatCapacity, venueToEdit.Id);
 
             _repository.Commit();
             _addressRepository.Commit();

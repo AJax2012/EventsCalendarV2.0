@@ -19,23 +19,23 @@ namespace EventsCalendar.Services.SeatServices
          * Checks if new number is more or less than the original
          * removes or adds Seats as needed
          */
-        public void ChangeAmountOfSeatsInContext(int budget, int moderate, int premier, int id)
+        public void ChangeAmountOfSeatsInContext(SeatCapacity capacity, int id)
         {
 
-            if (budget > 0)
-                _seatRepository.BulkInsertSeats(budget, SeatType.Budget, id);
-            else if (budget < 0)
-                _seatRepository.BulkDeleteSeats(budget, SeatType.Budget, id);
+            if (capacity.Budget > 0)
+                _seatRepository.BulkInsertSeats(capacity.Budget, SeatType.Budget, id);
+            else if (capacity.Budget < 0)
+                _seatRepository.BulkDeleteSeats(capacity.Budget, SeatType.Budget, id);
 
-            if (moderate > 0)
-                _seatRepository.BulkInsertSeats(moderate, SeatType.Moderate, id);
-            else if (moderate < 0)
-                _seatRepository.BulkDeleteSeats(moderate, SeatType.Moderate, id);
+            if (capacity.Moderate > 0)
+                _seatRepository.BulkInsertSeats(capacity.Moderate, SeatType.Moderate, id);
+            else if (capacity.Moderate < 0)
+                _seatRepository.BulkDeleteSeats(capacity.Moderate, SeatType.Moderate, id);
 
-            if (premier > 0)
-                _seatRepository.BulkInsertSeats(premier, SeatType.Premier, id);
-            else if (premier < 0)
-                _seatRepository.BulkDeleteSeats(premier, SeatType.Premier, id);
+            if (capacity.Premier > 0)
+                _seatRepository.BulkInsertSeats(capacity.Premier, SeatType.Premier, id);
+            else if (capacity.Premier < 0)
+                _seatRepository.BulkDeleteSeats(capacity.Premier, SeatType.Premier, id);
         }
 
         /**
