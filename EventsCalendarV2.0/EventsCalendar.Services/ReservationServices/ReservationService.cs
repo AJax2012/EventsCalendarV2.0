@@ -52,20 +52,20 @@ namespace EventsCalendar.Services.ReservationServices
 
         public IEnumerable<Reservation> CreateReservations(SeatCapacity capacity)
         {
+            var allReservations = _reservationRepository.Collection()
+                .Where(res => res.IsTaken == false)
+                .ToList();
 
-            var budgetReservations = _reservationRepository.Collection()
+            var budgetReservations = allReservations
                     .Where(res => res.Seat.SeatType == SeatType.Budget)
-                    .Where(res => res.IsTaken == false)
                     .Take(capacity.Budget);
 
-            var moderateReservations = _reservationRepository.Collection()
-                    .Where(res => res.Seat.SeatType == SeatType.Budget)
+            var moderateReservations = allReservations
                     .Where(res => res.IsTaken == false)
                     .Take(capacity.Moderate);
 
-            var premierReservations = _reservationRepository.Collection()
+            var premierReservations = allReservations
                     .Where(res => res.Seat.SeatType == SeatType.Budget)
-                    .Where(res => res.IsTaken == false)
                     .Take(capacity.Premier);
 
             List<Reservation> reservations = new List<Reservation>();
@@ -112,22 +112,21 @@ namespace EventsCalendar.Services.ReservationServices
         {
             var capacity = new SeatCapacity();
 
-            capacity.Budget = _reservationRepository.Collection()
+            var allSeats = _reservationRepository.Collection()
                 .Where(res => res.PerformanceId == performanceId)
-                .Where(res => res.Seat.SeatType == SeatType.Budget)
                 .Where(res => res.IsTaken == false)
+                .ToList();
+
+            capacity.Budget = allSeats
+                .Where(res => res.Seat.SeatType == SeatType.Budget)
                 .Count();
 
             capacity.Moderate = _reservationRepository.Collection()
-                .Where(res => res.PerformanceId == performanceId)
                 .Where(res => res.Seat.SeatType == SeatType.Moderate)
-                .Where(res => res.IsTaken == false)
                 .Count();
 
             capacity.Premier = _reservationRepository.Collection()
-                .Where(res => res.PerformanceId == performanceId)
                 .Where(res => res.Seat.SeatType == SeatType.Premier)
-                .Where(res => res.IsTaken == false)
                 .Count();
 
             return capacity;

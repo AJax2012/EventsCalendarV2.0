@@ -65,7 +65,7 @@ namespace EventsCalendar.Services.CrudServices
 
         public NewTicketViewModel NewTicketViewModel(int performanceId)
         {
-            var prices = _reservationRepository.GetPrices(performanceId);
+            ReservationPrices prices = _reservationRepository.GetPrices(performanceId);
 
             NewTicketViewModel viewModel = new NewTicketViewModel
             {
