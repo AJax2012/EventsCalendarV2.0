@@ -56,19 +56,21 @@ namespace EventsCalendar.DataAccess.Sql
 
         public ReservationPrices GetPrices(int performanceId)
         {
+            var reservations = Context.Reservations
+                .Where(res => res.PerformanceId == performanceId)
+                .Include(res => res.Seat)
+                .ToList();
+
             var capacity = new ReservationPrices
             {
-                Budget = Context.Reservations
-                    .Where(res => res.Seat.SeatType == SeatType.Budget)
-                    .First(res => res.PerformanceId == performanceId)
+                Budget = reservations
+                    .First(res => res.Seat.SeatType == SeatType.Budget)
                     .Price,
-                Moderate = Context.Reservations
-                    .Where(res => res.Seat.SeatType == SeatType.Moderate)
-                    .First(res => res.PerformanceId == performanceId)
+                Moderate = reservations
+                    .First(res => res.Seat.SeatType == SeatType.Moderate)
                     .Price,
-                Premier = Context.Reservations
-                    .Where(res => res.Seat.SeatType == SeatType.Premier)
-                    .First(res => res.PerformanceId == performanceId)
+                Premier = reservations
+                    .First(res => res.Seat.SeatType == SeatType.Premier)
                     .Price
             };
 
@@ -103,6 +105,7 @@ namespace EventsCalendar.DataAccess.Sql
                 row["Price"] = reservation.Price;
                 row["SeatId"] = reservation.SeatId;
                 row["PerformanceId"] = performanceId;
+                row["TicketId"] = Guid.Empty;
                 row["IsTaken"] = false;
                 dt.Rows.Add(row);
             }
@@ -111,19 +114,20 @@ namespace EventsCalendar.DataAccess.Sql
             {
                 sourceConnection.Open();
 
-                using (var bulkCopy = new SqlBulkCopy(
-                    ConnectionString, SqlBulkCopyOptions.KeepIdentity))
+                using (var bulkCopy = new SqlBulkCopy(ConnectionString, SqlBulkCopyOptions.KeepIdentity))
                 {
                     bulkCopy.BatchSize = simpleReservations.Count();
 
                     bulkCopy.DestinationTableName = "Reservations";
 
+                    bulkCopy.ColumnMappings.Add("Price", "Price");
+                    bulkCopy.ColumnMappings.Add("SeatId", "SeatId");
+                    bulkCopy.ColumnMappings.Add("PerformanceId", "PerformanceId");
+                    bulkCopy.ColumnMappings.Add("TicketId", "TicketId");
+                    bulkCopy.ColumnMappings.Add("IsTaken", "IsTaken");
+
                     try
                     {
-                        bulkCopy.ColumnMappings.Add("Price", "Price");
-                        bulkCopy.ColumnMappings.Add("SeatId", "SeatId");
-                        bulkCopy.ColumnMappings.Add("PerformanceId", "PerformanceId");
-                        bulkCopy.ColumnMappings.Add("IsTaken", "IsTaken");
                         bulkCopy.WriteToServer(dt);
                         Console.WriteLine("Bulk data stored successfully");
                     }
@@ -233,6 +237,12 @@ namespace EventsCalendar.DataAccess.Sql
             {
                 DataType = typeof(int),
                 ColumnName = "PerformanceId"
+            });
+
+            dt.Columns.Add(new DataColumn()
+            {
+                DataType = typeof(Guid),
+                ColumnName = "TicketId"
             });
 
             dt.Columns.Add(new DataColumn()

@@ -116,7 +116,7 @@
     <Compile Include="Models\Seats\Seat.cs" />
     <Compile Include="Models\Seats\SeatCapacity.cs" />
     <Compile Include="Models\Reservations\ReservationsByType.cs" />
-    <Compile Include="Models\Reservations\SimpleNewReservation.cs" />
+    <Compile Include="Models\Reservations\SimpleReservation.cs" />
     <Compile Include="Models\Tickets\Ticket.cs" />
     <Compile Include="Models\Reservations\UpdatePricesObject.cs" />
     <Compile Include="Models\Seats\SimpleSeat.cs" />
@@ -127,7 +127,6 @@
     <Compile Include="Validation\AfterToday.cs" />
     <Compile Include="ViewModels\PerformanceViewModel.cs" />
     <Compile Include="ViewModels\PerformerViewModel.cs" />
-    <Compile Include="ViewModels\NewTicketViewModel.cs" />
     <Compile Include="ViewModels\TicketViewModel.cs" />
     <Compile Include="ViewModels\VenueViewModel.cs" />
   </ItemGroup>

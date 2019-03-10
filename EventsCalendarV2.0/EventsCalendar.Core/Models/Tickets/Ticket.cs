@@ -11,7 +11,7 @@ namespace EventsCalendar.Core.Models.Tickets
         public string Recipient { get; set; }
         public string Email { get; set; }
         public decimal TotalPrice { get; set; }
-        public IEnumerable<Reservation> Reservations { get; set; }
+        public ICollection<Reservation> Reservations { get; set; }
 
         public Ticket()
         {

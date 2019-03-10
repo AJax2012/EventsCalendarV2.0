@@ -1,9 +1,5 @@
-﻿using EventsCalendar.Core.Contracts;
-using EventsCalendar.Core.ViewModels;
+﻿using EventsCalendar.Core.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using EventsCalendar.Core.Contracts.Services;
 
@@ -74,6 +70,12 @@ namespace EventsCalendar.WebUI.Controllers
             }
 
             return RedirectToAction("Index", "Venues");
+        }
+
+        public ActionResult Delete(Guid id)
+        {
+            _ticketService.DeleteTicket(id);
+            return RedirectToAction("Index", "Performances");
         }
     }
 }

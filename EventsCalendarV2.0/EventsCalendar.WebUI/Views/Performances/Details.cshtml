@@ -327,7 +327,7 @@
 
     <div class="pt-lg-4">
         @* PURCHASE TICKETS WILL CHANGE WHEN PURCHASE FUNCTIONS ADDED *@
-        @Html.ActionLink("Purchase Tickets", "Edit", new { id = Model.Performance.Id }, new { @class = "btn btn-success disabled" })
+        @Html.ActionLink("Purchase Tickets", "Create", "Tickets", new { id = Model.Performance.Id }, new { @class = "btn btn-success" })
         @Html.ActionLink("Edit", "Edit", new { id = Model.Performance.Id }, new { @class = "btn btn-primary" })
         @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
     </div>

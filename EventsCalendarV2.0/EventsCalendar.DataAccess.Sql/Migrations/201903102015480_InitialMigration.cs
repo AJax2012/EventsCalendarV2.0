@@ -25,7 +25,6 @@ namespace EventsCalendar.DataAccess.Sql.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        SeatsRemaining = c.Int(nullable: false),
                         Description = c.String(),
                         IsActive = c.Boolean(nullable: false),
                         EventDateTime = c.DateTime(nullable: false),
@@ -58,17 +57,20 @@ namespace EventsCalendar.DataAccess.Sql.Migrations
                 "dbo.Reservations",
                 c => new
                     {
-                        Id = c.Guid(nullable: false, identity: true),
+                        Id = c.Guid(nullable: false),
                         Price = c.Decimal(nullable: false, precision: 18, scale: 2),
                         SeatId = c.Int(nullable: false),
                         PerformanceId = c.Int(nullable: false),
+                        TicketId = c.Guid(nullable: false),
                         IsTaken = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Performances", t => t.PerformanceId, cascadeDelete: false)
                 .ForeignKey("dbo.Seats", t => t.SeatId, cascadeDelete: false)
+                .ForeignKey("dbo.Tickets", t => t.TicketId, cascadeDelete: false)
                 .Index(t => t.SeatId)
-                .Index(t => t.PerformanceId);
+                .Index(t => t.PerformanceId)
+                .Index(t => t.TicketId);
             
             CreateTable(
                 "dbo.Seats",
@@ -96,10 +98,23 @@ namespace EventsCalendar.DataAccess.Sql.Migrations
                 .ForeignKey("dbo.Addresses", t => t.AddressId, cascadeDelete: false)
                 .Index(t => t.AddressId);
             
+            CreateTable(
+                "dbo.Tickets",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        ConfirmationNumber = c.String(),
+                        Recipient = c.String(),
+                        Email = c.String(),
+                        TotalPrice = c.Decimal(nullable: false, precision: 18, scale: 2),
+                    })
+                .PrimaryKey(t => t.Id);
+            
         }
         
         public override void Down()
         {
+            DropForeignKey("dbo.Reservations", "TicketId", "dbo.Tickets");
             DropForeignKey("dbo.Seats", "VenueId", "dbo.Venues");
             DropForeignKey("dbo.Performances", "VenueId", "dbo.Venues");
             DropForeignKey("dbo.Venues", "AddressId", "dbo.Addresses");
@@ -108,10 +123,12 @@ namespace EventsCalendar.DataAccess.Sql.Migrations
             DropForeignKey("dbo.Performances", "PerformerId", "dbo.Performers");
             DropIndex("dbo.Venues", new[] { "AddressId" });
             DropIndex("dbo.Seats", new[] { "VenueId" });
+            DropIndex("dbo.Reservations", new[] { "TicketId" });
             DropIndex("dbo.Reservations", new[] { "PerformanceId" });
             DropIndex("dbo.Reservations", new[] { "SeatId" });
             DropIndex("dbo.Performances", new[] { "VenueId" });
             DropIndex("dbo.Performances", new[] { "PerformerId" });
+            DropTable("dbo.Tickets");
             DropTable("dbo.Venues");
             DropTable("dbo.Seats");
             DropTable("dbo.Reservations");

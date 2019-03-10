@@ -24,7 +24,7 @@ namespace EventsCalendar.EntityConfigurations
                 .IsRequired();
 
             HasOptional(r => r.Ticket)
-                .WithMany()
+                .WithMany(t => t.Reservations)
                 .HasForeignKey(r => r.TicketId)
                 .WillCascadeOnDelete(false);
         }

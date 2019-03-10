@@ -53,17 +53,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext.cs" />
-    <Compile Include="Migrations\201903050547541_InitialMigration.cs" />
-    <Compile Include="Migrations\201903050547541_InitialMigration.Designer.cs">
-      <DependentUpon>201903050547541_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201903102015480_InitialMigration.cs" />
+    <Compile Include="Migrations\201903102015480_InitialMigration.Designer.cs">
+      <DependentUpon>201903102015480_InitialMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201903061735013_EditSeatsRemaining.cs" />
-    <Compile Include="Migrations\201903061735013_EditSeatsRemaining.Designer.cs">
-      <DependentUpon>201903061735013_EditSeatsRemaining.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201903070440357_RemoveCapacitiesFromPerformance.cs" />
-    <Compile Include="Migrations\201903070440357_RemoveCapacitiesFromPerformance.Designer.cs">
-      <DependentUpon>201903070440357_RemoveCapacitiesFromPerformance.cs</DependentUpon>
+    <Compile Include="Migrations\201903102141575_ChangeTicketIDtoNull.cs" />
+    <Compile Include="Migrations\201903102141575_ChangeTicketIDtoNull.Designer.cs">
+      <DependentUpon>201903102141575_ChangeTicketIDtoNull.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MsSqlGenericRepository.cs" />
@@ -86,14 +82,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201903050547541_InitialMigration.resx">
-      <DependentUpon>201903050547541_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201903102015480_InitialMigration.resx">
+      <DependentUpon>201903102015480_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903061735013_EditSeatsRemaining.resx">
-      <DependentUpon>201903061735013_EditSeatsRemaining.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903070440357_RemoveCapacitiesFromPerformance.resx">
-      <DependentUpon>201903070440357_RemoveCapacitiesFromPerformance.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201903102141575_ChangeTicketIDtoNull.resx">
+      <DependentUpon>201903102141575_ChangeTicketIDtoNull.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

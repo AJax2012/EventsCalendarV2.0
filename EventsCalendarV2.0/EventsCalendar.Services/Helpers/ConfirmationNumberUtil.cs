@@ -17,7 +17,6 @@ namespace EventsCalendar.Services.Helpers
         }
 
         private readonly Random _random = new Random();
-        private readonly int _numberLength = 10;
 
         public string CreateConfirmationNumber(TicketViewModel ticketViewModel)
         {

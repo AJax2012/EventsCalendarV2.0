@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web;
 using AutoMapper;
-using EventsCalendar.Core.Contracts;
 using EventsCalendar.Core.Contracts.Repositories;
 using EventsCalendar.Core.Contracts.Services;
 using EventsCalendar.Core.Dtos;

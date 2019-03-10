@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using EventsCalendar.Core.Dtos;
 using EventsCalendar.Core.ViewModels;
 using EventsCalendar.Services.Helpers;
 using System;
@@ -8,6 +7,7 @@ using System.Linq;
 using System.Web;
 using EventsCalendar.Core.Contracts.Repositories;
 using EventsCalendar.Core.Contracts.Services;
+using EventsCalendar.Core.Dtos;
 using EventsCalendar.Core.Models.Reservations;
 using EventsCalendar.Core.Models.Seats;
 using EventsCalendar.Core.Models.Tickets;
@@ -58,9 +58,12 @@ namespace EventsCalendar.Services.CrudServices
             {
                 Ticket = Mapper.Map<Ticket, TicketDto>(ticket),
                 PerformanceId = reservations.First().PerformanceId,
-                NumberOfBudget = reservations.Count(r => r.Seat.SeatType == SeatType.Budget),
-                NumberOfModerate = reservations.Count(r => r.Seat.SeatType == SeatType.Moderate),
-                NumberOfPremier = reservations.Count(r => r.Seat.SeatType == SeatType.Premier)
+                SeatCapacity =
+                {
+                    Budget = reservations.Count(r => r.Seat.SeatType == SeatType.Budget),
+                    Moderate = reservations.Count(r => r.Seat.SeatType == SeatType.Moderate),
+                    Premier = reservations.Count(r => r.Seat.SeatType == SeatType.Premier)
+                }
             };
         }
 
@@ -70,15 +73,15 @@ namespace EventsCalendar.Services.CrudServices
             return tickets.Select(MapTicketToViewModel).ToList();
         }
 
-        public NewTicketViewModel NewTicketViewModel(int performanceId)
+        public TicketViewModel NewTicketViewModel(int performanceId)
         {
             ReservationPrices prices = _reservationRepository.GetPrices(performanceId);
 
-            var viewModel = new NewTicketViewModel
+            var viewModel = new TicketViewModel
             {
-                PriceOfBudget = prices.Budget,
-                PriceOfModerate = prices.Moderate,
-                PriceOfPremier = prices.Premier
+                BudgetPrice = prices.Budget,
+                ModeratePrice = prices.Moderate,
+                PremierPrice = prices.Premier
             };
 
             SeatCapacity numberRemaining = _reservationService.GetSeatsRemaining(performanceId);

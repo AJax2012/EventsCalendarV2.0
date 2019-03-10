@@ -8,6 +8,7 @@ using EventsCalendar.Core.Contracts;
 using EventsCalendar.Core.Contracts.Repositories;
 using EventsCalendar.Core.Contracts.Services;
 using EventsCalendar.Core.Models;
+using EventsCalendar.Core.Models.Tickets;
 using EventsCalendar.DataAccess.Sql;
 using EventsCalendar.Services.CrudServices;
 using EventsCalendar.Services.Helpers;
@@ -45,6 +46,7 @@ namespace EventsCalendar.WebUI
             builder.RegisterType(typeof(PerformerService)).As(typeof(IPerformerService));
             builder.RegisterType(typeof(VenueService)).As(typeof(IVenueService));
             builder.RegisterType(typeof(SeatService)).As(typeof(ISeatService));
+            builder.RegisterType(typeof(TicketService)).As(typeof(ITicketService));
             builder.RegisterType(typeof(ReservationService)).As(typeof(IReservationService));
 
             // Register Api Controllers

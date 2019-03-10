@@ -10,7 +10,7 @@ namespace EventsCalendar.Core.Contracts.Services
         void DeleteTicket(Guid id);
         void EditTicket(TicketViewModel ticketViewModel);
         IEnumerable<TicketViewModel> ListTickets();
-        NewTicketViewModel NewTicketViewModel(int performanceId);
+        TicketViewModel NewTicketViewModel(int performanceId);
         TicketViewModel ReturnTicketViewModelById(Guid id);
         TicketViewModel ReturnTicketViewModelByConfirmationNumber(string confirmationNumber);
     }

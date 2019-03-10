@@ -39,12 +39,6 @@ namespace EventsCalendar.WebUI
             CreateMap<Seat, SeatDto>()
                 .ReverseMap();
 
-            CreateMap<SeatCapacity, TicketViewModel>()
-                .ForMember(s => s.NumberOfBudget, opt => opt.MapFrom(s => s.Budget))
-                .ForMember(s => s.NumberOfModerate, opt => opt.MapFrom(s => s.Moderate))
-                .ForMember(s => s.NumberOfPremier, opt => opt.MapFrom(s => s.Premier))
-                .ReverseMap();
-
             CreateMap<Ticket, TicketDto>()
                 .ReverseMap();
 
