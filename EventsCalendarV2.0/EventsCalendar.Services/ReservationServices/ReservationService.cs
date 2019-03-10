@@ -51,7 +51,9 @@ namespace EventsCalendar.Services.ReservationServices
         }
 
         /**
-         * Creates reservations 
+         * Gets reservations by type
+         * Takes the amount of reservations required for each type
+         * Combines all reservations to IEnumerable<Reservation>
          */ 
         public IEnumerable<Reservation> GetReservations(SeatCapacity capacity, int performanceId)
         {
