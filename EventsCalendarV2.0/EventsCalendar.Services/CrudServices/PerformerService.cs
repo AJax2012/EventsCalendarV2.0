@@ -12,28 +12,20 @@ namespace EventsCalendar.Services.CrudServices
 {
     public class PerformerService : IPerformerService
     {
-        private readonly IRepository<Performer> _context;
-        private readonly IRepository<CustomImage> _imageContext;
-        private readonly IRepository<Performance> _performanceContext;
+        private readonly IRepository<Performer> _repository;
+        private readonly IRepository<Performance> _performanceRepository;
         private readonly string DefaultImgSrc = "https://static1.squarespace.com/static/5ba45d79ab1a620ab25a33da/t/5bf46b1f0e2e72ab66b383f1/1543426766008/Blank+Profile+Pic.png?format=300w";
 
-        public PerformerService(IRepository<Performer> context,
-                                IRepository<CustomImage> imageContext,
-                                IRepository<Performance> performanceContext)
+        public PerformerService(IRepository<Performer> repository,
+                                IRepository<Performance> performanceRepository)
         {
-            _context = context;
-            _imageContext = imageContext;
-            _performanceContext = performanceContext;
-        }
-
-        private Performer FindPerformerDto(int id)
-        {
-            return _context.Find(id);
+            _repository = repository;
+            _performanceRepository = performanceRepository;
         }
 
         private Performer CheckPerformerNullValue(int id)
         {
-            Performer performer = FindPerformerDto(id);
+            Performer performer = _repository.Find(id);
             if (performer == null)
                 throw new HttpException(404, "Performer Not Found");
 
@@ -59,7 +51,7 @@ namespace EventsCalendar.Services.CrudServices
 
         public IEnumerable<PerformerViewModel> ListPerformers()
         {
-            IEnumerable<Performer> performers = _context.Collection().ToList();
+            IEnumerable<Performer> performers = _repository.Collection().ToList();
 
             var performerDtos =
                 Mapper.Map<IEnumerable<Performer>, IEnumerable<PerformerDto>>
@@ -107,8 +99,8 @@ namespace EventsCalendar.Services.CrudServices
                 performer.Topic = performerViewModel.Performer.Topic;
 
             performer.IsActive = true;
-            _context.Insert(performer);
-            _context.Commit();
+            _repository.Insert(performer);
+            _repository.Commit();
         }
 
         public PerformerViewModel ReturnPerformerViewModel(int id)
@@ -143,7 +135,7 @@ namespace EventsCalendar.Services.CrudServices
             else
                 performerToEdit.Topic = performerViewModel.Performer.Topic;
 
-            _context.Commit();
+            _repository.Commit();
         }
 
         public void DeletePerformer(int id)
@@ -151,18 +143,18 @@ namespace EventsCalendar.Services.CrudServices
             CheckPerformerNullValue(id);
 
             IList<Performance> performances = 
-                _performanceContext.Collection()
+                _performanceRepository.Collection()
                     .Where(p => p.PerformerId == id).ToList();
 
             // performer.IsActive = false;
             foreach (var performance in performances)
             {
-                _performanceContext.Delete(performance.Id);
-                _performanceContext.Commit();
+                _performanceRepository.Delete(performance.Id);
+                _performanceRepository.Commit();
             }
 
-            _context.Delete(id);
-            _context.Commit();
+            _repository.Delete(id);
+            _repository.Commit();
         }
     }
 }
