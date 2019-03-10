@@ -50,23 +50,23 @@ namespace EventsCalendar.Services.ReservationServices
             return reservations;
         }
 
-        public IEnumerable<Reservation> CreateReservations(int budgetAmount, int moderateAmount, int premierAmount)
+        public IEnumerable<Reservation> CreateReservations(SeatCapacity capacity)
         {
 
             var budgetReservations = _reservationRepository.Collection()
                     .Where(res => res.Seat.SeatType == SeatType.Budget)
                     .Where(res => res.IsTaken == false)
-                    .Take(budgetAmount);
+                    .Take(capacity.Budget);
 
             var moderateReservations = _reservationRepository.Collection()
                     .Where(res => res.Seat.SeatType == SeatType.Budget)
                     .Where(res => res.IsTaken == false)
-                    .Take(moderateAmount);
+                    .Take(capacity.Moderate);
 
             var premierReservations = _reservationRepository.Collection()
                     .Where(res => res.Seat.SeatType == SeatType.Budget)
                     .Where(res => res.IsTaken == false)
-                    .Take(moderateAmount);
+                    .Take(capacity.Premier);
 
             List<Reservation> reservations = new List<Reservation>();
             reservations.AddRange(budgetReservations);

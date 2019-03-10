@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web;
-using EventsCalendar.Core.Models;
 using EventsCalendar.Core.ViewModels;
 
 namespace EventsCalendar.Core.Contracts

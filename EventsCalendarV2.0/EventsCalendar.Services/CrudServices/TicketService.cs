@@ -85,10 +85,14 @@ namespace EventsCalendar.Services.CrudServices
                 Email = ticketViewModel.Ticket.Email
             };
 
-            IEnumerable<Reservation> reservations = reservationService.CreateReservations(
-                ticketViewModel.NumberOfBudget,
-                ticketViewModel.NumberOfModerate,
-                ticketViewModel.NumberOfPremier);
+            SeatCapacity capacity = new SeatCapacity
+            {
+                Budget = ticketViewModel.NumberOfBudget,
+                Moderate = ticketViewModel.NumberOfModerate,
+                Premier = ticketViewModel.NumberOfPremier
+            };
+
+            IEnumerable<Reservation> reservations = reservationService.CreateReservations(capacity);
 
             foreach (var reservation in reservations)
             {
