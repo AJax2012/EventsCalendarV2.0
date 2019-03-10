@@ -92,7 +92,7 @@ namespace EventsCalendar.Services.CrudServices
             SeatCapacity capacity = new SeatCapacity();
             Mapper.Map(ticketViewModel, capacity);
             
-            IEnumerable<Reservation> reservations = reservationService.CreateReservations(capacity, ticketViewModel.PerformanceId);
+            IEnumerable<Reservation> reservations = reservationService.GetReservations(capacity, ticketViewModel.PerformanceId);
 
             foreach (var reservation in reservations)
             {

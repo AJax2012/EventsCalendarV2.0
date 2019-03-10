@@ -53,7 +53,7 @@ namespace EventsCalendar.Services.ReservationServices
         /**
          * Creates reservations 
          */ 
-        public IEnumerable<Reservation> CreateReservations(SeatCapacity capacity, int performanceId)
+        public IEnumerable<Reservation> GetReservations(SeatCapacity capacity, int performanceId)
         {
             var allReservations = _reservationRepository.Collection()
                 .Where(res => res.IsTaken == false)
