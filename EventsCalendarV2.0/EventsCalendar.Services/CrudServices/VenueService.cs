@@ -131,8 +131,7 @@ namespace EventsCalendar.Services.CrudServices
             venueToEdit.Address.State = venueViewModel.Venue.AddressDto.State;
             venueToEdit.Address.ZipCode = venueViewModel.Venue.AddressDto.ZipCode;
             venueToEdit.IsActive = true;
-
-
+            
             var capacity = _seatService.GetSeatCapacities(id);
 
             var seatsRemoved = new SeatCapacity

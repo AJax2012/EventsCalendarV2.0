@@ -8,9 +8,10 @@ namespace EventsCalendar.Core.Contracts.Services
     {
         void CreateTicket(TicketViewModel ticketViewModel);
         void DeleteTicket(Guid id);
-        void EditTicket(TicketViewModel ticketViewModel);
+        void EditTicket(TicketViewModel ticketViewModel, Guid id);
         IEnumerable<TicketViewModel> ListTickets();
         NewTicketViewModel NewTicketViewModel(int performanceId);
-        TicketViewModel ReturnTicketViewModel(Guid id);
+        TicketViewModel ReturnTicketViewModelById(Guid id);
+        TicketViewModel ReturnTicketViewModelByConfirmationNumber(string confirmationNumber);
     }
 }

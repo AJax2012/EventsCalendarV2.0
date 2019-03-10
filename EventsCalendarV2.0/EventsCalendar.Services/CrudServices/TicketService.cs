@@ -16,26 +16,23 @@ namespace EventsCalendar.Services.CrudServices
 {
     public class TicketService : ITicketService
     {
-        private readonly IGuidRepository<Ticket> _repository;
+        private readonly ITicketRepository _repository;
         private readonly IReservationRepository _reservationRepository;
         private readonly ConfirmationNumberUtil _confirmationNumberUtil;
         private readonly IReservationService _reservationService;
-        private readonly ISeatService _seatService;
 
-        public TicketService(IGuidRepository<Ticket> repository,
+        public TicketService(ITicketRepository repository,
                              IReservationRepository reservationRepository,
                              ConfirmationNumberUtil confirmationNumberUtil,
-                             IReservationService reservationService,
-                             ISeatService seatService)
+                             IReservationService reservationService)
         {
             _repository = repository;
             _reservationRepository = reservationRepository;
             _confirmationNumberUtil = confirmationNumberUtil;
             _reservationService = reservationService;
-            _seatService = seatService;
         }
 
-        private Ticket CheckTicketNullValue(Guid id)
+        private Ticket CheckTicketNullValueById(Guid id)
         {
             Ticket ticket = _repository.Find(id);
             if (ticket == null)
@@ -44,14 +41,28 @@ namespace EventsCalendar.Services.CrudServices
             return ticket;
         }
 
-        //private Ticket CheckTicketNullByConfirmationNumber(string confirmationNumber)
-        //{
-        //    Ticket ticket = _repository.Find(id);
-        //    if (ticket == null)
-        //        throw new HttpException(404, "Ticket Not Found");
+        private Ticket CheckTicketNullByConfirmationNumber(string confirmationNumber)
+        {
+            Ticket ticket = _repository.FindByConfirmationNumber(confirmationNumber);
+            if (ticket == null)
+                throw new HttpException(404, "Ticket Not Found");
 
-        //    return ticket;
-        //}
+            return ticket;
+        }
+
+        private TicketViewModel MapTicketToViewModel(Ticket ticket)
+        {
+            var reservations = ticket.Reservations;
+
+            return new TicketViewModel
+            {
+                Ticket = Mapper.Map<Ticket, TicketDto>(ticket),
+                PerformanceId = reservations.First().PerformanceId,
+                NumberOfBudget = reservations.Count(r => r.Seat.SeatType == SeatType.Budget),
+                NumberOfModerate = reservations.Count(r => r.Seat.SeatType == SeatType.Moderate),
+                NumberOfPremier = reservations.Count(r => r.Seat.SeatType == SeatType.Premier)
+            };
+        }
 
         public IEnumerable<TicketViewModel> ListTickets()
         {
@@ -99,45 +110,36 @@ namespace EventsCalendar.Services.CrudServices
             _repository.Commit();
         }
 
-        public TicketViewModel ReturnTicketViewModel(Guid id)
+        public TicketViewModel ReturnTicketViewModelById(Guid id)
         {
-            Ticket ticket = CheckTicketNullValue(id);
-
-            var seatsInTicket = ticket.Reservations
-                .Where(res => res.TicketId == id)
-                .ToList();
-
-            var viewModel = new TicketViewModel
-            {
-                Ticket = Mapper.Map<Ticket, TicketDto>(ticket),
-
-                NumberOfBudget = seatsInTicket
-                    .Count(s => s.Seat.SeatType == SeatType.Budget),
-
-                NumberOfModerate = seatsInTicket
-                    .Count(s => s.Seat.SeatType == SeatType.Moderate),
-
-                NumberOfPremier = seatsInTicket
-                .Count(s => s.Seat.SeatType == SeatType.Premier)
-            };
-
+            Ticket ticket = CheckTicketNullValueById(id);
+            var viewModel = MapTicketToViewModel(ticket);
             return viewModel;
         }
 
-//        public TicketViewModel ReturnTicketViewModelByConfirmationNumber(string confirmationNumber)
-//        {
-//            Ticket ticket = CheckTicketNullByConfirmationNumber(confirmationNumber);
-//            ticket.
-//        }
-
-        public void EditTicket(TicketViewModel ticketViewModel)
+        public TicketViewModel ReturnTicketViewModelByConfirmationNumber(string confirmationNumber)
         {
-            throw new NotImplementedException();
+            Ticket ticket = CheckTicketNullByConfirmationNumber(confirmationNumber);
+            var viewModel = MapTicketToViewModel(ticket);
+            return viewModel;
+        }
+
+        public void EditTicket(TicketViewModel ticketViewModel, Guid id)
+        {
+            Ticket ticketToEdit = CheckTicketNullValueById(id);
+
+            ticketToEdit.Email = ticketViewModel.Ticket.Email;
+            ticketToEdit.Recipient = ticketViewModel.Ticket.Recipient;
+            Mapper.Map(ticketViewModel.Ticket.Reservations, ticketToEdit.Reservations);
+
+            _repository.Commit();
         }
 
         public void DeleteTicket(Guid id)
         {
-            throw new NotImplementedException();
+            CheckTicketNullValueById(id);
+            _repository.Delete(id);
+            _repository.Commit();
         }
     }
 }

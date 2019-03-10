@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contracts\Repositories\IGuidRepository.cs" />
+    <Compile Include="Contracts\Repositories\ITicketRepository.cs" />
     <Compile Include="Contracts\Services\IPerformanceService.cs" />
     <Compile Include="Contracts\Services\ITicketService.cs" />
     <Compile Include="Contracts\Services\IPerformerService.cs" />

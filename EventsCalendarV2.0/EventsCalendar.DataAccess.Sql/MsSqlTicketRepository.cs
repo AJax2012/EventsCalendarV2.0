@@ -9,7 +9,7 @@ using EventsCalendar.Core.Models.Tickets;
 
 namespace EventsCalendar.DataAccess.Sql
 {
-    public class MsSqlTicketRepository : IGuidRepository<Ticket>
+    public class MsSqlTicketRepository : ITicketRepository
     {
         internal DataContext Context;
 
@@ -46,6 +46,13 @@ namespace EventsCalendar.DataAccess.Sql
             return Context.Tickets
                 .Include(t => t.Reservations)
                 .SingleOrDefault(t => t.Id == id);
+        }
+
+        public Ticket FindByConfirmationNumber(string confirmationNumber)
+        {
+            return Context.Tickets
+                .Include(t => t.Reservations)
+                .SingleOrDefault(t => t.ConfirmationNumber == confirmationNumber);
         }
 
         public void Insert(Ticket ticket)
