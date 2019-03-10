@@ -7,6 +7,8 @@ namespace EventsCalendar.Core.ViewModels
     {
         public TicketDto Ticket { get; set; }
 
+        public int PerformanceId { get; set; }
+
         [Display(Name = "Number of Budget Seats")]
         public int NumberOfBudget { get; set; }
 

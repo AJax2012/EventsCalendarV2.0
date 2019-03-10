@@ -86,13 +86,13 @@ namespace EventsCalendar.Services.CrudServices
             {
                 ConfirmationNumber = confirmationNumberUtil.CreateConfirmationNumber(ticketViewModel),
                 Recipient = ticketViewModel.Ticket.Recipient,
-                Email = ticketViewModel.Ticket.Email
+                Email = ticketViewModel.Ticket.Email,
             };
 
             SeatCapacity capacity = new SeatCapacity();
             Mapper.Map(ticketViewModel, capacity);
             
-            IEnumerable<Reservation> reservations = reservationService.CreateReservations(capacity);
+            IEnumerable<Reservation> reservations = reservationService.CreateReservations(capacity, ticketViewModel.PerformanceId);
 
             foreach (var reservation in reservations)
             {

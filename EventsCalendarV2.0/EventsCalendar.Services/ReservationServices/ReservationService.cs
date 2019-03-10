@@ -50,10 +50,11 @@ namespace EventsCalendar.Services.ReservationServices
             return reservations;
         }
 
-        public IEnumerable<Reservation> CreateReservations(SeatCapacity capacity)
+        public IEnumerable<Reservation> CreateReservations(SeatCapacity capacity, int performanceId)
         {
             var allReservations = _reservationRepository.Collection()
                 .Where(res => res.IsTaken == false)
+                .Where(res => res.PerformanceId == performanceId)
                 .ToList();
 
             var budgetReservations = allReservations
