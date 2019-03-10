@@ -42,6 +42,9 @@ namespace EventsCalendar.WebUI
                 .ForMember(s => s.NumberOfPremier, opt => opt.MapFrom(s => s.Premier))
                 .ReverseMap();
 
+            CreateMap<Ticket, TicketDto>()
+                .ReverseMap();
+
             CreateMap<Venue, VenueDto>()
                 .ForMember(d => d.AddressDto, opt => opt.MapFrom(v => v.Address))
                 .ReverseMap();
