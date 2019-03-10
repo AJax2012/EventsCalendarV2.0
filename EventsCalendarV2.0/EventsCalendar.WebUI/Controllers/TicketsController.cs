@@ -24,19 +24,19 @@ namespace EventsCalendar.WebUI.Controllers
         }
 
         // Shows User Pre-purchase ticket options page
-        public ActionResult Details(Guid id)
+        public ActionResult DetailsFromId(Guid id)
         {
             var ticket = _ticketService.ReturnTicketViewModelById(id);
 
-            return View(ticket);
+            return View("Details", ticket);
         }
 
         // Shows User Pre-purchase ticket options page
-        public ActionResult Details(string confirmationNumber)
+        public ActionResult DetailsFromConfirmationNumber(string confirmationNumber)
         {
             var ticket = _ticketService.ReturnTicketViewModelByConfirmationNumber(confirmationNumber);
 
-            return View(ticket);
+            return View("Details", ticket);
         }
 
         // Shows User Pre-purchase ticket options page
