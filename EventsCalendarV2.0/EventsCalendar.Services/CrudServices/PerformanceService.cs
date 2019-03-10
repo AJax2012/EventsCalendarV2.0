@@ -102,7 +102,14 @@ namespace EventsCalendar.Services.CrudServices
             IEnumerable<SimpleReservation> moderateReservations = reservationService.CreateSimpleReservations(performance.VenueId, SeatType.Moderate, performanceViewModel.ModeratePrice);
             IEnumerable<SimpleReservation> premierReservations = reservationService.CreateSimpleReservations(performance.VenueId, SeatType.Premier, performanceViewModel.PremierPrice);
 
-            IEnumerable<SimpleReservation> allReservations = reservationService.CombineReservations(budgetReservations, moderateReservations, premierReservations);
+            SimpleReservationsByType reservations = new SimpleReservationsByType
+            {
+                BudgetReservations = budgetReservations,
+                ModerateReservations = moderateReservations,
+                PremierReservations = premierReservations
+            };
+
+            IEnumerable<SimpleReservation> allReservations = reservationService.CombineSimpleReservations(reservations);
                         
             _repository.Insert(performance);
             _repository.Commit();
