@@ -13,7 +13,7 @@ namespace EventsCalendar.DataAccess.Sql
     public class MsSqlReservationRepository : IReservationRepository
     {
         internal DataContext Context;
-        internal readonly string connectionString = ConfigurationManager.ConnectionStrings["EventCalendarDataContext"].ConnectionString;
+        internal readonly string ConnectionString = ConfigurationManager.ConnectionStrings["EventCalendarDataContext"].ConnectionString;
 
         public MsSqlReservationRepository(DataContext context)
         {
@@ -53,25 +53,21 @@ namespace EventsCalendar.DataAccess.Sql
 
         public ReservationPrices GetPrices(int performanceId)
         {
-            var capacity = new ReservationPrices();
-
-            capacity.Budget = Context.Reservations
-                .Where(res => res.Seat.SeatType == SeatType.Budget)
-                .Where(res => res.PerformanceId == performanceId)
-                .First()
-                .Price;
-
-            capacity.Moderate = Context.Reservations
-                .Where(res => res.Seat.SeatType == SeatType.Moderate)
-                .Where(res => res.PerformanceId == performanceId)
-                .First()
-                .Price;
-
-           capacity.Premier = Context.Reservations
-                .Where(res => res.Seat.SeatType == SeatType.Premier)
-                .Where(res => res.PerformanceId == performanceId)
-                .First()
-                .Price;
+            var capacity = new ReservationPrices
+            {
+                Budget = Context.Reservations
+                    .Where(res => res.Seat.SeatType == SeatType.Budget)
+                    .First(res => res.PerformanceId == performanceId)
+                    .Price,
+                Moderate = Context.Reservations
+                    .Where(res => res.Seat.SeatType == SeatType.Moderate)
+                    .First(res => res.PerformanceId == performanceId)
+                    .Price,
+                Premier = Context.Reservations
+                    .Where(res => res.Seat.SeatType == SeatType.Premier)
+                    .First(res => res.PerformanceId == performanceId)
+                    .Price
+            };
 
             return capacity;
         }
@@ -96,9 +92,11 @@ namespace EventsCalendar.DataAccess.Sql
         {
             var dt = MakeTable();
 
-            foreach (var reservation in reservations)
+            IEnumerable<SimpleReservation> simpleReservations = reservations as SimpleReservation[] ?? reservations.ToArray();
+
+            foreach (var reservation in simpleReservations)
             {
-                DataRow row = dt.NewRow();
+                var row = dt.NewRow();
                 row["Price"] = reservation.Price;
                 row["SeatId"] = reservation.SeatId;
                 row["PerformanceId"] = performanceId;
@@ -106,14 +104,14 @@ namespace EventsCalendar.DataAccess.Sql
                 dt.Rows.Add(row);
             }
 
-            using (SqlConnection sourceConnection = new SqlConnection(connectionString))
+            using (var sourceConnection = new SqlConnection(ConnectionString))
             {
                 sourceConnection.Open();
 
-                using (SqlBulkCopy bulkCopy = new SqlBulkCopy(
-                    connectionString, SqlBulkCopyOptions.KeepIdentity))
+                using (var bulkCopy = new SqlBulkCopy(
+                    ConnectionString, SqlBulkCopyOptions.KeepIdentity))
                 {
-                    bulkCopy.BatchSize = reservations.Count();
+                    bulkCopy.BatchSize = simpleReservations.Count();
 
                     bulkCopy.DestinationTableName = "Reservations";
 
@@ -140,7 +138,7 @@ namespace EventsCalendar.DataAccess.Sql
 
         public void ChangeReservationPrices(UpdatePricesObject update)
         {
-            using (SqlConnection sourceConnection = new SqlConnection(connectionString))
+            using (var sourceConnection = new SqlConnection(ConnectionString))
             {
                 sourceConnection.Open();
 
@@ -165,7 +163,7 @@ namespace EventsCalendar.DataAccess.Sql
 
         public void DeleteAllPerformanceReservations(int performanceId)
         {
-            using (SqlConnection sourceConnection = new SqlConnection(connectionString))
+            using (var sourceConnection = new SqlConnection(ConnectionString))
             {
                 sourceConnection.Open();
 
@@ -188,7 +186,7 @@ namespace EventsCalendar.DataAccess.Sql
 
         public void BulkDeleteReservations(int numberOfReservations, decimal price, int performanceId)
         {
-            using (SqlConnection sourceConnection = new SqlConnection(connectionString))
+            using (var sourceConnection = new SqlConnection(ConnectionString))
             {
                 sourceConnection.Open();
 

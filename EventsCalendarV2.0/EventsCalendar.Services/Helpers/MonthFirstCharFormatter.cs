@@ -15,12 +15,14 @@ namespace EventsCalendar.Services.Helpers
         {
             get
             {
-                if (_formatProvider == null)
-                {
-                    var dtfi = new DateTimeFormatInfo();
-                    dtfi.AbbreviatedMonthNames = dtfi.MonthNames.Select(x => x.FirstOrDefault().ToString()).ToArray();
-                    _formatProvider = dtfi;
-                }
+                if (_formatProvider != null) return _formatProvider;
+                var dtfi = new DateTimeFormatInfo();
+
+                dtfi.AbbreviatedMonthNames = dtfi.MonthNames
+                    .Select(x => x.FirstOrDefault().ToString())
+                    .ToArray();
+
+                _formatProvider = dtfi;
                 return _formatProvider;
             }
         }

@@ -10,6 +10,5 @@ namespace EventsCalendar.Core.Contracts
         T Find(int id);
         void Insert(T t);
         void Update(T t);
-        void ToggleChangeDetection(bool enabled);
     }
 }

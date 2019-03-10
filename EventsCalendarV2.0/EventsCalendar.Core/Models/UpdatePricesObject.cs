@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace EventsCalendar.Core.Models
+﻿namespace EventsCalendar.Core.Models
 {
     public class UpdatePricesObject
     {

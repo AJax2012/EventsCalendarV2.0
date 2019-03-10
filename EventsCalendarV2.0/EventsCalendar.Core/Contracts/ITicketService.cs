@@ -6,11 +6,11 @@ namespace EventsCalendar.Core.Contracts
 {
     public interface ITicketService
     {
+        void CreateTicket(TicketViewModel ticketViewModel);
+        void DeleteTicket(Guid id);
+        void EditTicket(TicketViewModel ticketViewModel);
         IEnumerable<TicketViewModel> ListTickets();
         NewTicketViewModel NewTicketViewModel(int performanceId);
-        void CreateTicket(TicketViewModel ticketViewModel);
         TicketViewModel ReturnTicketViewModel(Guid id);
-        void EditTicket(TicketViewModel ticketViewModel);
-        void DeleteTicket(Guid id);
     }
 }

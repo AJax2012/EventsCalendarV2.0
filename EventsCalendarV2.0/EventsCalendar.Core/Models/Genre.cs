@@ -9,7 +9,7 @@ namespace EventsCalendar.Core.Models
         Classical,
 
         [Display(Name = "Classic Rock")]
-        Classic_Rock,
+        ClassicRock,
 
         Jazz,
 

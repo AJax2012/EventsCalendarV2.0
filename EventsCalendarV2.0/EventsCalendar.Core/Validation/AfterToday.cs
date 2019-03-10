@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using EventsCalendar.Core.Models;
 using EventsCalendar.Core.ViewModels;
 
 namespace EventsCalendar.Core.Validation

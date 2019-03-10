@@ -96,18 +96,18 @@
     }
 </div>
 
-        @section scripts
+@section scripts
 {
-            @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryval")
 
-            <script>
-                $('.seats').change(function () {
-                    var sum = 0;
-                    $('.seats').each(function () {
-                        sum += Number($(this).val());
-                    });
+    <script>
+        $('.seats').change(function () {
+            var sum = 0;
+            $('.seats').each(function () {
+                sum += Number($(this).val());
+            });
 
-                    $('#capacity').val(sum);
-                });
-            </script>
-        }
+            $('#capacity').val(sum);
+        });
+    </script>
+}

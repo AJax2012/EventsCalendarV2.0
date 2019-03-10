@@ -14,7 +14,7 @@ namespace EventsCalendar.Services.CrudServices
     {
         private readonly IRepository<Performer> _repository;
         private readonly IRepository<Performance> _performanceRepository;
-        private readonly string DefaultImgSrc = "https://static1.squarespace.com/static/5ba45d79ab1a620ab25a33da/t/5bf46b1f0e2e72ab66b383f1/1543426766008/Blank+Profile+Pic.png?format=300w";
+        private const string DefaultImgSrc = "https://static1.squarespace.com/static/5ba45d79ab1a620ab25a33da/t/5bf46b1f0e2e72ab66b383f1/1543426766008/Blank+Profile+Pic.png?format=300w";
 
         public PerformerService(IRepository<Performer> repository,
                                 IRepository<Performance> performanceRepository)
@@ -34,13 +34,16 @@ namespace EventsCalendar.Services.CrudServices
 
         private PerformerDto MapPerformerToDto(Performer performer)
         {
-            PerformerDto performerDto = new PerformerDto();
-            performerDto.Id = performer.Id;
-            performerDto.Name = performer.Name;
-            performerDto.ImageUrl = performer.ImageUrl;
-            performerDto.TourName = performer.TourName;
-            performerDto.IsActive = performer.IsActive;
-            performerDto.PerformerType = performer.PerformerType;
+            var performerDto = new PerformerDto
+            {
+                Id = performer.Id,
+                Name = performer.Name,
+                ImageUrl = performer.ImageUrl,
+                TourName = performer.TourName,
+                IsActive = performer.IsActive,
+                PerformerType = performer.PerformerType
+            };
+
             if (performer.PerformerType == PerformerType.Musician)
                 performerDto.Genre = performer.Genre;
             else
@@ -69,12 +72,11 @@ namespace EventsCalendar.Services.CrudServices
             var viewModel = new PerformerViewModel
             {
                 Performer = new PerformerDto(),
+                PerformerTypes = EnumUtil.GetValues<PerformerType>(),
+                Genres = EnumUtil.GetValues<Genre>(),
+                Topics = EnumUtil.GetValues<Topic>(),
             };
-
-            viewModel.PerformerTypes = EnumUtil.GetValues<PerformerType>();
-            viewModel.Genres = EnumUtil.GetValues<Genre>();
-            viewModel.Topics = EnumUtil.GetValues<Topic>();
-
+            
             return viewModel;
         }
 
@@ -111,10 +113,9 @@ namespace EventsCalendar.Services.CrudServices
             {
                 PerformerTypes = EnumUtil.GetValues<PerformerType>(),
                 Genres = EnumUtil.GetValues<Genre>(),
-                Topics = EnumUtil.GetValues<Topic>()
+                Topics = EnumUtil.GetValues<Topic>(),
+                Performer = MapPerformerToDto(performer)
             };
-
-            viewModel.Performer = MapPerformerToDto(performer);
 
             return viewModel;
         }

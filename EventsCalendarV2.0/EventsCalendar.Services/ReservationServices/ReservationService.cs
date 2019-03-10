@@ -8,13 +8,13 @@ namespace EventsCalendar.Services.ReservationServices
     public class ReservationService : IReservationService
     {
         private readonly IReservationRepository _reservationRepository;
-        private readonly ISeatService seatUtil;
+        private readonly ISeatService _seatUtil;
 
         public ReservationService(IReservationRepository reservationRepository,
-                               ISeatService _seatUtil)
+                                  ISeatService seatUtil)
         {
             _reservationRepository = reservationRepository;
-            seatUtil = _seatUtil;
+            _seatUtil = seatUtil;
         }
 
         /**
@@ -22,7 +22,7 @@ namespace EventsCalendar.Services.ReservationServices
          */
         public IEnumerable<SimpleReservation> CombineSimpleReservations(SimpleReservationsByType reservations)
         {
-            List<SimpleReservation> all = new List<SimpleReservation>();
+            var all = new List<SimpleReservation>();
             all.AddRange(reservations.BudgetReservations);
             all.AddRange(reservations.ModerateReservations);
             all.AddRange(reservations.PremierReservations);
@@ -35,19 +35,8 @@ namespace EventsCalendar.Services.ReservationServices
          */
         public IEnumerable<SimpleReservation> CreateSimpleReservations(int venueId, SeatType type, decimal price)
         {
-            IEnumerable<Seat> seats = seatUtil.GetSeatsBySeatType(venueId, type);
-            List<SimpleReservation> reservations = new List<SimpleReservation>();
-
-            foreach (var seat in seats)
-            {
-                reservations.Add(new SimpleReservation
-                {
-                    SeatId = seat.Id,
-                    Price = price
-                });
-            }
-
-            return reservations;
+            var seats = _seatUtil.GetSeatsBySeatType(venueId, type);
+            return seats.Select(seat => new SimpleReservation {SeatId = seat.Id, Price = price}).ToList();
         }
 
         /**
@@ -63,18 +52,18 @@ namespace EventsCalendar.Services.ReservationServices
                 .ToList();
 
             var budgetReservations = allReservations
-                    .Where(res => res.Seat.SeatType == SeatType.Budget)
-                    .Take(capacity.Budget);
+                .Where(res => res.Seat.SeatType == SeatType.Budget)
+                .Take(capacity.Budget);
 
             var moderateReservations = allReservations
-                    .Where(res => res.IsTaken == false)
-                    .Take(capacity.Moderate);
+                .Where(res => res.IsTaken == false)
+                .Take(capacity.Moderate);
 
             var premierReservations = allReservations
-                    .Where(res => res.Seat.SeatType == SeatType.Budget)
-                    .Take(capacity.Premier);
+                .Where(res => res.Seat.SeatType == SeatType.Budget)
+                .Take(capacity.Premier);
 
-            List<Reservation> reservations = new List<Reservation>();
+            var reservations = new List<Reservation>();
             reservations.AddRange(budgetReservations);
             reservations.AddRange(moderateReservations);
             reservations.AddRange(premierReservations);
@@ -128,17 +117,9 @@ namespace EventsCalendar.Services.ReservationServices
                 .Where(res => res.IsTaken == false)
                 .ToList();
 
-            capacity.Budget = allSeats
-                .Where(res => res.Seat.SeatType == SeatType.Budget)
-                .Count();
-
-            capacity.Moderate = _reservationRepository.Collection()
-                .Where(res => res.Seat.SeatType == SeatType.Moderate)
-                .Count();
-
-            capacity.Premier = _reservationRepository.Collection()
-                .Where(res => res.Seat.SeatType == SeatType.Premier)
-                .Count();
+            capacity.Budget = allSeats.Count(res => res.Seat.SeatType == SeatType.Budget);
+            capacity.Moderate = allSeats.Count(res => res.Seat.SeatType == SeatType.Moderate);
+            capacity.Premier = allSeats.Count(res => res.Seat.SeatType == SeatType.Premier);
 
             return capacity;
         }

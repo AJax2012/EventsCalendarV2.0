@@ -5,11 +5,11 @@ namespace EventsCalendar.Core.Contracts
 {
     public interface IVenueService
     {
+        void CreateVenue(VenueViewModel venueViewModel);
+        void DeleteVenue(int id);
+        void EditVenue(VenueViewModel venueViewModel, int id);
         IEnumerable<VenueViewModel> ListVenues();
         VenueViewModel NewVenueViewModel();
-        void CreateVenue(VenueViewModel venueViewModel);
         VenueViewModel ReturnVenueViewModel(int id);
-        void EditVenue(VenueViewModel venueViewModel, int id);
-        void DeleteVenue(int id);
     }
 }

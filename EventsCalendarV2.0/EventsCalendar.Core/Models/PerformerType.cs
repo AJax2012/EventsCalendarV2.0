@@ -7,6 +7,6 @@ namespace EventsCalendar.Core.Models
         Musician,
 
         [Display(Name = "Public Speaker")]
-        Public_Speaker
+        PublicSpeaker
     }
 }

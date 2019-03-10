@@ -17,27 +17,21 @@ namespace EventsCalendar.Services.CrudServices
     {
         private readonly IGuidRepository<Ticket> _repository;
         private readonly IReservationRepository _reservationRepository;
-        private readonly IRepository<Seat> _seatRepository;
-        private readonly IRepository<Performance> _performanceRepository;
-        private readonly ConfirmationNumberUtil confirmationNumberUtil;
-        private readonly IReservationService reservationService;
-        private readonly ISeatService seatService;
+        private readonly ConfirmationNumberUtil _confirmationNumberUtil;
+        private readonly IReservationService _reservationService;
+        private readonly ISeatService _seatService;
 
         public TicketService(IGuidRepository<Ticket> repository,
                              IReservationRepository reservationRepository,
-                             IRepository<Seat> seatRepository,
-                             IRepository<Performance> performanceRepository,
-                             ConfirmationNumberUtil _confirmationNumberUtil,
-                             IReservationService _reservationService,
-                             ISeatService _seatService)
+                             ConfirmationNumberUtil confirmationNumberUtil,
+                             IReservationService reservationService,
+                             ISeatService seatService)
         {
             _repository = repository;
             _reservationRepository = reservationRepository;
-            _seatRepository = seatRepository;
-            _performanceRepository = performanceRepository;
-            confirmationNumberUtil = _confirmationNumberUtil;
-            reservationService = _reservationService;
-            seatService = _seatService;
+            _confirmationNumberUtil = confirmationNumberUtil;
+            _reservationService = reservationService;
+            _seatService = seatService;
         }
 
         private Ticket CheckTicketNullValue(Guid id)
@@ -67,14 +61,14 @@ namespace EventsCalendar.Services.CrudServices
         {
             ReservationPrices prices = _reservationRepository.GetPrices(performanceId);
 
-            NewTicketViewModel viewModel = new NewTicketViewModel
+            var viewModel = new NewTicketViewModel
             {
                 PriceOfBudget = prices.Budget,
                 PriceOfModerate = prices.Moderate,
                 PriceOfPremier = prices.Premier
             };
 
-            SeatCapacity numberRemaining = reservationService.GetSeatsRemaining(performanceId);
+            SeatCapacity numberRemaining = _reservationService.GetSeatsRemaining(performanceId);
             Mapper.Map(numberRemaining, viewModel);
 
             return viewModel;
@@ -82,17 +76,17 @@ namespace EventsCalendar.Services.CrudServices
 
         public void CreateTicket(TicketViewModel ticketViewModel)
         {
-            Ticket ticket = new Ticket
+            var ticket = new Ticket
             {
-                ConfirmationNumber = confirmationNumberUtil.CreateConfirmationNumber(ticketViewModel),
+                ConfirmationNumber = _confirmationNumberUtil.CreateConfirmationNumber(ticketViewModel),
                 Recipient = ticketViewModel.Ticket.Recipient,
                 Email = ticketViewModel.Ticket.Email,
             };
 
-            SeatCapacity capacity = new SeatCapacity();
+            var capacity = new SeatCapacity();
             Mapper.Map(ticketViewModel, capacity);
             
-            IEnumerable<Reservation> reservations = reservationService.GetReservations(capacity, ticketViewModel.PerformanceId);
+            IEnumerable<Reservation> reservations = _reservationService.GetReservations(capacity, ticketViewModel.PerformanceId);
 
             foreach (var reservation in reservations)
             {
@@ -112,31 +106,28 @@ namespace EventsCalendar.Services.CrudServices
                 .Where(res => res.TicketId == id)
                 .ToList();
 
-            TicketViewModel viewModel = new TicketViewModel
+            var viewModel = new TicketViewModel
             {
                 Ticket = Mapper.Map<Ticket, TicketDto>(ticket),
 
                 NumberOfBudget = seatsInTicket
-                    .Where(s => s.Seat.SeatType == SeatType.Budget)
-                    .Count(),
+                    .Count(s => s.Seat.SeatType == SeatType.Budget),
 
                 NumberOfModerate = seatsInTicket
-                    .Where(s => s.Seat.SeatType == SeatType.Moderate)
-                    .Count(),
+                    .Count(s => s.Seat.SeatType == SeatType.Moderate),
 
                 NumberOfPremier = seatsInTicket
-                .Where(s => s.Seat.SeatType == SeatType.Premier)
-                .Count()
+                .Count(s => s.Seat.SeatType == SeatType.Premier)
             };
 
             return viewModel;
         }
 
-        public TicketViewModel ReturnTicketViewModelByConfirmationNumber(string confirmationNumber)
-        {
-            Ticket ticket = CheckTicketNullByConfirmationNumber(confirmationNumber);
-            ticket.
-        }
+//        public TicketViewModel ReturnTicketViewModelByConfirmationNumber(string confirmationNumber)
+//        {
+//            Ticket ticket = CheckTicketNullByConfirmationNumber(confirmationNumber);
+//            ticket.
+//        }
 
         public void EditTicket(TicketViewModel ticketViewModel)
         {

@@ -16,20 +16,20 @@ namespace EventsCalendar.Services.CrudServices
         private readonly IRepository<Address> _addressRepository;
         private readonly IRepository<Performance> _performanceRepository;
         private readonly ISeatRepository _seatRepository;
-        private readonly ISeatService seatService;
+        private readonly ISeatService _seatService;
         private readonly string DefaultImgSrc = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJa4VlErDGxyBl-tQu41odZDe-qLvI1xNDALRMYxTITZOb3DslFg";
 
         public VenueService(IRepository<Venue> repo, 
                             IRepository<Address> addressRepo, 
                             ISeatRepository seatRepo,
                             IRepository<Performance> performanceRepo,
-                            ISeatService _seatService)
+                            ISeatService seatService)
         {
             _repository = repo;
             _addressRepository = addressRepo;
             _seatRepository = seatRepo;
             _performanceRepository = performanceRepo;
-            seatService = _seatService;
+            _seatService = seatService;
         }
 
         private Venue CheckVenueNullValue(int id)
@@ -58,7 +58,7 @@ namespace EventsCalendar.Services.CrudServices
 
         public VenueViewModel NewVenueViewModel()
         {
-            VenueViewModel viewModel = new VenueViewModel
+            var viewModel = new VenueViewModel
             {
                 Venue = new VenueDto(),
                 ImgSrc = DefaultImgSrc
@@ -110,10 +110,9 @@ namespace EventsCalendar.Services.CrudServices
             var viewModel = new VenueViewModel
             {
                 Venue = Mapper.Map<Venue, VenueDto>(venue),
-                ImgSrc = venue.ImageUrl
+                ImgSrc = venue.ImageUrl,
+                SeatCapacity = _seatService.GetSeatCapacities(venue.Id)
             };
-
-            viewModel.SeatCapacity = seatService.GetSeatCapacities(venue.Id);
 
             return viewModel;
         }
@@ -132,23 +131,23 @@ namespace EventsCalendar.Services.CrudServices
             venueToEdit.IsActive = true;
 
 
-            var capacity = seatService.GetSeatCapacities(id);
+            var capacity = _seatService.GetSeatCapacities(id);
 
-            SeatCapacity seatsRemoved = new SeatCapacity
+            var seatsRemoved = new SeatCapacity
             {
                 Budget = venueViewModel.SeatCapacity.Budget,
                 Moderate = venueViewModel.SeatCapacity.Moderate,
                 Premier = venueViewModel.SeatCapacity.Premier
             };
 
-            SeatCapacity newSeatCapacity = new SeatCapacity
+            var newSeatCapacity = new SeatCapacity
             {
                 Budget = seatsRemoved.Budget - capacity.Budget,
                 Moderate = seatsRemoved.Moderate - capacity.Moderate,
                 Premier = seatsRemoved.Premier - capacity.Premier
             };
 
-            seatService.ChangeAmountOfSeatsInContext(newSeatCapacity, venueToEdit.Id);
+            _seatService.ChangeAmountOfSeatsInContext(newSeatCapacity, venueToEdit.Id);
 
             _repository.Commit();
             _addressRepository.Commit();
@@ -158,9 +157,8 @@ namespace EventsCalendar.Services.CrudServices
         {
             var venue = CheckVenueNullValue(id);
 
-            List<Performance> performances = 
-                _performanceRepository.Collection()
-                    .Where(p => p.VenueId == id).ToList();
+            List<Performance> performances = _performanceRepository.Collection()
+                .Where(p => p.VenueId == id).ToList();
 
 //            venue.IsActive = false;
 //            venue.Address.IsActive = false;

@@ -11,7 +11,6 @@ namespace EventsCalendar.Core.ViewModels
         public IEnumerable<PerformerDto> Performers { get; set; }
         public IEnumerable<VenueDto> Venues { get; set; }
         public PerformanceDto Performance { get; set; }
-        public string GoogleMapsSrcUrl { get; set; }
         public SeatCapacity SeatsRemaining { get; set; }
 
         [Display(Name = "Budget Price")]

@@ -51,16 +51,13 @@ namespace EventsCalendar.Services.SeatServices
                 .ToList();
 
             capacity.Budget = allSeats
-                .Where(seat => seat.SeatType.Equals(SeatType.Budget))
-                .Count();
+                .Count(seat => seat.SeatType.Equals(SeatType.Budget));
 
             capacity.Moderate = allSeats
-                .Where(seat => seat.SeatType == SeatType.Moderate)
-                .Count();
+                .Count(seat => seat.SeatType == SeatType.Moderate);
 
             capacity.Premier = allSeats
-                .Where(seat => seat.SeatType == SeatType.Premier)
-                .Count();
+                .Count(seat => seat.SeatType == SeatType.Premier);
 
             capacity.Total = allSeats.Count();
 
@@ -73,19 +70,6 @@ namespace EventsCalendar.Services.SeatServices
                 .Where(seat => seat.VenueId == venueId)
                 .Where(seat => seat.SeatType == type)
                 .ToList();
-        }
-
-        /**
-         * loops through amounts in seats array. sets essential values for each seat
-         */
-        private void CreateSeatsForNewVenue(int capacity, SeatType type, Venue venue)
-        {
-            for (var i = 0; i >= capacity; i++)
-            {
-                var seat = new Seat();
-                seat.SeatType = type;
-                venue.Seats.Add(seat);
-            };
         }
     }
 }

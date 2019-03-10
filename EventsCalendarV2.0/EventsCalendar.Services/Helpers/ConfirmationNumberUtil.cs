@@ -15,28 +15,29 @@ namespace EventsCalendar.Services.Helpers
             _repository = repository;
         }
 
-        private static Random random = new Random();
-        private readonly int numberLength = 10;
+        private readonly Random _random = new Random();
+        private readonly int _numberLength = 10;
 
         public string CreateConfirmationNumber(TicketViewModel ticketViewModel)
         {
             var data = CreateConfirmationNumberData(ticketViewModel);
             var datetime = DateTime.Now;
 
-            string month = datetime.ToString("MMM", MonthFirstCharFormatter.FormatProvider);
-            string date = datetime.ToString("dd");
-            string year = datetime.ToString("yy");
-            string hour = datetime.ToString("HH");
+            var month = datetime.ToString("MMM", MonthFirstCharFormatter.FormatProvider);
+            var date = datetime.ToString("dd");
+            var year = datetime.ToString("yy");
+            var hour = datetime.ToString("HH");
 
-            StringBuilder confirmationNumber = new StringBuilder();
+            var confirmationNumber = new StringBuilder();
             confirmationNumber.Append(data.PerformerChar);
-            confirmationNumber.Append(date);
+            confirmationNumber.Append(month);
             confirmationNumber.Append(data.VenueChar);
-            confirmationNumber.Append(hour);
+            confirmationNumber.Append(date);
             confirmationNumber.Append(data.LastReservationChar);
+            confirmationNumber.Append(hour);
             confirmationNumber.Append(data.SeatDigit);
-            confirmationNumber.Append(data.FirstReservationChar);
             confirmationNumber.Append(year);
+            confirmationNumber.Append(data.FirstReservationChar);
             confirmationNumber.Append(data.RandomReservationChar);
             confirmationNumber.Append(data.VenueRandom);
             
@@ -47,21 +48,20 @@ namespace EventsCalendar.Services.Helpers
 
         private ConfirmationNumberData CreateConfirmationNumberData(TicketViewModel ticketViewModel)
         {
-            var performerName = ticketViewModel.Ticket.Reservations.FirstOrDefault().Performance.PerformerDto.Name;
-            var seatId = ticketViewModel.Ticket.Reservations.FirstOrDefault().SeatId.ToString();
-            var venueName = ticketViewModel.Ticket.Reservations.FirstOrDefault().Seat.VenueDto.Name;
-            var reservationNumber = ticketViewModel.Ticket.Reservations.FirstOrDefault().Id.ToString();
-            Random random = new Random();
+            var performerName = ticketViewModel.Ticket.Reservations.First().Performance.PerformerDto.Name;
+            var seatId = ticketViewModel.Ticket.Reservations.First().SeatId.ToString();
+            var venueName = ticketViewModel.Ticket.Reservations.First().Seat.VenueDto.Name;
+            var reservationNumber = ticketViewModel.Ticket.Reservations.First().Id.ToString();
 
             return new ConfirmationNumberData
             {
                 PerformerChar = performerName[0],
                 SeatDigit = seatId[seatId.Length - 1],
                 VenueChar = venueName[0],
-                VenueRandom = venueName[random.Next(venueName.Length)],
+                VenueRandom = venueName[_random.Next(venueName.Length)],
                 FirstReservationChar = reservationNumber[0],
                 LastReservationChar = reservationNumber[reservationNumber.Length - 1],
-                RandomReservationChar = reservationNumber[random.Next(reservationNumber.Length)]
+                RandomReservationChar = reservationNumber[_random.Next(reservationNumber.Length)]
             };
         }
     }
