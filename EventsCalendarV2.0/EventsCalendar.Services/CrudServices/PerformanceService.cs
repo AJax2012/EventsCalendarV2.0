@@ -36,14 +36,9 @@ namespace EventsCalendar.Services.CrudServices
             reservationService = _reservationService;
         }
 
-        private Performance FindPerformanceDto(int id)
-        {
-            return _repository.Find(id);
-        }
-
         private Performance CheckPerformanceNullValue(int id)
         {
-            Performance performance = FindPerformanceDto(id);
+            Performance performance = _repository.Find(id);
             if (performance == null)
                 throw new HttpException(404, "Performance Not Found");
 
