@@ -1,5 +1,6 @@
 ﻿using EventsCalendar.Core.Models;
 using System.Collections.Generic;
+using EventsCalendar.Core.Models.Seats;
 
 namespace EventsCalendar.Core.Dtos
 {

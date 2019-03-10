@@ -1,7 +1,7 @@
-﻿using EventsCalendar.Core.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using EventsCalendar.Core.Models.Reservations;
 
-namespace EventsCalendar.Core.Contracts
+namespace EventsCalendar.Core.Contracts.Repositories
 {
     public interface IReservationRepository : IGuidRepository<Reservation>
     {

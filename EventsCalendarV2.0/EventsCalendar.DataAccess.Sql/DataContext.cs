@@ -1,5 +1,8 @@
 ﻿using System.Data.Entity;
 using EventsCalendar.Core.Models;
+using EventsCalendar.Core.Models.Reservations;
+using EventsCalendar.Core.Models.Seats;
+using EventsCalendar.Core.Models.Tickets;
 
 namespace EventsCalendar.DataAccess.Sql
 {

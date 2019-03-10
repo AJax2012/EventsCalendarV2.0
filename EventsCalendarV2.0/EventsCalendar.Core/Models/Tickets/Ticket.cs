@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using EventsCalendar.Core.Models.Reservations;
 
-namespace EventsCalendar.Core.Models
+namespace EventsCalendar.Core.Models.Tickets
 {
     public class Ticket
     {

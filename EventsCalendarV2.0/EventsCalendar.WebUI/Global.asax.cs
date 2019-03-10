@@ -5,11 +5,12 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using AutoMapper;
 using EventsCalendar.Core.Contracts;
+using EventsCalendar.Core.Contracts.Repositories;
+using EventsCalendar.Core.Contracts.Services;
 using EventsCalendar.Core.Models;
 using EventsCalendar.DataAccess.Sql;
 using EventsCalendar.Services.CrudServices;
-using EventsCalendar.Services.ReservationServices;
-using EventsCalendar.Services.SeatServices;
+using EventsCalendar.Services.Helpers;
 
 namespace EventsCalendar.WebUI
 {

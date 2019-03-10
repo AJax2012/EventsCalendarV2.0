@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EventsCalendar.Core.Models.Reservations;
 
 namespace EventsCalendar.Core.Models
 {

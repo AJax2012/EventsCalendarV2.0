@@ -2,6 +2,7 @@
 using EventsCalendar.Core.Models;
 using System;
 using System.ComponentModel.DataAnnotations;
+using EventsCalendar.Core.Models.Seats;
 
 namespace EventsCalendar.Core.ViewModels
 {

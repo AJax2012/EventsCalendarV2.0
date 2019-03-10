@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using EventsCalendar.Core.Contracts;
+using EventsCalendar.Core.Contracts.Repositories;
 using EventsCalendar.Core.Models;
 
 namespace EventsCalendar.DataAccess.InMemory

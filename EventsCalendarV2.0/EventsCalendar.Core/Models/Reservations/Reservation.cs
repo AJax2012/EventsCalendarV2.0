@@ -1,6 +1,8 @@
 ﻿using System;
+using EventsCalendar.Core.Models.Seats;
+using EventsCalendar.Core.Models.Tickets;
 
-namespace EventsCalendar.Core.Models
+namespace EventsCalendar.Core.Models.Reservations
 {
     public class Reservation
     {

@@ -1,4 +1,4 @@
-﻿namespace EventsCalendar.Core.Models
+﻿namespace EventsCalendar.Core.Models.Tickets
 {
     public class ConfirmationNumberData
     {

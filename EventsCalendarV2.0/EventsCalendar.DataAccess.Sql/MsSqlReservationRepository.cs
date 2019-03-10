@@ -7,6 +7,9 @@ using System.Data.Entity;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
+using EventsCalendar.Core.Contracts.Repositories;
+using EventsCalendar.Core.Models.Reservations;
+using EventsCalendar.Core.Models.Seats;
 
 namespace EventsCalendar.DataAccess.Sql
 {

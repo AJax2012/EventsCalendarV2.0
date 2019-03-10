@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using EventsCalendar.Core.Contracts;
+using EventsCalendar.Core.Contracts.Services;
 using EventsCalendar.Core.ViewModels;
 
 namespace EventsCalendar.WebUI.Controllers

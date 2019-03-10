@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EventsCalendar.Core.Models
+namespace EventsCalendar.Core.Models.Reservations
 {
     public class SimpleReservationsByType
     {

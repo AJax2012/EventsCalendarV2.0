@@ -1,6 +1,6 @@
-﻿using EventsCalendar.Core.Models;
+﻿using EventsCalendar.Core.Models.Seats;
 
-namespace EventsCalendar.Core.Contracts
+namespace EventsCalendar.Core.Contracts.Repositories
 {
     public interface ISeatRepository : IRepository<Seat>
     {

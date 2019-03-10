@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using EventsCalendar.Core.Contracts.Repositories;
+using EventsCalendar.Core.Models.Tickets;
 
 namespace EventsCalendar.DataAccess.Sql
 {

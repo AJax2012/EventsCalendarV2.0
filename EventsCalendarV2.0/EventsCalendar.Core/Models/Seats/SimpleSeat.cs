@@ -1,4 +1,4 @@
-﻿namespace EventsCalendar.Core.Models
+﻿namespace EventsCalendar.Core.Models.Seats
 {
     public class SimpleSeat
     {

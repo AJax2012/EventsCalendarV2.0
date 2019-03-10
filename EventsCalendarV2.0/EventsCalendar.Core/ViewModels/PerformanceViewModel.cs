@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using EventsCalendar.Core.Dtos;
 using EventsCalendar.Core.Models;
+using EventsCalendar.Core.Models.Seats;
 using EventsCalendar.Core.Validation;
 
 namespace EventsCalendar.Core.ViewModels

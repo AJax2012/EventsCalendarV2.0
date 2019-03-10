@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using EventsCalendar.Core.Contracts.Services;
 
 namespace EventsCalendar.WebUI.Controllers
 {

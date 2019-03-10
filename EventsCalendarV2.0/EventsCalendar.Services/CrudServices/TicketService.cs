@@ -10,6 +10,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using EventsCalendar.Core.Contracts.Repositories;
+using EventsCalendar.Core.Contracts.Services;
+using EventsCalendar.Core.Models.Reservations;
+using EventsCalendar.Core.Models.Seats;
+using EventsCalendar.Core.Models.Tickets;
 
 namespace EventsCalendar.Services.CrudServices
 {

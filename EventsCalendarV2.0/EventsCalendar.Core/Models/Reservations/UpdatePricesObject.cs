@@ -1,4 +1,6 @@
-﻿namespace EventsCalendar.Core.Models
+﻿using EventsCalendar.Core.Models.Seats;
+
+namespace EventsCalendar.Core.Models.Reservations
 {
     public class UpdatePricesObject
     {

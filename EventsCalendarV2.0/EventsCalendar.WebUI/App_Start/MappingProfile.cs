@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using EventsCalendar.Core.Dtos;
 using EventsCalendar.Core.Models;
+using EventsCalendar.Core.Models.Reservations;
+using EventsCalendar.Core.Models.Seats;
+using EventsCalendar.Core.Models.Tickets;
 using EventsCalendar.Core.ViewModels;
 
 namespace EventsCalendar.WebUI

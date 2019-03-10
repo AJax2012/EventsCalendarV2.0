@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace EventsCalendar.Core.Contracts
+namespace EventsCalendar.Core.Contracts.Repositories
 {
     public interface IGuidRepository<T>
     {

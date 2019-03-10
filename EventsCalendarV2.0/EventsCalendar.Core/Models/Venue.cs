@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using EventsCalendar.Core.Models.Seats;
 
 namespace EventsCalendar.Core.Models
 {

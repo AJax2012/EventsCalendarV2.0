@@ -4,6 +4,7 @@ using EventsCalendar.DataAccess.Sql;
 using System;
 using System.Linq;
 using System.Text;
+using EventsCalendar.Core.Models.Tickets;
 
 namespace EventsCalendar.Services.Helpers
 {

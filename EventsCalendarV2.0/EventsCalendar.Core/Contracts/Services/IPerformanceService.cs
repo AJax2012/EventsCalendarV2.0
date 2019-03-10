@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using EventsCalendar.Core.ViewModels;
 
-namespace EventsCalendar.Core.Contracts
+namespace EventsCalendar.Core.Contracts.Services
 {
     public interface IPerformanceService
     {

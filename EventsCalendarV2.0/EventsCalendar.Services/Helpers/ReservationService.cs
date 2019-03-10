@@ -1,9 +1,11 @@
-﻿using EventsCalendar.Core.Contracts;
-using EventsCalendar.Core.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using EventsCalendar.Core.Contracts.Repositories;
+using EventsCalendar.Core.Contracts.Services;
+using EventsCalendar.Core.Models.Reservations;
+using EventsCalendar.Core.Models.Seats;
 
-namespace EventsCalendar.Services.ReservationServices
+namespace EventsCalendar.Services.Helpers
 {
     public class ReservationService : IReservationService
     {

@@ -3,10 +3,12 @@ using System.Linq;
 using System.Web;
 using AutoMapper;
 using EventsCalendar.Core.Contracts;
+using EventsCalendar.Core.Contracts.Repositories;
+using EventsCalendar.Core.Contracts.Services;
 using EventsCalendar.Core.Dtos;
 using EventsCalendar.Core.Models;
+using EventsCalendar.Core.Models.Seats;
 using EventsCalendar.Core.ViewModels;
-using EventsCalendar.Services.SeatServices;
 
 namespace EventsCalendar.Services.CrudServices
 {
