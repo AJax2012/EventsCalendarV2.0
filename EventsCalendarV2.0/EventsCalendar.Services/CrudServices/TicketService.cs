@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
-using EventsCalendar.Core.Contracts;
 using EventsCalendar.Core.Dtos;
-using EventsCalendar.Core.Models;
 using EventsCalendar.Core.ViewModels;
 using EventsCalendar.Services.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using EventsCalendar.Core.Contracts.Repositories;
 using EventsCalendar.Core.Contracts.Services;

@@ -11,17 +11,18 @@ namespace EventsCalendar.WebUI.Controllers
 {
     public class TicketsController : Controller
     {
-        private readonly ITicketService ticketService;
+        private readonly ITicketService _ticketService;
 
-        public TicketsController(ITicketService _ticketService)
+        public TicketsController(ITicketService ticketService)
         {
-            ticketService = _ticketService;
+            this._ticketService = ticketService;
         }
 
         // Shows User Pre-purchase ticket options page
-        public ActionResult TicketDetails()
+        public ActionResult Details(Guid id)
         {
-            return View();
+            var ticket = _ticketService.ReturnTicketViewModel(id);
+            return View(ticket);
         }
 
         // Shows User Pre-purchase ticket options page
@@ -46,10 +47,10 @@ namespace EventsCalendar.WebUI.Controllers
                 return View("TicketForm", ticketViewModel);
 
             if (ticketViewModel.Ticket.Id == Guid.Empty)
-                ticketService.CreateTicket(ticketViewModel);
+                _ticketService.CreateTicket(ticketViewModel);
             else
             {
-                ticketService.EditTicket(ticketViewModel);
+                _ticketService.EditTicket(ticketViewModel);
             }
 
             return RedirectToAction("Index", "Venues");

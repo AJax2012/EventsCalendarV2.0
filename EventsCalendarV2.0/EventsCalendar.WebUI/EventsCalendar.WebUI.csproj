@@ -606,10 +606,10 @@
     <Content Include="Views\Performers\Details.cshtml" />
     <Content Include="Views\Venues\Details.cshtml" />
     <Content Include="Views\Performances\Details.cshtml" />
+    <Content Include="Views\Tickets\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Tickets\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
