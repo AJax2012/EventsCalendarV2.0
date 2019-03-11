@@ -1,4 +1,4 @@
-﻿@model EventsCalendar.Core.ViewModels.TicketViewModel
+﻿@model EventsCalendar.Services.Contracts.ITicketViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -6,7 +6,6 @@
 
 <h2>Details</h2>
 
-<h3>Are you sure you want to delete this?</h3>
 <div>
     <h4>TicketViewModel</h4>
     <hr />
@@ -20,36 +19,32 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.NumberOfBudget)
+            @Html.DisplayNameFor(model => model.BudgetPrice)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.NumberOfBudget)
+            @Html.DisplayFor(model => model.BudgetPrice)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.NumberOfModerate)
+            @Html.DisplayNameFor(model => model.ModeratePrice)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.NumberOfModerate)
+            @Html.DisplayFor(model => model.ModeratePrice)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.NumberOfPremier)
+            @Html.DisplayNameFor(model => model.PremierPrice)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.NumberOfPremier)
+            @Html.DisplayFor(model => model.PremierPrice)
         </dd>
 
     </dl>
-
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions">
-            @Html.ActionLink("Back to List", "Index", "Performances")
-        </div>
-    }
 </div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* performerId = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

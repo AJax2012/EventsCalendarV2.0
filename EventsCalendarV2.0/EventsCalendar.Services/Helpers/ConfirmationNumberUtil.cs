@@ -1,10 +1,9 @@
-﻿using EventsCalendar.Core.Models;
-using EventsCalendar.Core.ViewModels;
-using EventsCalendar.DataAccess.Sql;
+﻿using EventsCalendar.DataAccess.Sql;
 using System;
 using System.Linq;
 using System.Text;
 using EventsCalendar.Core.Models.Tickets;
+using EventsCalendar.Services.Contracts;
 
 namespace EventsCalendar.Services.Helpers
 {
@@ -18,7 +17,7 @@ namespace EventsCalendar.Services.Helpers
 
         private readonly Random _random = new Random();
 
-        public string CreateConfirmationNumber(TicketViewModel ticketViewModel)
+        public string CreateConfirmationNumber(ITicketViewModel ticketViewModel)
         {
             var data = CreateConfirmationNumberData(ticketViewModel);
             var datetime = DateTime.Now;
@@ -46,7 +45,7 @@ namespace EventsCalendar.Services.Helpers
             return stringConfNumb;
         }
 
-        private ConfirmationNumberData CreateConfirmationNumberData(TicketViewModel ticketViewModel)
+        private ConfirmationNumberData CreateConfirmationNumberData(ITicketViewModel ticketViewModel)
         {
             var performerName = ticketViewModel.Ticket.Reservations.First().Performance.PerformerDto.Name;
             var seatId = ticketViewModel.Ticket.Reservations.First().SeatId.ToString();

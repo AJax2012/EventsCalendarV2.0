@@ -1,5 +1,4 @@
-﻿using EventsCalendar.Core.Contracts;
-using EventsCalendar.Core.Models;
+﻿using EventsCalendar.Core.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
@@ -7,8 +6,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using System;
-using EventsCalendar.Core.Contracts.Repositories;
 using EventsCalendar.Core.Models.Seats;
+using EventsCalendar.DataAccess.Sql.Contracts;
 
 namespace EventsCalendar.DataAccess.Sql
 {

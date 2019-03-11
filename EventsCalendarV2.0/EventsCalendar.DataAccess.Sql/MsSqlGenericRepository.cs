@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
-using EventsCalendar.Core.Contracts;
-using EventsCalendar.Core.Contracts.Repositories;
 using EventsCalendar.Core.Models;
+using EventsCalendar.DataAccess.Sql.Contracts;
 
 namespace EventsCalendar.DataAccess.Sql
 {

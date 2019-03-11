@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using EventsCalendar.Core.Contracts;
-using EventsCalendar.Core.Contracts.Services;
-using EventsCalendar.Core.ViewModels;
+using EventsCalendar.Services.Contracts;
+using EventsCalendar.Services.Contracts.Services;
+using EventsCalendar.Services.Dtos;
+using EventsCalendar.WebUI.ViewModels;
 
 namespace EventsCalendar.WebUI.Controllers
 {
@@ -21,7 +22,7 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Index()
         {
-            IEnumerable<PerformanceViewModel> viewModel = _performanceService.ListPerformances();
+            IEnumerable<IPerformanceViewModel> viewModel = _performanceService.ListPerformances();
             return View(viewModel);
         }
 
@@ -30,7 +31,17 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Create()
         {
-            return View("PerformanceForm", _performanceService.NewPerformanceViewModel());
+            IPerformanceViewModel viewModel = new PerformanceViewModel
+            {
+                Performance = new PerformanceDto
+                {
+                    PerformerDto = new PerformerDto(),
+                    VenueDto = new VenueDto()
+                },
+                Performers = new List<PerformerDto>(),
+                Venues = new List<VenueDto>()
+            };
+            return View("PerformanceForm", _performanceService.NewPerformanceViewModel(viewModel));
         }
 
         /*
@@ -38,7 +49,17 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Edit(int id)
         {
-            return View("PerformanceForm", _performanceService.ReturnPerformanceViewModel(id));
+            IPerformanceViewModel viewModel = new PerformanceViewModel
+            {
+                Performance = new PerformanceDto
+                {
+                    Id = id
+                },
+                Performers = new List<PerformerDto>(),
+                Venues = new List<VenueDto>()
+            };
+
+            return View("PerformanceForm", _performanceService.ReturnPerformanceViewModel(viewModel));
         }
 
         [HttpPost]
@@ -49,7 +70,7 @@ namespace EventsCalendar.WebUI.Controllers
             if (!ModelState.IsValid)
             {
                 var performanceVm = _performanceService.ReturnPerformanceViewModel
-                    (performanceViewModel.Performance.Id);
+                    (performanceViewModel);
 
                 return View("PerformanceForm", performanceVm);
             }
@@ -77,14 +98,22 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Details(int id)
         {
-            var performance = _performanceService.ReturnPerformanceDetails(id);
+            IPerformanceViewModel viewModel = new PerformanceViewModel
+            {
+                Performance = new PerformanceDto
+                {
+                    Id = id
+                }
+            };
+
+            var performance = _performanceService.ReturnPerformanceDetails(viewModel);
             return View(performance);
         }
 
         /*
          * PRIVATE METHOD
          */
-        private void CheckDateTime(PerformanceViewModel performanceViewModel)
+        private void CheckDateTime(IPerformanceViewModel performanceViewModel)
         {
             var date = performanceViewModel.EventDate;
             var time = performanceViewModel.EventTime;

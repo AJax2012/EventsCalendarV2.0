@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using EventsCalendar.Core.Contracts.Repositories;
-using EventsCalendar.Core.Contracts.Services;
 using EventsCalendar.Core.Models.Reservations;
 using EventsCalendar.Core.Models.Seats;
+using EventsCalendar.DataAccess.Sql.Contracts;
+using EventsCalendar.Services.Contracts.Services;
 
 namespace EventsCalendar.Services.Helpers
 {
@@ -110,9 +110,9 @@ namespace EventsCalendar.Services.Helpers
          * sorts seats by seattype
          * returns SeatCapacity Object
          */ 
-        public SeatCapacity GetSeatsRemaining(int performanceId)
+        public SeatCapacityDto GetSeatsRemaining(int performanceId)
         {
-            var capacity = new SeatCapacity();
+            var capacity = new SeatCapacityDto();
 
             var allSeats = _reservationRepository.Collection()
                 .Where(res => res.PerformanceId == performanceId)

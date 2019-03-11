@@ -1,11 +1,13 @@
 ﻿using System.Data.Entity;
-using EventsCalendar.EntityConfigurations;
+using EventsCalendar.Services;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace EventsCalendar.WebUI.Models
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        private readonly BuildModelBuilderConfigurations _builder = new BuildModelBuilderConfigurations();
+
         public ApplicationDbContext()
             : base("EventCalendarDataContext", throwIfV1Schema: false)
         {
@@ -18,13 +20,7 @@ namespace EventsCalendar.WebUI.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Configurations.Add(new AddressConfiguration());
-            modelBuilder.Configurations.Add(new PerformanceConfiguration());
-            modelBuilder.Configurations.Add(new PerformerConfiguration());
-            modelBuilder.Configurations.Add(new SeatConfiguration());
-            modelBuilder.Configurations.Add(new ReservationConfiguration());
-            modelBuilder.Configurations.Add(new TicketConfiguration());
-            modelBuilder.Configurations.Add(new VenueConfiguration());
+            _builder.Builder(modelBuilder);
         }
     }
 }

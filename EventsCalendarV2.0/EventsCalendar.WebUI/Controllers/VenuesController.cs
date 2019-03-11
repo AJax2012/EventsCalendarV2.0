@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using EventsCalendar.Core.Contracts;
-using EventsCalendar.Core.Contracts.Services;
-using EventsCalendar.Core.ViewModels;
+using EventsCalendar.Services.Contracts;
+using EventsCalendar.Services.Contracts.Services;
+using EventsCalendar.Services.Dtos;
+using EventsCalendar.WebUI.ViewModels;
 
 namespace EventsCalendar.WebUI.Controllers
 {
     public class VenuesController : Controller
     {
         private readonly IVenueService _venueService;
+        private const string DefaultImgSrc = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJa4VlErDGxyBl-tQu41odZDe-qLvI1xNDALRMYxTITZOb3DslFg";
 
         public VenuesController(IVenueService venueService)
         {
@@ -20,7 +22,7 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Index()
         {
-            IEnumerable<VenueViewModel> viewModel = _venueService.ListVenues();
+            IEnumerable<IVenueViewModel> viewModel = _venueService.ListVenues();
             return View(viewModel);
         }
 
@@ -29,7 +31,17 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Create()
         {
-            return View("VenueForm", _venueService.NewVenueViewModel());
+            var viewModel = new VenueViewModel
+            {
+                Venue = new VenueDto
+                {
+                    Id = 0,
+                    AddressId = 0,
+                    ImageUrl = DefaultImgSrc
+                },
+            };
+
+            return View("VenueForm", viewModel);
         }
 
         /*
@@ -37,7 +49,15 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Edit(int id)
         {
-            return View("VenueForm", _venueService.ReturnVenueViewModel(id));
+            IVenueViewModel viewModel = new VenueViewModel
+            {
+                Venue = new VenueDto
+                {
+                    Id = id
+                }
+            };
+
+            return View("VenueForm", _venueService.ReturnVenueViewModel(viewModel));
         }
 
         /*
@@ -74,7 +94,15 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Details(int id)
         {
-            var venue = _venueService.ReturnVenueViewModel(id);
+            IVenueViewModel viewModel = new VenueViewModel
+            {
+                Venue = new VenueDto
+                {
+                    Id = id
+                }
+            };
+
+            var venue = _venueService.ReturnVenueViewModel(viewModel);
 
             return View(venue);
         }

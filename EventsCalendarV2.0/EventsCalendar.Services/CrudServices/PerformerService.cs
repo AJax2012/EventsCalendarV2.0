@@ -2,12 +2,11 @@
 using System.Linq;
 using System.Web;
 using AutoMapper;
-using EventsCalendar.Core.Contracts;
-using EventsCalendar.Core.Contracts.Repositories;
-using EventsCalendar.Core.Contracts.Services;
-using EventsCalendar.Core.Dtos;
 using EventsCalendar.Core.Models;
-using EventsCalendar.Core.ViewModels;
+using EventsCalendar.DataAccess.Sql.Contracts;
+using EventsCalendar.Services.Contracts;
+using EventsCalendar.Services.Contracts.Services;
+using EventsCalendar.Services.Dtos;
 using EventsCalendar.Services.Helpers;
 
 namespace EventsCalendar.Services.CrudServices
@@ -54,7 +53,18 @@ namespace EventsCalendar.Services.CrudServices
             return performerDto;
         }
 
-        public IEnumerable<PerformerViewModel> ListPerformers()
+        private IPerformerViewModel mapEnumsToViewModel(IPerformerViewModel viewModel)
+        {
+            var performerTypes = EnumUtil.GetValues<PerformerType>();
+            var genres = EnumUtil.GetValues<Genre>();
+            var topics = EnumUtil.GetValues<Topic>();
+            Mapper.Map(performerTypes, viewModel.PerformerTypes);
+            Mapper.Map(genres, viewModel.Genres);
+            Mapper.Map(topics, viewModel.Topics);
+            return viewModel;
+        }
+
+        public IEnumerable<IPerformerViewModel> ListPerformers()
         {
             IEnumerable<Performer> performers = _repository.Collection().ToList();
 
@@ -64,25 +74,21 @@ namespace EventsCalendar.Services.CrudServices
 
             var performerViewModels =
                 Mapper.Map<IEnumerable<PerformerDto>,
-                    IEnumerable<PerformerViewModel>>(performerDtos);
+                    IEnumerable<IPerformerViewModel>>(performerDtos);
 
             return performerViewModels;
         }
 
-        public PerformerViewModel NewPerformerViewModel()
+        public IPerformerViewModel NewPerformerViewModel(IPerformerViewModel viewModel)
         {
-            var viewModel = new PerformerViewModel
-            {
-                Performer = new PerformerDto(),
-                PerformerTypes = EnumUtil.GetValues<PerformerType>(),
-                Genres = EnumUtil.GetValues<Genre>(),
-                Topics = EnumUtil.GetValues<Topic>(),
-            };
-            
+            viewModel.Performer = new PerformerDto();
+            viewModel = mapEnumsToViewModel(viewModel);
+            viewModel.Performer.ImageUrl = DefaultImgSrc;
+
             return viewModel;
         }
 
-        public void CreatePerformer(PerformerViewModel performerViewModel)
+        public void CreatePerformer(IPerformerViewModel performerViewModel)
         {
             var performer = new Performer
             {
@@ -107,22 +113,16 @@ namespace EventsCalendar.Services.CrudServices
             _repository.Commit();
         }
 
-        public PerformerViewModel ReturnPerformerViewModel(int id)
+        public IPerformerViewModel ReturnPerformerViewModel(IPerformerViewModel viewModel)
         {
-            Performer performer = CheckPerformerNullValue(id);
-
-            var viewModel = new PerformerViewModel
-            {
-                PerformerTypes = EnumUtil.GetValues<PerformerType>(),
-                Genres = EnumUtil.GetValues<Genre>(),
-                Topics = EnumUtil.GetValues<Topic>(),
-                Performer = MapPerformerToDto(performer)
-            };
+            Performer performer = CheckPerformerNullValue(viewModel.Performer.Id);
+            viewModel.Performer = MapPerformerToDto(performer);
+            viewModel = mapEnumsToViewModel(viewModel);
 
             return viewModel;
         }
 
-        public void EditPerformer(PerformerViewModel performerViewModel, int id)
+        public void EditPerformer(IPerformerViewModel performerViewModel, int id)
         {
             Performer performerToEdit = CheckPerformerNullValue(id);
 

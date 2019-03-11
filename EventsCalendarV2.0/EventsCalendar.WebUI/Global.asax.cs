@@ -4,25 +4,23 @@ using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
 using AutoMapper;
-using EventsCalendar.Core.Contracts;
-using EventsCalendar.Core.Contracts.Repositories;
-using EventsCalendar.Core.Contracts.Services;
-using EventsCalendar.Core.Models;
-using EventsCalendar.Core.Models.Tickets;
-using EventsCalendar.DataAccess.Sql;
-using EventsCalendar.Services.CrudServices;
-using EventsCalendar.Services.Helpers;
+using EventsCalendar.Services;
+using EventsCalendar.Services.Contracts;
+using EventsCalendar.WebUI.ViewModels;
 
 namespace EventsCalendar.WebUI
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        private readonly AutofacContainer _container = new AutofacContainer();
+
         protected void Application_Start()
         {
             /*
              * AutoMapper config
              */
             Mapper.Initialize(c => c.AddProfile<MappingProfile>());
+//            Mapper.AssertConfigurationIsValid();
 
             /*
              * begin Autofac Config
@@ -34,23 +32,14 @@ namespace EventsCalendar.WebUI
             // Register your MVC controllers. (MvcApplication is the name of
             // the class in Global.asax.)
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
-            builder.RegisterType<DataContext>().InstancePerRequest();
-            builder.RegisterGeneric(typeof(MsSqlGenericRepository<>)).As(typeof(IRepository<>));
-            builder.RegisterType(typeof(MsSqlVenueRepository)).As(typeof(IRepository<Venue>));
-            builder.RegisterType(typeof(MsSqlPerformerRepository)).As(typeof(IRepository<Performer>));
-            builder.RegisterType(typeof(MsSqlPerformanceRepository)).As(typeof(IRepository<Performance>));
-            builder.RegisterType(typeof(MsSqlReservationRepository)).As(typeof(IReservationRepository));
-            builder.RegisterType(typeof(MsSqlSeatRepository)).As(typeof(ISeatRepository));
-            builder.RegisterType(typeof(MsSqlTicketRepository)).As(typeof(ITicketRepository));
-            builder.RegisterType(typeof(PerformanceService)).As(typeof(IPerformanceService));
-            builder.RegisterType(typeof(PerformerService)).As(typeof(IPerformerService));
-            builder.RegisterType(typeof(VenueService)).As(typeof(IVenueService));
-            builder.RegisterType(typeof(SeatService)).As(typeof(ISeatService));
-            builder.RegisterType(typeof(TicketService)).As(typeof(ITicketService));
-            builder.RegisterType(typeof(ReservationService)).As(typeof(IReservationService));
+            builder.RegisterType(typeof(PerformanceViewModel)).As(typeof(IPerformanceViewModel));
+            builder.RegisterType(typeof(PerformerViewModel)).As(typeof(IPerformerViewModel));
+            builder.RegisterType(typeof(TicketViewModel)).As(typeof(ITicketViewModel));
+            builder.RegisterType(typeof(VenueViewModel)).As(typeof(IVenueViewModel));
+            _container.BuildAutofacContainer(builder);
 
             // Register Api Controllers
-//            builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+            //            builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
             // Set the dependency resolver to be Autofac.
             var container = builder.Build();

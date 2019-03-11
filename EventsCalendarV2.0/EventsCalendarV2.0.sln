@@ -5,9 +5,7 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsCalendar.Core", "EventsCalendar.Core\EventsCalendar.Core.csproj", "{34BE36F9-3353-494E-8643-5AC3E0AD4F94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsCalendar.Services", "EventsCalendar.Services\EventsCalendar.Services.csproj", "{CA314121-AE19-486C-AD3F-21B3BCCCFA5A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsCalendar.DataAccess.InMemory", "EventsCalendar.DataAccess.InMemory\EventsCalendar.DataAccess.InMemory.csproj", "{5B6C742E-51D1-441D-B29A-67DB4C71CCBC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsCalendar.Service", "EventsCalendar.Services\EventsCalendar.Service.csproj", "{CA314121-AE19-486C-AD3F-21B3BCCCFA5A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsCalendar.DataAccess.Sql", "EventsCalendar.DataAccess.Sql\EventsCalendar.DataAccess.Sql.csproj", "{1140237F-B97F-419B-B9E0-6B12F73E223E}"
 EndProject
@@ -31,10 +29,6 @@ Global
 		{CA314121-AE19-486C-AD3F-21B3BCCCFA5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA314121-AE19-486C-AD3F-21B3BCCCFA5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA314121-AE19-486C-AD3F-21B3BCCCFA5A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5B6C742E-51D1-441D-B29A-67DB4C71CCBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5B6C742E-51D1-441D-B29A-67DB4C71CCBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5B6C742E-51D1-441D-B29A-67DB4C71CCBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5B6C742E-51D1-441D-B29A-67DB4C71CCBC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1140237F-B97F-419B-B9E0-6B12F73E223E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1140237F-B97F-419B-B9E0-6B12F73E223E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1140237F-B97F-419B-B9E0-6B12F73E223E}.Release|Any CPU.ActiveCfg = Release|Any CPU

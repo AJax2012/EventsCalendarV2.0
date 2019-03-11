@@ -1,7 +1,8 @@
-﻿using EventsCalendar.Core.ViewModels;
-using System;
+﻿using System;
 using System.Web.Mvc;
-using EventsCalendar.Core.Contracts.Services;
+using EventsCalendar.Services.Contracts;
+using EventsCalendar.Services.Contracts.Services;
+using EventsCalendar.WebUI.ViewModels;
 
 namespace EventsCalendar.WebUI.Controllers
 {
@@ -16,7 +17,8 @@ namespace EventsCalendar.WebUI.Controllers
 
         public ActionResult Index()
         {
-            var tickets = _ticketService.ListTickets();
+            ITicketViewModel viewModel = new TicketViewModel();
+            var tickets = _ticketService.ListTickets(viewModel);
             return View(tickets);
         }
 
@@ -42,9 +44,14 @@ namespace EventsCalendar.WebUI.Controllers
         }
 
         // Shows User Pre-purchase ticket options page
-        public ActionResult Create(int performanceId)
+        public ActionResult Create(int id)
         {
-            return View("TicketForm", _ticketService.NewTicketViewModel(performanceId));
+            ITicketViewModel viewModel = new TicketViewModel
+            {
+                PerformanceId = id
+            };
+
+            return View("TicketForm", _ticketService.NewTicketViewModel(viewModel));
         }
 
         // Shows User Pre-purchase ticket options page

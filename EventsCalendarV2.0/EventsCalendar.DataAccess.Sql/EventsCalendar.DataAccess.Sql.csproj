@@ -70,6 +70,11 @@
     <Compile Include="MsSqlTicketRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MsSqlVenueRepository.cs" />
+    <Compile Include="Contracts\IGuidRepository.cs" />
+    <Compile Include="Contracts\IRepository.cs" />
+    <Compile Include="Contracts\IReservationRepository.cs" />
+    <Compile Include="Contracts\ISeatRepository.cs" />
+    <Compile Include="Contracts\ITicketRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EventsCalendar.Core\EventsCalendar.Core.csproj">

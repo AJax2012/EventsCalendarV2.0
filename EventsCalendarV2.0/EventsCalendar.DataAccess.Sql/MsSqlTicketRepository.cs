@@ -1,11 +1,10 @@
-﻿using EventsCalendar.Core.Contracts;
-using EventsCalendar.Core.Models;
+﻿using EventsCalendar.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using EventsCalendar.Core.Contracts.Repositories;
 using EventsCalendar.Core.Models.Tickets;
+using EventsCalendar.DataAccess.Sql.Contracts;
 
 namespace EventsCalendar.DataAccess.Sql
 {

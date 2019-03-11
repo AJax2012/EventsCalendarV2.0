@@ -2,13 +2,13 @@
 using System.Linq;
 using System.Web;
 using AutoMapper;
-using EventsCalendar.Core.Contracts.Repositories;
-using EventsCalendar.Core.Contracts.Services;
-using EventsCalendar.Core.Dtos;
 using EventsCalendar.Core.Models;
 using EventsCalendar.Core.Models.Reservations;
 using EventsCalendar.Core.Models.Seats;
-using EventsCalendar.Core.ViewModels;
+using EventsCalendar.DataAccess.Sql.Contracts;
+using EventsCalendar.Services.Contracts;
+using EventsCalendar.Services.Contracts.Services;
+using EventsCalendar.Services.Dtos;
 
 namespace EventsCalendar.Services.CrudServices
 {
@@ -17,20 +17,17 @@ namespace EventsCalendar.Services.CrudServices
         private readonly IRepository<Performance> _repository;
         private readonly IRepository<Performer> _performerRepository;
         private readonly IReservationRepository _reservationRepository;
-        private readonly ISeatRepository _seatRepository;
         private readonly IRepository<Venue> _venueRepository;
         private readonly IReservationService _reservationService;
 
         public PerformanceService(IRepository<Performance> repository,
                                   IRepository<Performer> performerRepository, 
                                   IReservationRepository reservationRepository,
-                                  ISeatRepository seatRepository,
                                   IRepository<Venue> venueRepository,
                                   IReservationService reservationService)
         {
             _repository = repository;
             _performerRepository = performerRepository;
-            _seatRepository = seatRepository;
             _reservationRepository = reservationRepository;
             _venueRepository = venueRepository;
             _reservationService = reservationService;
@@ -45,13 +42,12 @@ namespace EventsCalendar.Services.CrudServices
             return performance;
         }
 
-        private SeatCapacity CountRemainingReservations(Performance performance)
+        private SeatCapacityDto CountRemainingReservations(Performance performance)
         {
-            var capacity = new SeatCapacity();
             return _reservationService.GetSeatsRemaining(performance.Id);
         }
 
-        public IEnumerable<PerformanceViewModel> ListPerformances()
+        public IEnumerable<IPerformanceViewModel> ListPerformances()
         {
             IEnumerable<Performance> performances = 
                 _repository.Collection()
@@ -65,37 +61,34 @@ namespace EventsCalendar.Services.CrudServices
 
             var performanceViewModels = 
                 Mapper.Map<IEnumerable<PerformanceDto>, 
-                    IEnumerable<PerformanceViewModel>>
+                    IEnumerable<IPerformanceViewModel>>
                     (performanceDtos);
 
             return performanceViewModels;
         }
 
-        public PerformanceViewModel NewPerformanceViewModel()
+        public IPerformanceViewModel NewPerformanceViewModel(IPerformanceViewModel viewModel)
         {
-            var viewModel = new PerformanceViewModel
-            {
-                Performance = new PerformanceDto(),
-                Performers = Mapper.Map
-                    <IEnumerable<Performer>, ICollection<PerformerDto>>
-                        (_performerRepository.Collection()),
-
-                Venues = Mapper.Map
-                    <IEnumerable<Venue>, ICollection<VenueDto>>
-                        (_venueRepository.Collection())
-            };
+            Mapper.Map(_performerRepository.Collection(), viewModel.Performers);
+            Mapper.Map(_venueRepository.Collection(), viewModel.Venues);
             
             return viewModel;
         }
 
-        public void CreatePerformance(PerformanceViewModel performanceViewModel)
+        public void CreatePerformance(IPerformanceViewModel performanceViewModel)
         {
+            var performerId = performanceViewModel.Performance.PerformerDto.Id;
+            var venueId = performanceViewModel.Performance.VenueDto.Id;
             var performance = new Performance
             {
+                Description = performanceViewModel.Performance.Description,
                 EventDateTime = performanceViewModel.Performance.EventDateTime,
                 IsActive = true,
                 PerformerId = performanceViewModel.Performance.PerformerDto.Id,
                 VenueId = performanceViewModel.Performance.VenueDto.Id,
+                Performer = _performerRepository.Find(performerId),
+                Venue = _venueRepository.Find(venueId),
+                Reservations = new List<Reservation>()
             };
 
             IEnumerable<SimpleReservation> budgetReservations = _reservationService.CreateSimpleReservations(performance.VenueId, SeatType.Budget, performanceViewModel.BudgetPrice);
@@ -110,65 +103,46 @@ namespace EventsCalendar.Services.CrudServices
             };
 
             IEnumerable<SimpleReservation> allReservations = _reservationService.CombineSimpleReservations(reservations);
-                        
+            
             _repository.Insert(performance);
             _repository.Commit();
 
             _reservationRepository.BulkInsertReservations(allReservations, performance.Id);
         }
 
-        public PerformanceViewModel ReturnPerformanceViewModel(int id)
+        public IPerformanceViewModel ReturnPerformanceViewModel(IPerformanceViewModel viewModel)
         {
-            Performance performance = CheckPerformanceNullValue(id);
+            Performance performance = CheckPerformanceNullValue(viewModel.Performance.Id);
 
-            var viewModel = new PerformanceViewModel
-            {
-                Performance = Mapper.Map
-                    <Performance, PerformanceDto>(performance),
+            var performers = _performerRepository.Collection();
+            var venues = _venueRepository.Collection();
 
-                Performers = Mapper.Map
-                    <IEnumerable<Performer>, ICollection<PerformerDto>>
-                    (_performerRepository.Collection()),
+            Mapper.Map(performance, viewModel.Performance);
+            Mapper.Map(performers, viewModel.Performers);
+            Mapper.Map(venues, viewModel.Venues);
+            Mapper.Map(viewModel.Performance, viewModel);
 
-                Venues = Mapper.Map
-                    <IEnumerable<Venue>, ICollection<VenueDto>>
-                    (_venueRepository.Collection()),
-
-                EventDate = performance.EventDateTime.ToShortDateString(),
-                EventTime = performance.EventDateTime.ToShortTimeString(),
-                SeatsRemaining = CountRemainingReservations(performance),
-                BudgetPrice = _reservationRepository.GetPrices(id).Budget,
-                ModeratePrice = _reservationRepository.GetPrices(id).Moderate,
-                PremierPrice = _reservationRepository.GetPrices(id).Premier,
-            };
+            var prices = _reservationRepository.GetPrices(performance.Id);
+            viewModel.BudgetPrice = prices.Budget;
+            viewModel.ModeratePrice = prices.Moderate;
+            viewModel.PremierPrice = prices.Premier;
 
             return viewModel;
         }
 
-        public PerformanceViewModel ReturnPerformanceDetails(int id)
+        public IPerformanceViewModel ReturnPerformanceDetails(IPerformanceViewModel viewModel)
         {
-            Performance performance = CheckPerformanceNullValue(id);
+            Performance performance = CheckPerformanceNullValue(viewModel.Performance.Id);
 
-            var viewModel = new PerformanceViewModel
-            {
-                Performance = Mapper.Map
-                    <Performance, PerformanceDto>(performance),
-
-                Performers = Mapper.Map
-                    <IEnumerable<Performer>, ICollection<PerformerDto>>
-                    (_performerRepository.Collection()),
-
-                Venues = Mapper.Map
-                    <IEnumerable<Venue>, ICollection<VenueDto>>
-                    (_venueRepository.Collection()),
-
-                EventDate = performance.EventDateTime.ToShortDateString(),
-                EventTime = performance.EventDateTime.ToShortTimeString(),
-                BudgetPrice = _reservationRepository.GetPrices(id).Budget,
-                ModeratePrice = _reservationRepository.GetPrices(id).Moderate,
-                PremierPrice = _reservationRepository.GetPrices(id).Premier,
-                SeatsRemaining = CountRemainingReservations(performance),
-            };
+            Mapper.Map(performance, viewModel.Performance);
+            Mapper.Map(_performerRepository.Collection(), viewModel.Performers);
+            Mapper.Map(_venueRepository.Collection(), viewModel.Venues);
+            viewModel.EventDate = performance.EventDateTime.ToShortDateString();
+            viewModel.EventTime = performance.EventDateTime.ToShortTimeString();
+            viewModel.BudgetPrice = _reservationRepository.GetPrices(performance.Id).Budget;
+            viewModel.ModeratePrice = _reservationRepository.GetPrices(performance.Id).Moderate;
+            viewModel.PremierPrice = _reservationRepository.GetPrices(performance.Id).Premier;
+            viewModel.SeatsRemaining = CountRemainingReservations(performance);
 
             Mapper.Map(_performerRepository.Find(performance.PerformerId), viewModel.Performance.PerformerDto);
             Mapper.Map(_venueRepository.Find(performance.VenueId), viewModel.Performance.VenueDto);
@@ -176,7 +150,7 @@ namespace EventsCalendar.Services.CrudServices
             return viewModel;
         }
 
-        public void EditPerformance(PerformanceViewModel performanceViewModel, int id)
+        public void EditPerformance(IPerformanceViewModel performanceViewModel, int id)
         {
             Performance performanceToEdit = CheckPerformanceNullValue(id);
 
@@ -202,9 +176,9 @@ namespace EventsCalendar.Services.CrudServices
             CheckPerformanceNullValue(id);
 
             // performance.IsActive = false;
-            _reservationRepository.DeleteAllPerformanceReservations(id);
             _repository.Delete(id);
             _repository.Commit();
+            _reservationRepository.DeleteAllPerformanceReservations(id);
         }
     }
 }

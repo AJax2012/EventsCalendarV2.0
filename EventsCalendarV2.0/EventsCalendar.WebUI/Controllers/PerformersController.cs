@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using EventsCalendar.Core.Contracts;
-using EventsCalendar.Core.Contracts.Services;
-using EventsCalendar.Core.ViewModels;
+using EventsCalendar.Services.Contracts;
+using EventsCalendar.Services.Contracts.Services;
+using EventsCalendar.Services.Dtos;
+using EventsCalendar.WebUI.ViewModels;
 
 namespace EventsCalendar.WebUI.Controllers
 {
@@ -20,16 +21,17 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Index()
         {
-            IEnumerable<PerformerViewModel> viewModel = _performerService.ListPerformers();
+            IEnumerable<IPerformerViewModel> viewModel = _performerService.ListPerformers();
             return View(viewModel);
         }
 
         /*
          * Create new performerViewModel page
          */
-        public ActionResult Create(/*HttpPostedFileBase image*/)
+        public ActionResult Create()
         {
-            return View("PerformerForm", _performerService.NewPerformerViewModel());
+            IPerformerViewModel viewModel = new PerformerViewModel();
+            return View("PerformerForm", _performerService.NewPerformerViewModel(viewModel));
         }
         
         /*
@@ -37,7 +39,15 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Edit(int id)
         {
-            return View("PerformerForm", _performerService.ReturnPerformerViewModel(id));
+            IPerformerViewModel viewModel = new PerformerViewModel
+            {
+                Performer = new PerformerDto
+                {
+                    Id = id
+                }
+            };
+
+            return View("PerformerForm", _performerService.ReturnPerformerViewModel(viewModel));
         }
 
         [HttpPost]
@@ -69,9 +79,15 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Details(int id)
         {
-            var performer = _performerService.ReturnPerformerViewModel(id);
+            IPerformerViewModel viewModel = new PerformerViewModel
+            {
+                Performer = new PerformerDto
+                {
+                    Id = id
+                }
+            };
 
-            return View(performer);
+            return View(_performerService.ReturnPerformerViewModel(viewModel));
         }
     }
 }

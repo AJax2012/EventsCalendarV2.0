@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EventsCalendar.Core.ViewModels.TicketViewModel>
+﻿@model IEnumerable<EventsCalendar.Services.Contracts.ITicketViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -15,13 +15,13 @@
             @Html.DisplayNameFor(model => model.PerformanceId)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.NumberOfBudget)
+            @Html.DisplayNameFor(model => model.BudgetPrice)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.NumberOfModerate)
+            @Html.DisplayNameFor(model => model.ModeratePrice)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.NumberOfPremier)
+            @Html.DisplayNameFor(model => model.PremierPrice)
         </th>
         <th></th>
     </tr>
@@ -32,17 +32,18 @@
             @Html.DisplayFor(modelItem => item.PerformanceId)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.NumberOfBudget)
+            @Html.DisplayFor(modelItem => item.BudgetPrice)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.NumberOfModerate)
+            @Html.DisplayFor(modelItem => item.ModeratePrice)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.NumberOfPremier)
+            @Html.DisplayFor(modelItem => item.PremierPrice)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "DetailsFromId", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Edit", "Edit", new { /* performerId=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* performerId=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* performerId=item.PrimaryKey */ })
         </td>
     </tr>
 }

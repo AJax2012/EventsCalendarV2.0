@@ -2,13 +2,12 @@
 using System.Linq;
 using System.Web;
 using AutoMapper;
-using EventsCalendar.Core.Contracts;
-using EventsCalendar.Core.Contracts.Repositories;
-using EventsCalendar.Core.Contracts.Services;
-using EventsCalendar.Core.Dtos;
 using EventsCalendar.Core.Models;
 using EventsCalendar.Core.Models.Seats;
-using EventsCalendar.Core.ViewModels;
+using EventsCalendar.DataAccess.Sql.Contracts;
+using EventsCalendar.Services.Contracts;
+using EventsCalendar.Services.Contracts.Services;
+using EventsCalendar.Services.Dtos;
 
 namespace EventsCalendar.Services.CrudServices
 {
@@ -19,7 +18,7 @@ namespace EventsCalendar.Services.CrudServices
         private readonly IRepository<Performance> _performanceRepository;
         private readonly ISeatRepository _seatRepository;
         private readonly ISeatService _seatService;
-        private readonly string DefaultImgSrc = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJa4VlErDGxyBl-tQu41odZDe-qLvI1xNDALRMYxTITZOb3DslFg";
+        private const string DefaultImgSrc = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJa4VlErDGxyBl-tQu41odZDe-qLvI1xNDALRMYxTITZOb3DslFg";
 
         public VenueService(IRepository<Venue> repo, 
                             IRepository<Address> addressRepo, 
@@ -43,7 +42,7 @@ namespace EventsCalendar.Services.CrudServices
             return venue;
         }
 
-        public IEnumerable<VenueViewModel> ListVenues()
+        public IEnumerable<IVenueViewModel> ListVenues()
         {
             IEnumerable<Venue> venues = _repository.Collection().ToList();
 
@@ -53,26 +52,12 @@ namespace EventsCalendar.Services.CrudServices
 
             var venueViewModels =
                 Mapper.Map<IEnumerable<VenueDto>, 
-                    IEnumerable<VenueViewModel>>(venueDtos);
+                    IEnumerable<IVenueViewModel>>(venueDtos);
             
             return venueViewModels;
         }
 
-        public VenueViewModel NewVenueViewModel()
-        {
-            var viewModel = new VenueViewModel
-            {
-                Venue = new VenueDto(),
-                ImgSrc = DefaultImgSrc
-            };
-
-            viewModel.Venue.Id = 0;
-            viewModel.Venue.AddressId = 0;
-
-            return viewModel;
-        }
-
-        public void CreateVenue(VenueViewModel venueViewModel)
+        public void CreateVenue(IVenueViewModel venueViewModel)
         {
             var venue = new Venue
             {
@@ -104,22 +89,18 @@ namespace EventsCalendar.Services.CrudServices
             _seatRepository.BulkInsertSeats(premier, SeatType.Premier, venue.Id);
         }
 
-        public VenueViewModel ReturnVenueViewModel(int id)
+        public IVenueViewModel ReturnVenueViewModel(IVenueViewModel viewModel)
         {
-            Venue venue = CheckVenueNullValue(id);
+            Venue venue = CheckVenueNullValue(viewModel.Venue.Id);
             venue.Address = _addressRepository.Find(venue.AddressId);
 
-            var viewModel = new VenueViewModel
-            {
-                Venue = Mapper.Map<Venue, VenueDto>(venue),
-                ImgSrc = venue.ImageUrl,
-                SeatCapacity = _seatService.GetSeatCapacities(venue.Id)
-            };
+            Mapper.Map(venue, viewModel.Venue);
+            viewModel.SeatCapacity = _seatService.GetSeatCapacities(venue.Id);
 
             return viewModel;
         }
 
-        public void EditVenue(VenueViewModel venueViewModel, int id)
+        public void EditVenue(IVenueViewModel venueViewModel, int id)
         {
             Venue venueToEdit = CheckVenueNullValue(id);
 

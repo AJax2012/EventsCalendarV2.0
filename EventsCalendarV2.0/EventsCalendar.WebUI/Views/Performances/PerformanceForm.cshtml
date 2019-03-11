@@ -1,4 +1,4 @@
-﻿@model EventsCalendar.Core.ViewModels.PerformanceViewModel
+﻿@model EventsCalendar.Services.Contracts.IPerformanceViewModel
 
 @{
     ViewBag.Title = "PerformanceForm";
@@ -22,7 +22,7 @@
         <div class="row">
             <div class="form-group col">
                 @Html.LabelFor(model => model.EventDate)
-                @Html.EditorFor(model => model.EventDate, new { htmlAttributes = new { @class = "form-control", @id = "datepicker", @placeholder = DateTime.Today.ToString("M/d/yyyy") } })
+                @Html.EditorFor(model => model.EventDate, new { htmlAttributes = new { @class = "form-control", @id = "datepicker", @placeholder = DateTime.Today.AddDays(1).ToString("M/d/yyyy") } })
                 @Html.ValidationMessageFor(model => model.EventDate, "", new { @class = "text-danger" })
             </div>
 
@@ -36,7 +36,7 @@
         @*<div class="form-group">
                 @Html.LabelFor(model => model.Performance.Price)
                 @Html.EditorFor(model => model.Performance.Price, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Performance.Price, "", new { @class = "text-danger" })
+                @Html.ValvenueIdationMessageFor(model => model.Performance.Price, "", new { @class = "text-danger" })
             </div>*@
 
         <div class="form-group">
@@ -81,7 +81,7 @@
     <script>
         $(document).ready(function () {
             $('#datepicker').datepicker({
-                minDate: 0,
+                minDate: 1,
                 dateFormat: 'm/d/yy'
             });
 

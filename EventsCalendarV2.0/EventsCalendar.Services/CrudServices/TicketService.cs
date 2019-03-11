@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
-using EventsCalendar.Core.ViewModels;
 using EventsCalendar.Services.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using EventsCalendar.Core.Contracts.Repositories;
-using EventsCalendar.Core.Contracts.Services;
-using EventsCalendar.Core.Dtos;
 using EventsCalendar.Core.Models.Reservations;
 using EventsCalendar.Core.Models.Seats;
 using EventsCalendar.Core.Models.Tickets;
+using EventsCalendar.DataAccess.Sql.Contracts;
+using EventsCalendar.Services.Contracts;
+using EventsCalendar.Services.Contracts.Services;
 
 namespace EventsCalendar.Services.CrudServices
 {
@@ -50,47 +49,27 @@ namespace EventsCalendar.Services.CrudServices
             return ticket;
         }
 
-        private TicketViewModel MapTicketToViewModel(Ticket ticket)
-        {
-            var reservations = ticket.Reservations;
-
-            return new TicketViewModel
-            {
-                Ticket = Mapper.Map<Ticket, TicketDto>(ticket),
-                PerformanceId = reservations.First().PerformanceId,
-                SeatCapacity =
-                {
-                    Budget = reservations.Count(r => r.Seat.SeatType == SeatType.Budget),
-                    Moderate = reservations.Count(r => r.Seat.SeatType == SeatType.Moderate),
-                    Premier = reservations.Count(r => r.Seat.SeatType == SeatType.Premier)
-                }
-            };
-        }
-
-        public IEnumerable<TicketViewModel> ListTickets()
+        public IEnumerable<ITicketViewModel> ListTickets(ITicketViewModel viewModel)
         {
             IEnumerable<Ticket> tickets = _repository.Collection().ToList();
-            return tickets.Select(MapTicketToViewModel).ToList();
+            return tickets.Select(ticket => Mapper.Map(ticket, viewModel)).ToList();
         }
 
-        public TicketViewModel NewTicketViewModel(int performanceId)
+        public ITicketViewModel NewTicketViewModel(ITicketViewModel viewModel)
         {
-            ReservationPrices prices = _reservationRepository.GetPrices(performanceId);
+            ReservationPrices prices = _reservationRepository.GetPrices(viewModel.PerformanceId);
+            SeatCapacityDto numberRemaining = _reservationService.GetSeatsRemaining(viewModel.PerformanceId);
 
-            var viewModel = new TicketViewModel
-            {
-                BudgetPrice = prices.Budget,
-                ModeratePrice = prices.Moderate,
-                PremierPrice = prices.Premier
-            };
-
-            SeatCapacity numberRemaining = _reservationService.GetSeatsRemaining(performanceId);
+            viewModel.BudgetPrice = prices.Budget;
+            viewModel.ModeratePrice = prices.Moderate;
+            viewModel.PremierPrice = prices.Premier;
             Mapper.Map(numberRemaining, viewModel);
+            
 
             return viewModel;
         }
 
-        public void CreateTicket(TicketViewModel ticketViewModel)
+        public void CreateTicket(ITicketViewModel ticketViewModel)
         {
             var ticket = new Ticket
             {
@@ -114,21 +93,19 @@ namespace EventsCalendar.Services.CrudServices
             _repository.Commit();
         }
 
-        public TicketViewModel ReturnTicketViewModelById(Guid id)
+        public ITicketViewModel ReturnTicketViewModelById(Guid id)
         {
             Ticket ticket = CheckTicketNullValueById(id);
-            var viewModel = MapTicketToViewModel(ticket);
-            return viewModel;
+            return Mapper.Map<Ticket, ITicketViewModel>(ticket);
         }
 
-        public TicketViewModel ReturnTicketViewModelByConfirmationNumber(string confirmationNumber)
+        public ITicketViewModel ReturnTicketViewModelByConfirmationNumber(string confirmationNumber)
         {
             Ticket ticket = CheckTicketNullByConfirmationNumber(confirmationNumber);
-            var viewModel = MapTicketToViewModel(ticket);
-            return viewModel;
+            return Mapper.Map<Ticket, ITicketViewModel>(ticket);
         }
 
-        public void EditTicket(TicketViewModel ticketViewModel)
+        public void EditTicket(ITicketViewModel ticketViewModel)
         {
             Ticket ticketToEdit = CheckTicketNullValueById(ticketViewModel.Ticket.Id);
 
