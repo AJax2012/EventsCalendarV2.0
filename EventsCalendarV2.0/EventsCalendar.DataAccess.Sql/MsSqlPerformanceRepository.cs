@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -11,12 +10,10 @@ namespace EventsCalendar.DataAccess.Sql
     public class MsSqlPerformanceRepository : IRepository<Performance>
     {
         internal DataContext Context;
-        private IReservationRepository _reservationRepository;
 
-        public MsSqlPerformanceRepository(DataContext context, IReservationRepository reservationRepository)
+        public MsSqlPerformanceRepository(DataContext context)
         {
             Context = context;
-            _reservationRepository = reservationRepository;
         }
 
         public IEnumerable<Performance> Collection()
