@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.ModelBinding;
 using AutoMapper;
 using EventsCalendar.Core.Models;
 using EventsCalendar.Core.Models.Reservations;
@@ -47,6 +49,22 @@ namespace EventsCalendar.Services.CrudServices
             return _reservationService.GetSeatsRemaining(performance.Id);
         }
 
+        public DateTime FixDateTime(string date, string time)
+        {
+            if (date == null)
+                date = DateTime.Now.AddDays(1).ToShortDateString();
+
+            if (time == null)
+                time = "7:30 pm";
+
+            DateTime eventDateTime;
+            DateTime.TryParseExact($"{date} {time}", new string[] {"M/d/yyyy h:mm tt"},
+                System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None,
+                out eventDateTime);
+
+            return eventDateTime;
+        }
+
         public IEnumerable<IPerformanceViewModel> ListPerformances()
         {
             IEnumerable<Performance> performances = 
@@ -69,8 +87,8 @@ namespace EventsCalendar.Services.CrudServices
 
         public IPerformanceViewModel NewPerformanceViewModel(IPerformanceViewModel viewModel)
         {
-            Mapper.Map(_performerRepository.Collection(), viewModel.Performers);
-            Mapper.Map(_venueRepository.Collection(), viewModel.Venues);
+            Mapper.Map(_performerRepository.Collection().ToList(), viewModel.Performers);
+            Mapper.Map(_venueRepository.Collection().ToList(), viewModel.Venues);
             
             return viewModel;
         }
@@ -148,6 +166,20 @@ namespace EventsCalendar.Services.CrudServices
             Mapper.Map(_venueRepository.Find(performance.VenueId), viewModel.Performance.VenueDto);
 
             return viewModel;
+        }
+
+        public ICollection<PerformerDto> GetAllPerformers()
+        {
+            return Mapper.Map
+                <IEnumerable<Performer>, ICollection<PerformerDto>>
+                (_performerRepository.Collection());
+        }
+
+        public ICollection<VenueDto> GetAllVenues()
+        {
+            return Mapper.Map
+                <IEnumerable<Venue>, ICollection<VenueDto>>
+                (_venueRepository.Collection());
         }
 
         public void EditPerformance(IPerformanceViewModel performanceViewModel, int id)

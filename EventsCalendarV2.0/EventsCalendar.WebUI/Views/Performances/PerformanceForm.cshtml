@@ -28,8 +28,7 @@
 
             <div class="form-group col">
                 @Html.LabelFor(model => model.EventTime)
-                @Html.EditorFor(model => model.EventTime, new { htmlAttributes = new { @class = "form-control timepicker", @id = "timepicker", @placeholder = DateTime.Today.AddHours(19).AddMinutes(30).ToString("h:m tt") } })
-                @Html.ValidationMessageFor(model => model.Performance.EventDateTime, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.EventTime, new { htmlAttributes = new { @class = "form-control timepicker", @placeholder = DateTime.Today.AddHours(19).AddMinutes(30).ToString("h:m tt") } })
             </div>
         </div>
 
@@ -79,7 +78,7 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#datepicker').datepicker({
                 minDate: 1,
                 dateFormat: 'm/d/yy'
@@ -93,6 +92,8 @@
                 dropdown: true,
                 scrollbar: true
             });
+
+            
         });
     </script>
 }

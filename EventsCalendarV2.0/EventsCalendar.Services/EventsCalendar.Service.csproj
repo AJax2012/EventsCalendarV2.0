@@ -97,6 +97,7 @@
     <Compile Include="Contracts\Services\ISeatService.cs" />
     <Compile Include="Contracts\Services\ITicketService.cs" />
     <Compile Include="Contracts\Services\IVenueService.cs" />
+    <Compile Include="Validation\AfterToday.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EventsCalendar.Core\EventsCalendar.Core.csproj">

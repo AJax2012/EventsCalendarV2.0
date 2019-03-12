@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using AutoMapper;
 using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.Contracts.Services;
 using EventsCalendar.Services.Dtos;
@@ -31,17 +32,8 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Create()
         {
-            IPerformanceViewModel viewModel = new PerformanceViewModel
-            {
-                Performance = new PerformanceDto
-                {
-                    PerformerDto = new PerformerDto(),
-                    VenueDto = new VenueDto()
-                },
-                Performers = new List<PerformerDto>(),
-                Venues = new List<VenueDto>()
-            };
-            return View("PerformanceForm", _performanceService.NewPerformanceViewModel(viewModel));
+            var viewModel = NewIPerformanceViewModel();
+            return View("PerformanceForm", viewModel);
         }
 
         /*
@@ -49,29 +41,25 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Edit(int id)
         {
-            IPerformanceViewModel viewModel = new PerformanceViewModel
-            {
-                Performance = new PerformanceDto
-                {
-                    Id = id
-                },
-                Performers = new List<PerformerDto>(),
-                Venues = new List<VenueDto>()
-            };
-
+            var viewModel = NewIPerformanceViewModel();
+            viewModel.Performance.Id = id;
             return View("PerformanceForm", _performanceService.ReturnPerformanceViewModel(viewModel));
         }
 
         [HttpPost]
         public ActionResult Save(PerformanceViewModel performanceViewModel)
         {
-            CheckDateTime(performanceViewModel);
+            var date = performanceViewModel.EventDate;
+            var time = performanceViewModel.EventTime;
+
+            performanceViewModel.Performance.EventDateTime = 
+                _performanceService.FixDateTime(date, time);
 
             if (!ModelState.IsValid)
             {
-                var performanceVm = _performanceService.ReturnPerformanceViewModel
-                    (performanceViewModel);
-
+                var performanceVm = performanceViewModel;
+                performanceVm.Performers = _performanceService.GetAllPerformers();
+                performanceVm.Venues = _performanceService.GetAllVenues();
                 return View("PerformanceForm", performanceVm);
             }
 
@@ -110,22 +98,18 @@ namespace EventsCalendar.WebUI.Controllers
             return View(performance);
         }
 
-        /*
-         * PRIVATE METHOD
-         */
-        private void CheckDateTime(IPerformanceViewModel performanceViewModel)
+        private IPerformanceViewModel NewIPerformanceViewModel()
         {
-            var date = performanceViewModel.EventDate;
-            var time = performanceViewModel.EventTime;
-
-            if (!DateTime.TryParse($"{date} {time}", out var dateValue))
-                ModelState.AddModelError("Performance.EventDateTime", "Please insert a valid Date and Time");
-
-            if (DateTime.Compare(dateValue, DateTime.Now) < 0)
-                ModelState.AddModelError("Performance.EventDateTime",
-                    "Please submit a value later than current date/time");
-
-            performanceViewModel.Performance.EventDateTime = dateValue;
+            return new PerformanceViewModel
+            {
+                Performance = new PerformanceDto
+                {
+                    PerformerDto = new PerformerDto(),
+                    VenueDto = new VenueDto()
+                },
+                Performers = _performanceService.GetAllPerformers(),
+                Venues = _performanceService.GetAllVenues()
+            };
         }
     }
 }

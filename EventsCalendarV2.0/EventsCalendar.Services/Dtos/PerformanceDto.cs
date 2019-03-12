@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using EventsCalendar.Services.Validation;
 
 namespace EventsCalendar.Services.Dtos
 {

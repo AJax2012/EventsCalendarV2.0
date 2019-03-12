@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using EventsCalendar.Core.Models.Seats;
 using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.Dtos;
-using EventsCalendar.WebUI.Validation;
+using EventsCalendar.Services.Validation;
 
 namespace EventsCalendar.WebUI.ViewModels
 {
@@ -23,11 +23,11 @@ namespace EventsCalendar.WebUI.ViewModels
         [Display(Name = "Premier Price")]
         public decimal PremierPrice { get; set; }
 
-        [AfterToday]
-        [Display(Name = "Event Date")]
+        [AfterToday(ErrorMessage = "Please choose Date/Time after today.")]
+        [Display(Name = "Date")]
         public string EventDate { get; set; }
 
-        [Display(Name = "Event Time")]
+        [Display(Name = "Time")]
         public string EventTime { get; set; }
     }
 }
