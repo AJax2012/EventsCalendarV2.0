@@ -23,7 +23,7 @@ namespace EventsCalendar.WebUI.ViewModels
         [Display(Name = "Premier Price")]
         public decimal PremierPrice { get; set; }
 
-        [AfterToday(ErrorMessage = "Please choose Date/Time after today.")]
+        [AfterToday(ErrorMessage = "Please select a date tomorrow or later.")]
         [Display(Name = "Date")]
         public string EventDate { get; set; }
 
