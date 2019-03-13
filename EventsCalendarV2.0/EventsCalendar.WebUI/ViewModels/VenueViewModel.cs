@@ -1,12 +1,9 @@
-﻿using EventsCalendar.Core.Models.Seats;
-using EventsCalendar.Services.Contracts;
-using EventsCalendar.Services.Dtos;
+﻿using EventsCalendar.Services.Dtos.Venue;
 
 namespace EventsCalendar.WebUI.ViewModels
 {
-    public class VenueViewModel : IVenueViewModel
+    public class VenueViewModel
     {
         public VenueDto Venue { get; set; }
-        public SeatCapacityDto SeatCapacity { get; set; }
     }
 }

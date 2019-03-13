@@ -1,4 +1,6 @@
-﻿@model IEnumerable<EventsCalendar.Services.Contracts.IPerformerViewModel>
+﻿@using EventsCalendar.Core.Models
+@using EventsCalendar.Services.Dtos.Performer
+@model IEnumerable<EventsCalendar.WebUI.ViewModels.PerformerViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -36,7 +38,7 @@
                 @Html.DisplayFor(modelItem => item.Performer.Name)
             </td>
             <td>
-                @if (item.Performer.PerformerType == EventsCalendar.Core.Models.PerformerType.Musician)
+                @if (item.Performer.PerformerType == PerformerTypeDto.Musician)
                 {
                     @Html.DisplayFor(modelItem => item.Performer.Genre)
                 }

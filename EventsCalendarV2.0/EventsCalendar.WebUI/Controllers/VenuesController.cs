@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using System.Web.Mvc;
 using EventsCalendar.Services.Contracts;
-using EventsCalendar.Services.Contracts.Services;
-using EventsCalendar.Services.Dtos;
+using EventsCalendar.Services.Dtos.Seat;
+using EventsCalendar.Services.Dtos.Venue;
 using EventsCalendar.WebUI.ViewModels;
 
 namespace EventsCalendar.WebUI.Controllers
@@ -10,11 +10,14 @@ namespace EventsCalendar.WebUI.Controllers
     public class VenuesController : Controller
     {
         private readonly IVenueService _venueService;
+        private readonly ISeatService _seatService;
         private const string DefaultImgSrc = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJa4VlErDGxyBl-tQu41odZDe-qLvI1xNDALRMYxTITZOb3DslFg";
 
-        public VenuesController(IVenueService venueService)
+        public VenuesController(IVenueService venueService, 
+                                ISeatService seatService)
         {
             _venueService = venueService;
+            _seatService = seatService;
         }
 
         /*
@@ -22,8 +25,16 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Index()
         {
-            IEnumerable<IVenueViewModel> viewModel = _venueService.ListVenues();
-            return View(viewModel);
+            var venueDtos = _venueService.GetAllVenueDtos();
+
+            var viewModels = venueDtos.Select(venue => 
+                new VenueViewModel
+                {
+                    Venue = _venueService.GetVenueDtoById(venue.Id)
+                })
+                .ToList();
+
+            return View(viewModels);
         }
 
         /*
@@ -37,7 +48,8 @@ namespace EventsCalendar.WebUI.Controllers
                 {
                     Id = 0,
                     AddressId = 0,
-                    ImageUrl = DefaultImgSrc
+                    ImageUrl = DefaultImgSrc,
+                    SeatCapacity = new SeatCapacityDto()
                 },
             };
 
@@ -49,15 +61,12 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Edit(int id)
         {
-            IVenueViewModel viewModel = new VenueViewModel
+            VenueViewModel viewModel = new VenueViewModel
             {
-                Venue = new VenueDto
-                {
-                    Id = id
-                }
+                Venue = _venueService.GetVenueDtoById(id)
             };
 
-            return View("VenueForm", _venueService.ReturnVenueViewModel(viewModel));
+            return View("VenueForm", viewModel);
         }
 
         /*
@@ -70,13 +79,28 @@ namespace EventsCalendar.WebUI.Controllers
                 return View("VenueForm", venueViewModel);
 
             if (venueViewModel.Venue.Id == 0)
-                _venueService.CreateVenue(venueViewModel);
+            {
+                _venueService.CreateVenue(venueViewModel.Venue);
+            }
             else
             {
-                _venueService.EditVenue(venueViewModel, venueViewModel.Venue.Id);
+                _venueService.EditVenue(venueViewModel.Venue);
             }
 
-            return RedirectToAction("Index", "Venues");
+            return RedirectToAction("Index");
+        }
+
+        /*
+         * DETAILS: Venue
+         */
+        public ActionResult Details(int id)
+        {
+            VenueViewModel viewModel = new VenueViewModel
+            {
+                Venue = _venueService.GetVenueDtoById(id)
+            };
+
+            return View(viewModel);
         }
 
         /*
@@ -87,24 +111,6 @@ namespace EventsCalendar.WebUI.Controllers
         {
             _venueService.DeleteVenue(id);
             return RedirectToAction("Index");
-        }
-
-        /*
-         * DETAILS: Venue
-         */
-        public ActionResult Details(int id)
-        {
-            IVenueViewModel viewModel = new VenueViewModel
-            {
-                Venue = new VenueDto
-                {
-                    Id = id
-                }
-            };
-
-            var venue = _venueService.ReturnVenueViewModel(viewModel);
-
-            return View(venue);
         }
     }
 }

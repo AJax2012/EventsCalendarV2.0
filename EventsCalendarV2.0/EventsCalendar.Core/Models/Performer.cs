@@ -10,8 +10,11 @@ namespace EventsCalendar.Core.Models
         public string TourName { get; set; }
         public bool IsActive { get; set; }
         public string ImageUrl { get; set; }
+        public int? GenreId { get; set; }
         public Genre Genre { get; set; }
+        public int? TopicId { get; set; }
         public Topic Topic { get; set; }
+        public int PerformerTypeId { get; set; }
         public PerformerType PerformerType { get; set; }
         public ICollection<Performance> Performances { get; set; }
 

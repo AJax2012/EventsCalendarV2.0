@@ -1,5 +1,4 @@
-﻿using EventsCalendar.Core.Models;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using EventsCalendar.Core.Models.Seats;
 
@@ -16,8 +15,10 @@ namespace EventsCalendar.EntityConfigurations
                 .HasDatabaseGeneratedOption(
                     DatabaseGeneratedOption.Identity);
 
-            Property(s => s.SeatType)
-                .IsRequired();
+            HasRequired(s => s.SeatType)
+                .WithMany()
+                .HasForeignKey(s => s.SeatTypeId)
+                .WillCascadeOnDelete(false);
 
             HasMany(s => s.Reservations)
                 .WithRequired(r => r.Seat)

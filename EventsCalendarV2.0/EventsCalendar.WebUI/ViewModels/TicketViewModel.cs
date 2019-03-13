@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using EventsCalendar.Core.Models.Seats;
-using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.Dtos;
+using EventsCalendar.Services.Dtos.Seat;
 
 namespace EventsCalendar.WebUI.ViewModels
 {
-    public class TicketViewModel : ITicketViewModel
+    public class TicketViewModel
     {
         public TicketDto Ticket { get; set; }
 

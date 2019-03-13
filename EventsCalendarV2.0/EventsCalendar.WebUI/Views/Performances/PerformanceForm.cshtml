@@ -1,4 +1,4 @@
-﻿@model EventsCalendar.Services.Contracts.IPerformanceViewModel
+﻿@model EventsCalendar.WebUI.ViewModels.PerformanceViewModel
 
 @{
     ViewBag.Title = "PerformanceForm";
@@ -45,19 +45,19 @@
 
         <div class="row">
             <div class="col">
-                @Html.LabelFor(model => model.BudgetPrice)
-                @Html.EditorFor(model => model.BudgetPrice, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.BudgetPrice, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.Performance.Prices.Budget)
+                @Html.EditorFor(model => model.Performance.Prices.Budget, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Performance.Prices.Budget, "", new { @class = "text-danger" })
             </div>
             <div class="col">
-                @Html.LabelFor(model => model.ModeratePrice)
-                @Html.EditorFor(model => model.ModeratePrice, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ModeratePrice, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.Performance.Prices.Moderate)
+                @Html.EditorFor(model => model.Performance.Prices.Moderate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Performance.Prices.Moderate, "", new { @class = "text-danger" })
             </div>
             <div class="col">
-                @Html.LabelFor(model => model.PremierPrice)
-                @Html.EditorFor(model => model.PremierPrice, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PremierPrice, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.Performance.Prices.Premier)
+                @Html.EditorFor(model => model.Performance.Prices.Premier, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Performance.Prices.Moderate, "", new { @class = "text-danger" })
             </div>
         </div>
 

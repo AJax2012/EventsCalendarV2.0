@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using EventsCalendar.Core.Models.Seats;
 
-namespace EventsCalendar.Services.Dtos
+namespace EventsCalendar.Services.Dtos.Seat
 {
     public class SeatDto
     {

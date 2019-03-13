@@ -5,7 +5,6 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using AutoMapper;
 using EventsCalendar.Services;
-using EventsCalendar.Services.Contracts;
 using EventsCalendar.WebUI.ViewModels;
 
 namespace EventsCalendar.WebUI
@@ -32,10 +31,6 @@ namespace EventsCalendar.WebUI
             // Register your MVC controllers. (MvcApplication is the name of
             // the class in Global.asax.)
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
-            builder.RegisterType(typeof(PerformanceViewModel)).As(typeof(IPerformanceViewModel));
-            builder.RegisterType(typeof(PerformerViewModel)).As(typeof(IPerformerViewModel));
-            builder.RegisterType(typeof(TicketViewModel)).As(typeof(ITicketViewModel));
-            builder.RegisterType(typeof(VenueViewModel)).As(typeof(IVenueViewModel));
             _container.BuildAutofacContainer(builder);
 
             // Register Api Controllers

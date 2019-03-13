@@ -1,5 +1,6 @@
-﻿@using Microsoft.Ajax.Utilities
-@model EventsCalendar.Services.Contracts.IPerformanceViewModel
+﻿@using EventsCalendar.Services.Dtos.Performer
+@using Microsoft.Ajax.Utilities
+@model EventsCalendar.WebUI.ViewModels.PerformanceViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -36,27 +37,27 @@
             <dl class="col-lg-4">
 
                 <dt>
-                    @Html.DisplayNameFor(model => model.BudgetPrice)
+                    @Html.DisplayNameFor(model => model.Performance.Prices.Budget)
                 </dt>
 
                 <dd>
-                    @Html.DisplayFor(model => model.BudgetPrice)
+                    @Html.DisplayFor(model => model.Performance.Prices.Budget)
                 </dd>
 
                 <dt>
-                    @Html.DisplayNameFor(model => model.ModeratePrice)
+                    @Html.DisplayNameFor(model => model.Performance.Prices.Moderate)
                 </dt>
 
                 <dd>
-                    @Html.DisplayFor(model => model.ModeratePrice)
+                    @Html.DisplayFor(model => model.Performance.Prices.Moderate)
                 </dd>
 
                 <dt>
-                    @Html.DisplayNameFor(model => model.PremierPrice)
+                    @Html.DisplayNameFor(model => model.Performance.Prices.Premier)
                 </dt>
 
                 <dd>
-                    @Html.DisplayFor(model => model.PremierPrice)
+                    @Html.DisplayFor(model => model.Performance.Prices.Premier)
                 </dd>
             </dl>
 
@@ -131,11 +132,11 @@
                         <dl class="dl-horizontal">
 
                             <dt>
-                                @Html.DisplayNameFor(model => model.BudgetPrice)
+                                @Html.DisplayNameFor(model => model.Performance.Prices.Budget)
                             </dt>
 
                             <dd>
-                                @Html.DisplayFor(model => model.BudgetPrice)
+                                @Html.DisplayFor(model => model.Performance.Prices.Budget)
                             </dd>
 
                         </dl>
@@ -144,11 +145,11 @@
                         <dl class="dl-horizontal">
 
                             <dt>
-                                @Html.DisplayNameFor(model => model.ModeratePrice)
+                                @Html.DisplayNameFor(model => model.Performance.Prices.Moderate)
                             </dt>
 
                             <dd>
-                                @Html.DisplayFor(model => model.ModeratePrice)
+                                @Html.DisplayFor(model => model.Performance.Prices.Moderate)
                             </dd>
 
                         </dl>
@@ -157,11 +158,11 @@
                         <dl class="dl-horizontal">
 
                             <dt>
-                                @Html.DisplayNameFor(model => model.PremierPrice)
+                                @Html.DisplayNameFor(model => model.Performance.Prices.Premier)
                             </dt>
 
                             <dd>
-                                @Html.DisplayFor(model => model.PremierPrice)
+                                @Html.DisplayFor(model => model.Performance.Prices.Premier)
                             </dd>
 
                         </dl>
@@ -193,7 +194,7 @@
                 @Html.DisplayFor(model => model.Performance.PerformerDto.PerformerType)
             </dd>
 
-            @if (Model.Performance.PerformerDto.PerformerType == EventsCalendar.Core.Models.PerformerType.Musician)
+            @if (Model.Performance.PerformerDto.PerformerType == PerformerTypeDto.Musician)
             {
                 <dt>
                     @Html.DisplayNameFor(model => model.Performance.PerformerDto.Genre)
@@ -327,7 +328,7 @@
 
     <div class="pt-lg-4">
         @* PURCHASE TICKETS WILL CHANGE WHEN PURCHASE FUNCTIONS ADDED *@
-        @Html.ActionLink("Purchase Tickets", "Create", "Tickets", new { id = Model.Performance.Id }, new { @class = "btn btn-success" })
+        @* @Html.ActionLink("Purchase Tickets", "Create", "Tickets", new { id = Model.Performance.Id }, new { @class = "btn btn-success" }) *@
         @Html.ActionLink("Edit", "Edit", new { id = Model.Performance.Id }, new { @class = "btn btn-primary" })
         @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
     </div>
@@ -337,9 +338,9 @@
 {
     <script>
         $(document).ready(function () {
-            var streetAddress = '@(Model.Performance.VenueDto.AddressDto.StreetAddress)'.trim();
-            var city = '@(Model.Performance.VenueDto.AddressDto.City)'.trim();
-            var state = '@(Model.Performance.VenueDto.AddressDto.State)'.trim();
+            var streetAddress = (@Model.Performance.VenueDto.AddressDto.StreetAddress).trim();
+            var city = @(Model.Performance.VenueDto.AddressDto.City).trim();
+            var state = @(Model.Performance.VenueDto.AddressDto.State).trim();
             var address = `${streetAddress},+${city},+${state}`;
             address = address.replace(/\s/g, '+');
             var src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBEvGqWLKAT14Nk_NVCtqKE-AuchnT1OU8&q=${address}&zoom=11`;

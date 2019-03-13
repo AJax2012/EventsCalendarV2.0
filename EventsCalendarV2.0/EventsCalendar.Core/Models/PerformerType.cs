@@ -1,12 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace EventsCalendar.Core.Models
+﻿namespace EventsCalendar.Core.Models
 {
-    public enum PerformerType
+    public class PerformerType
     {
-        Musician,
-
-        [Display(Name = "Public Speaker")]
-        PublicSpeaker
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

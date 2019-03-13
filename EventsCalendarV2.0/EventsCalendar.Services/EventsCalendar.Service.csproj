@@ -33,11 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=4.8.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.4.8.1\lib\net45\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=4.9.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.9.1\lib\net45\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.8.0.0\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
@@ -63,40 +63,41 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildModelBuilderConfigurations.cs" />
-    <Compile Include="Contracts\IPerformanceViewModel.cs" />
-    <Compile Include="Contracts\IPerformerViewModel.cs" />
-    <Compile Include="Contracts\ITicketViewModel.cs" />
-    <Compile Include="Contracts\IVenueViewModel.cs" />
     <Compile Include="CrudServices\PerformanceService.cs" />
     <Compile Include="CrudServices\PerformerService.cs" />
     <Compile Include="CrudServices\TicketService.cs" />
-    <Compile Include="Dtos\AddressDto.cs" />
-    <Compile Include="Dtos\GenreDto.cs" />
+    <Compile Include="Dtos\ConfirmationNumberData.cs" />
+    <Compile Include="Dtos\Performer\GenreDto.cs" />
+    <Compile Include="Dtos\Performer\PerformerTypeDto.cs" />
+    <Compile Include="Dtos\Performer\TopicDto.cs" />
+    <Compile Include="Dtos\Reservation\ReservationsByType.cs" />
+    <Compile Include="Dtos\Reservation\SimpleReservationsByType.cs" />
+    <Compile Include="Dtos\Seat\SeatTypeDto.cs" />
+    <Compile Include="Dtos\Venue\AddressDto.cs" />
     <Compile Include="Dtos\PerformanceDto.cs" />
-    <Compile Include="Dtos\PerformerDto.cs" />
-    <Compile Include="Dtos\PerformerTypeDto.cs" />
-    <Compile Include="Dtos\ReservationDto.cs" />
-    <Compile Include="Dtos\SeatCapacityDto.cs" />
-    <Compile Include="Dtos\SeatDto.cs" />
-    <Compile Include="Dtos\SimpleSeatDto.cs" />
+    <Compile Include="Dtos\Performer\PerformerDto.cs" />
+    <Compile Include="Dtos\Reservation\ReservationDto.cs" />
+    <Compile Include="Dtos\Reservation\ReservationPricesDto.cs" />
+    <Compile Include="Dtos\Seat\SeatCapacityDto.cs" />
+    <Compile Include="Dtos\Seat\SeatDto.cs" />
+    <Compile Include="Dtos\Seat\SimpleSeatDto.cs" />
     <Compile Include="Dtos\TicketDto.cs" />
-    <Compile Include="Dtos\TopicDto.cs" />
-    <Compile Include="Dtos\VenueDto.cs" />
+    <Compile Include="Dtos\Venue\VenueDto.cs" />
     <Compile Include="Helpers\ConfirmationNumberUtil.cs" />
     <Compile Include="Helpers\EnumUtil.cs" />
     <Compile Include="Helpers\MonthFirstCharFormatter.cs" />
     <Compile Include="MappingProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CrudServices\VenueService.cs" />
-    <Compile Include="Helpers\ReservationService.cs" />
-    <Compile Include="Helpers\SeatService.cs" />
+    <Compile Include="CrudServices\ReservationService.cs" />
+    <Compile Include="CrudServices\SeatService.cs" />
     <Compile Include="AutofacContainer.cs" />
-    <Compile Include="Contracts\Services\IPerformanceService.cs" />
-    <Compile Include="Contracts\Services\IPerformerService.cs" />
-    <Compile Include="Contracts\Services\IReservationService.cs" />
-    <Compile Include="Contracts\Services\ISeatService.cs" />
-    <Compile Include="Contracts\Services\ITicketService.cs" />
-    <Compile Include="Contracts\Services\IVenueService.cs" />
+    <Compile Include="Contracts\IPerformanceService.cs" />
+    <Compile Include="Contracts\IPerformerService.cs" />
+    <Compile Include="Contracts\IReservationService.cs" />
+    <Compile Include="Contracts\ISeatService.cs" />
+    <Compile Include="Contracts\ITicketService.cs" />
+    <Compile Include="Contracts\IVenueService.cs" />
     <Compile Include="Validation\AfterToday.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿using EventsCalendar.Core.Models.Tickets;
+﻿using EventsCalendar.Core.Models;
 
 namespace EventsCalendar.DataAccess.Sql.Contracts
 {

@@ -1,16 +1,21 @@
 USE [EventsCalendar]
 GO
 
-/****** Object:  StoredProcedure [dbo].[BulkUpdatePrices]    Script Date: 3/7/2019 10:58:17 PM ******/
+/****** Object:  StoredProcedure [dbo].[BulkUpdatePrices]    Script Date: 3/13/2019 11:07:23 AM ******/
+DROP PROCEDURE [dbo].[BulkUpdatePrices]
+GO
+
+/****** Object:  StoredProcedure [dbo].[BulkUpdatePrices]    Script Date: 3/13/2019 11:07:23 AM ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
+
 CREATE PROCEDURE [dbo].[BulkUpdatePrices]
 	@price decimal = 0.00,
-	@seatType int,
+	@seatTypeId int,
 	@performanceId int = 0
 AS
 BEGIN
@@ -19,8 +24,9 @@ BEGIN
 		FROM Reservations r
 		JOIN Seats s
 			ON r.SeatId = s.Id
-		WHERE SeatType = @seatType
+		WHERE SeatTypeId = @seatTypeId
 		AND r.PerformanceId = @performanceId
 END
 GO
+
 

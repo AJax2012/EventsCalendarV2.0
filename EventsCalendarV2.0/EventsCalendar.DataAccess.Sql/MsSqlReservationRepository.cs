@@ -6,7 +6,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using EventsCalendar.Core.Models.Reservations;
-using EventsCalendar.Core.Models.Seats;
 using EventsCalendar.DataAccess.Sql.Contracts;
 
 namespace EventsCalendar.DataAccess.Sql
@@ -62,13 +61,13 @@ namespace EventsCalendar.DataAccess.Sql
             var capacity = new ReservationPrices
             {
                 Budget = reservations
-                    .First(res => res.Seat.SeatType == SeatType.Budget)
+                    .First(res => res.Seat.SeatTypeId == 1)
                     .Price,
                 Moderate = reservations
-                    .First(res => res.Seat.SeatType == SeatType.Moderate)
+                    .First(res => res.Seat.SeatTypeId == 2)
                     .Price,
                 Premier = reservations
-                    .First(res => res.Seat.SeatType == SeatType.Premier)
+                    .First(res => res.Seat.SeatTypeId == 3)
                     .Price
             };
 
@@ -95,9 +94,7 @@ namespace EventsCalendar.DataAccess.Sql
         {
             var dt = MakeTable();
 
-            IEnumerable<SimpleReservation> simpleReservations = reservations as SimpleReservation[] ?? reservations.ToArray();
-
-            foreach (var reservation in simpleReservations)
+            foreach (var reservation in reservations)
             {
                 var row = dt.NewRow();
                 row["Price"] = reservation.Price;
@@ -114,7 +111,7 @@ namespace EventsCalendar.DataAccess.Sql
 
                 using (var bulkCopy = new SqlBulkCopy(ConnectionString, SqlBulkCopyOptions.KeepIdentity))
                 {
-                    bulkCopy.BatchSize = simpleReservations.Count();
+                    bulkCopy.BatchSize = reservations.Count();
 
                     bulkCopy.DestinationTableName = "Reservations";
 
@@ -150,9 +147,9 @@ namespace EventsCalendar.DataAccess.Sql
                 try
                 {
                     var priceParam = new SqlParameter("@price", update.Price);
-                    var seatTypeParam = new SqlParameter("@seatType", update.Type);
+                    var seatTypeParam = new SqlParameter("@seatTypeId", update.SeatTypeId);
                     var performanceIdParam = new SqlParameter("@performanceId", update.PerformanceId);
-                    Context.Database.ExecuteSqlCommand("dbo.BulkUpdatePrices @price, @seatType, @performanceId", priceParam, seatTypeParam, performanceIdParam);
+                    Context.Database.ExecuteSqlCommand("dbo.BulkUpdatePrices @price, @seatTypeId, @performanceId", priceParam, seatTypeParam, performanceIdParam);
                     Console.WriteLine("Reservation prices updated successfully.");
                 }
                 catch (Exception e)

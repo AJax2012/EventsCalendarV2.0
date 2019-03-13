@@ -3,11 +3,10 @@ using System.Linq;
 using System.Web;
 using AutoMapper;
 using EventsCalendar.Core.Models;
-using EventsCalendar.Core.Models.Seats;
 using EventsCalendar.DataAccess.Sql.Contracts;
 using EventsCalendar.Services.Contracts;
-using EventsCalendar.Services.Contracts.Services;
-using EventsCalendar.Services.Dtos;
+using EventsCalendar.Services.Dtos.Seat;
+using EventsCalendar.Services.Dtos.Venue;
 
 namespace EventsCalendar.Services.CrudServices
 {
@@ -33,114 +32,101 @@ namespace EventsCalendar.Services.CrudServices
             _seatService = seatService;
         }
 
-        private Venue CheckVenueNullValue(int id)
+        private Venue CheckVenueNullValue(int venueId)
         {
-            Venue venue = _repository.Find(id);
+            Venue venue = _repository.Find(venueId);
             if (venue == null)
                 throw new HttpException(404, "Venue Not Found");
 
             return venue;
         }
 
-        public IEnumerable<IVenueViewModel> ListVenues()
+        public void CreateVenue(VenueDto venue)
         {
-            IEnumerable<Venue> venues = _repository.Collection().ToList();
-
-            var venueDtos =
-                Mapper.Map<IEnumerable<Venue>, IEnumerable<VenueDto>>
-                    (venues);
-
-            var venueViewModels =
-                Mapper.Map<IEnumerable<VenueDto>, 
-                    IEnumerable<IVenueViewModel>>(venueDtos);
-            
-            return venueViewModels;
-        }
-
-        public void CreateVenue(IVenueViewModel venueViewModel)
-        {
-            var venue = new Venue
+            var newVenue = new Venue
             {
                 IsActive = true,
-                Name = venueViewModel.Venue.Name,
-                ImageUrl = venueViewModel.Venue.ImageUrl,
+                Name = venue.Name,
+                ImageUrl = venue.ImageUrl,
 
                 Address = new Address
                 {
-                    StreetAddress = venueViewModel.Venue.AddressDto.StreetAddress,
-                    City = venueViewModel.Venue.AddressDto.City,
-                    State = venueViewModel.Venue.AddressDto.State,
-                    ZipCode = venueViewModel.Venue.AddressDto.ZipCode,
+                    StreetAddress = venue.AddressDto.StreetAddress,
+                    City = venue.AddressDto.City,
+                    State = venue.AddressDto.State,
+                    ZipCode = venue.AddressDto.ZipCode,
                 }
             };
 
             if (string.IsNullOrWhiteSpace(venue.ImageUrl))
                 venue.ImageUrl = DefaultImgSrc;
 
-            _repository.Insert(venue);
+            _repository.Insert(newVenue);
             _repository.Commit();
 
-            var budget = venueViewModel.SeatCapacity.Budget;
-            var moderate = venueViewModel.SeatCapacity.Moderate;
-            var premier = venueViewModel.SeatCapacity.Premier;
-
-            _seatRepository.BulkInsertSeats(budget, SeatType.Budget, venue.Id);
-            _seatRepository.BulkInsertSeats(moderate, SeatType.Moderate, venue.Id);
-            _seatRepository.BulkInsertSeats(premier, SeatType.Premier, venue.Id);
+            _seatRepository.BulkInsertSeats(venue.SeatCapacity.Budget, (int) SeatTypeDto.Budget, newVenue.Id);
+            _seatRepository.BulkInsertSeats(venue.SeatCapacity.Moderate, (int)SeatTypeDto.Moderate, newVenue.Id);
+            _seatRepository.BulkInsertSeats(venue.SeatCapacity.Premier, (int) SeatTypeDto.Premier, newVenue.Id);
         }
 
-        public IVenueViewModel ReturnVenueViewModel(IVenueViewModel viewModel)
+        public IEnumerable<VenueDto> GetAllVenueDtos()
         {
-            Venue venue = CheckVenueNullValue(viewModel.Venue.Id);
-            venue.Address = _addressRepository.Find(venue.AddressId);
-
-            Mapper.Map(venue, viewModel.Venue);
-            viewModel.SeatCapacity = _seatService.GetSeatCapacities(venue.Id);
-
-            return viewModel;
+            return Mapper.Map
+                <IEnumerable<Venue>, ICollection<VenueDto>>
+                (_repository.Collection());
         }
 
-        public void EditVenue(IVenueViewModel venueViewModel, int id)
+        public IEnumerable<Venue> GetAllVenues()
         {
-            Venue venueToEdit = CheckVenueNullValue(id);
+            return _repository.Collection();
+        }
 
-            venueToEdit.AddressId = venueViewModel.Venue.AddressId;
-            venueToEdit.Name = venueViewModel.Venue.Name;
-            venueToEdit.ImageUrl = venueViewModel.Venue.ImageUrl;
-            venueToEdit.Address.StreetAddress = venueViewModel.Venue.AddressDto.StreetAddress;
-            venueToEdit.Address.City = venueViewModel.Venue.AddressDto.City;
-            venueToEdit.Address.State = venueViewModel.Venue.AddressDto.State;
-            venueToEdit.Address.ZipCode = venueViewModel.Venue.AddressDto.ZipCode;
+        public VenueDto GetVenueDtoById(int venueId)
+        {
+            var venue =  Mapper.Map
+                <Venue, VenueDto>
+                (_repository.Find(venueId));
+
+            venue.SeatCapacity = _seatService
+                .GetSeatCapacitiesFromDb(venueId);
+
+            return venue;
+        }
+
+        public Venue GetVenueById(int venueId)
+        {
+            return _repository.Find(venueId);
+        }
+
+        public void EditVenue(VenueDto venue)
+        {
+            Venue venueToEdit = CheckVenueNullValue(venue.Id);
+
+            venueToEdit.AddressId = venue.AddressId;
+            venueToEdit.Name = venue.Name;
+            venueToEdit.ImageUrl = venue.ImageUrl;
+            venueToEdit.Address.StreetAddress = venue.AddressDto.StreetAddress;
+            venueToEdit.Address.City = venue.AddressDto.City;
+            venueToEdit.Address.State = venue.AddressDto.State;
+            venueToEdit.Address.ZipCode = venue.AddressDto.ZipCode;
             venueToEdit.IsActive = true;
             
-            var capacity = _seatService.GetSeatCapacities(id);
+            var oldCapacity = _seatService.GetSeatCapacitiesFromList(venueToEdit.Seats);
+            var changeCapacity = _seatService.CalculateAmountOfSeatsToChange(oldCapacity, venue.SeatCapacity);
 
-            var seatsRemoved = new SeatCapacity
-            {
-                Budget = venueViewModel.SeatCapacity.Budget,
-                Moderate = venueViewModel.SeatCapacity.Moderate,
-                Premier = venueViewModel.SeatCapacity.Premier
-            };
-
-            var newSeatCapacity = new SeatCapacity
-            {
-                Budget = seatsRemoved.Budget - capacity.Budget,
-                Moderate = seatsRemoved.Moderate - capacity.Moderate,
-                Premier = seatsRemoved.Premier - capacity.Premier
-            };
-
-            _seatService.ChangeAmountOfSeatsInContext(newSeatCapacity, venueToEdit.Id);
+            _seatService.ChangeAmountOfSeatsInContext(changeCapacity, venueToEdit.Id);
 
             _repository.Commit();
             _addressRepository.Commit();
         }
 
-        public void DeleteVenue(int id)
+        public void DeleteVenue(int venueId)
         {
-            var venue = CheckVenueNullValue(id);
+            var venue = CheckVenueNullValue(venueId);
 
-            List<Performance> performances = _performanceRepository.Collection()
-                .Where(p => p.VenueId == id).ToList();
+            var performances = _performanceRepository.Collection()
+                .Where(p => p.VenueId == venueId)
+                .ToList();
 
 //            venue.IsActive = false;
 //            venue.Address.IsActive = false;
@@ -151,11 +137,13 @@ namespace EventsCalendar.Services.CrudServices
                 _performanceRepository.Commit();
             }
 
-            _repository.Delete(id);
+            _repository.Delete(venueId);
             _addressRepository.Delete(venue.AddressId);
-            _seatRepository.DeleteAllVenueSeats(id);
+            _seatRepository.DeleteAllVenueSeats(venueId);
             _repository.Commit();
             _addressRepository.Commit();
         }
+
+
     }
 }

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using EventsCalendar.Core.Models;
 using EventsCalendar.DataAccess.Sql.Contracts;
@@ -22,7 +24,14 @@ namespace EventsCalendar.DataAccess.Sql
 
         public void Commit()
         {
-            Context.SaveChanges();
+            try
+            {
+                Context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         public void Delete(int id)
@@ -42,6 +51,7 @@ namespace EventsCalendar.DataAccess.Sql
         {
             return Context.Venues
                 .Include(v => v.Address)
+                .Include(v => v.Seats)
                 .SingleOrDefault(v => v.Id == id);
         }
 

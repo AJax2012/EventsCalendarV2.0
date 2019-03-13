@@ -1,20 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace EventsCalendar.Core.Models
+﻿namespace EventsCalendar.Core.Models
 {
-    public enum Genre
+    public class Genre
     {
-        Rock,
-
-        Classical,
-
-        [Display(Name = "Classic Rock")]
-        ClassicRock,
-
-        Jazz,
-
-        Blues,
-
-        Alternative
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

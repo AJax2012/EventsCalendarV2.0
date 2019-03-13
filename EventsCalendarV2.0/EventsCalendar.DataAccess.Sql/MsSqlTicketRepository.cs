@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using EventsCalendar.Core.Models.Tickets;
 using EventsCalendar.DataAccess.Sql.Contracts;
 
 namespace EventsCalendar.DataAccess.Sql
@@ -26,7 +25,7 @@ namespace EventsCalendar.DataAccess.Sql
 
         public void Commit()
         {
-            Context.SaveChanges();
+                Context.SaveChanges();
         }
 
         public void Delete(Guid id)

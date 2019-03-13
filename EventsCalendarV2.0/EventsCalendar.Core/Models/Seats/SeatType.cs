@@ -1,9 +1,8 @@
 ﻿namespace EventsCalendar.Core.Models.Seats
 {
-    public enum SeatType
+    public class SeatType
     {
-        Budget,
-        Moderate,
-        Premier
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

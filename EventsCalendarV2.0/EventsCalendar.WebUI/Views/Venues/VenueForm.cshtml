@@ -1,4 +1,4 @@
-﻿@model EventsCalendar.Services.Contracts.IVenueViewModel
+﻿@model EventsCalendar.WebUI.ViewModels.VenueViewModel
 
 @{
     ViewBag.Title = "VenueForm";
@@ -25,28 +25,28 @@
 
         <div class="row">
             <div class="form-group col-lg-3">
-                @Html.LabelFor(model => model.SeatCapacity.Budget)
-                @Html.EditorFor(model => model.SeatCapacity.Budget, new { htmlAttributes = new { @class = "form-control seats" } })
-                @Html.ValidationMessageFor(model => model.SeatCapacity.Budget, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.Venue.SeatCapacity.Budget)
+                @Html.EditorFor(model => model.Venue.SeatCapacity.Budget, new { htmlAttributes = new { @class = "form-control seats" } })
+                @Html.ValidationMessageFor(model => model.Venue.SeatCapacity.Budget, "", new { @class = "text-danger" })
             </div>
 
             <div class="form-group col-lg-3">
-                @Html.LabelFor(model => model.SeatCapacity.Moderate)
-                @Html.EditorFor(model => model.SeatCapacity.Moderate, new { htmlAttributes = new { @class = "form-control seats" } })
-                @Html.ValidationMessageFor(model => model.SeatCapacity.Moderate, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.Venue.SeatCapacity.Moderate)
+                @Html.EditorFor(model => model.Venue.SeatCapacity.Moderate, new { htmlAttributes = new { @class = "form-control seats" } })
+                @Html.ValidationMessageFor(model => model.Venue.SeatCapacity.Moderate, "", new { @class = "text-danger" })
             </div>
 
             <div class="form-group col-lg-3">
-                @Html.LabelFor(model => model.SeatCapacity.Premier)
-                @Html.EditorFor(model => model.SeatCapacity.Premier, new { htmlAttributes = new { @class = "form-control seats" } })
-                @Html.ValidationMessageFor(model => model.SeatCapacity.Premier, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.Venue.SeatCapacity.Premier)
+                @Html.EditorFor(model => model.Venue.SeatCapacity.Premier, new { htmlAttributes = new { @class = "form-control seats" } })
+                @Html.ValidationMessageFor(model => model.Venue.SeatCapacity.Premier, "", new { @class = "text-danger" })
             </div>
 
             <div class="form-group col-lg-3">
-                @Html.LabelFor(model => model.SeatCapacity.Total)
-                @Html.EditorFor(model => model.SeatCapacity.Total, new { htmlAttributes = new {
+                @Html.LabelFor(model => model.Venue.SeatCapacity.Total)
+                @Html.EditorFor(model => model.Venue.SeatCapacity.Total, new { htmlAttributes = new {
                     @class = "form-control", @id = "capacity", disabled = "disabled", @readonly = "readonly", @placeholder = "0" } })
-                @Html.ValidationMessageFor(model => model.SeatCapacity.Premier, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.Venue.SeatCapacity.Premier, "", new { @class = "text-danger" })
             </div>
         </div>
 

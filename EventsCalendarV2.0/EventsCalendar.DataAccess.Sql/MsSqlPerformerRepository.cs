@@ -17,7 +17,11 @@ namespace EventsCalendar.DataAccess.Sql
 
         public IEnumerable<Performer> Collection()
         {
-            return Context.Performers.ToList();
+            return Context.Performers
+                .Include(p => p.PerformerType)
+                .Include(p => p.Genre)
+                .Include(p => p.Topic)
+                .ToList();
         }
 
         public void Commit()
@@ -37,7 +41,11 @@ namespace EventsCalendar.DataAccess.Sql
 
         public Performer Find(int id)
         {
-            return Context.Performers.SingleOrDefault(v => v.Id == id);
+            return Context.Performers
+                .Include(p => p.PerformerType)
+                .Include(p => p.Genre)
+                .Include(p => p.Topic)
+                .SingleOrDefault(v => v.Id == id);
         }
 
         public void Insert(Performer performer)

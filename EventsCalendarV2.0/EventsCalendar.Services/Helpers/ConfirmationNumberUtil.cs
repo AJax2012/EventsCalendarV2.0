@@ -2,8 +2,7 @@
 using System;
 using System.Linq;
 using System.Text;
-using EventsCalendar.Core.Models.Tickets;
-using EventsCalendar.Services.Contracts;
+using EventsCalendar.Services.Dtos;
 
 namespace EventsCalendar.Services.Helpers
 {
@@ -17,9 +16,9 @@ namespace EventsCalendar.Services.Helpers
 
         private readonly Random _random = new Random();
 
-        public string CreateConfirmationNumber(ITicketViewModel ticketViewModel)
+        public string CreateConfirmationNumber(TicketDto ticket)
         {
-            var data = CreateConfirmationNumberData(ticketViewModel);
+            var data = CreateConfirmationNumberData(ticket);
             var datetime = DateTime.Now;
 
             var month = datetime.ToString("MMM", MonthFirstCharFormatter.FormatProvider);
@@ -45,12 +44,12 @@ namespace EventsCalendar.Services.Helpers
             return stringConfNumb;
         }
 
-        private ConfirmationNumberData CreateConfirmationNumberData(ITicketViewModel ticketViewModel)
+        private ConfirmationNumberData CreateConfirmationNumberData(TicketDto ticket)
         {
-            var performerName = ticketViewModel.Ticket.Reservations.First().Performance.PerformerDto.Name;
-            var seatId = ticketViewModel.Ticket.Reservations.First().SeatId.ToString();
-            var venueName = ticketViewModel.Ticket.Reservations.First().Seat.VenueDto.Name;
-            var reservationNumber = ticketViewModel.Ticket.Reservations.First().Id.ToString();
+            var performerName = ticket.Reservations.First().Performance.PerformerDto.Name;
+            var seatId = ticket.Reservations.First().SeatId.ToString();
+            var venueName = ticket.Reservations.First().Seat.VenueDto.Name;
+            var reservationNumber = ticket.Reservations.First().Id.ToString();
 
             return new ConfirmationNumberData
             {

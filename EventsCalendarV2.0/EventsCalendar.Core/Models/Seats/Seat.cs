@@ -6,6 +6,7 @@ namespace EventsCalendar.Core.Models.Seats
     public class Seat
     {
         public int Id { get; set; }
+        public int SeatTypeId { get; set; }
         public SeatType SeatType { get; set; }
         public int VenueId { get; set; }
         public Venue Venue { get; set; }
@@ -14,7 +15,6 @@ namespace EventsCalendar.Core.Models.Seats
         public Seat()
         {
             Reservations = new List<Reservation>();
-            SeatType = new SeatType();
         }
     }
 }

@@ -1,39 +1,34 @@
 ﻿using AutoMapper;
 using EventsCalendar.Services.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using EventsCalendar.Core.Models.Reservations;
-using EventsCalendar.Core.Models.Seats;
-using EventsCalendar.Core.Models.Tickets;
+using EventsCalendar.Core.Models;
 using EventsCalendar.DataAccess.Sql.Contracts;
 using EventsCalendar.Services.Contracts;
-using EventsCalendar.Services.Contracts.Services;
+using EventsCalendar.Services.Dtos;
+using EventsCalendar.Services.Dtos.Seat;
 
 namespace EventsCalendar.Services.CrudServices
 {
     public class TicketService : ITicketService
     {
         private readonly ITicketRepository _repository;
-        private readonly IReservationRepository _reservationRepository;
         private readonly ConfirmationNumberUtil _confirmationNumberUtil;
         private readonly IReservationService _reservationService;
 
         public TicketService(ITicketRepository repository,
-                             IReservationRepository reservationRepository,
                              ConfirmationNumberUtil confirmationNumberUtil,
                              IReservationService reservationService)
         {
             _repository = repository;
-            _reservationRepository = reservationRepository;
             _confirmationNumberUtil = confirmationNumberUtil;
             _reservationService = reservationService;
         }
 
         private Ticket CheckTicketNullValueById(Guid id)
         {
-            Ticket ticket = _repository.Find(id);
+            var ticket = _repository.Find(id);
             if (ticket == null)
                 throw new HttpException(404, "Ticket Not Found");
 
@@ -42,83 +37,50 @@ namespace EventsCalendar.Services.CrudServices
 
         private Ticket CheckTicketNullByConfirmationNumber(string confirmationNumber)
         {
-            Ticket ticket = _repository.FindByConfirmationNumber(confirmationNumber);
+            var ticket = _repository.FindByConfirmationNumber(confirmationNumber);
             if (ticket == null)
                 throw new HttpException(404, "Ticket Not Found");
 
             return ticket;
         }
 
-        public IEnumerable<ITicketViewModel> ListTickets(ITicketViewModel viewModel)
+        public void CreateTicket(TicketDto ticket)
         {
-            IEnumerable<Ticket> tickets = _repository.Collection().ToList();
-            return tickets.Select(ticket => Mapper.Map(ticket, viewModel)).ToList();
-        }
-
-        public ITicketViewModel NewTicketViewModel(ITicketViewModel viewModel)
-        {
-            ReservationPrices prices = _reservationRepository.GetPrices(viewModel.PerformanceId);
-            SeatCapacityDto numberRemaining = _reservationService.GetSeatsRemaining(viewModel.PerformanceId);
-
-            viewModel.BudgetPrice = prices.Budget;
-            viewModel.ModeratePrice = prices.Moderate;
-            viewModel.PremierPrice = prices.Premier;
-            Mapper.Map(numberRemaining, viewModel);
-            
-
-            return viewModel;
-        }
-
-        public void CreateTicket(ITicketViewModel ticketViewModel)
-        {
-            var ticket = new Ticket
+            var newTicket = new Ticket
             {
-                ConfirmationNumber = _confirmationNumberUtil.CreateConfirmationNumber(ticketViewModel),
-                Recipient = ticketViewModel.Ticket.Recipient,
-                Email = ticketViewModel.Ticket.Email,
+                ConfirmationNumber = _confirmationNumberUtil.CreateConfirmationNumber(ticket),
+                Recipient = ticket.Recipient,
+                Email = ticket.Email,
             };
 
-            var capacity = new SeatCapacity();
-            Mapper.Map(ticketViewModel, capacity);
+            var performanceId = newTicket.Reservations.First().PerformanceId;
+            var capacity = new SeatCapacityDto();
+            newTicket.Reservations = _reservationService.GetReservations(capacity, performanceId).ToList();
             
-            IEnumerable<Reservation> reservations = _reservationService.GetReservations(capacity, ticketViewModel.PerformanceId);
-
-            foreach (var reservation in reservations)
+            foreach (var reservation in newTicket.Reservations)
             {
                 ticket.TotalPrice += reservation.Price;
                 reservation.IsTaken = true;
             }
 
-            _repository.Insert(ticket);
+            _repository.Insert(newTicket);
             _repository.Commit();
         }
 
-        public ITicketViewModel ReturnTicketViewModelById(Guid id)
+        public void EditTicket(TicketDto ticket)
         {
-            Ticket ticket = CheckTicketNullValueById(id);
-            return Mapper.Map<Ticket, ITicketViewModel>(ticket);
-        }
+            var ticketToEdit = CheckTicketNullValueById(ticket.Id);
 
-        public ITicketViewModel ReturnTicketViewModelByConfirmationNumber(string confirmationNumber)
-        {
-            Ticket ticket = CheckTicketNullByConfirmationNumber(confirmationNumber);
-            return Mapper.Map<Ticket, ITicketViewModel>(ticket);
-        }
-
-        public void EditTicket(ITicketViewModel ticketViewModel)
-        {
-            Ticket ticketToEdit = CheckTicketNullValueById(ticketViewModel.Ticket.Id);
-
-            ticketToEdit.Email = ticketViewModel.Ticket.Email;
-            ticketToEdit.Recipient = ticketViewModel.Ticket.Recipient;
-            Mapper.Map(ticketViewModel.Ticket.Reservations, ticketToEdit.Reservations);
+            ticketToEdit.Email = ticket.Email;
+            ticketToEdit.Recipient = ticket.Recipient;
+            Mapper.Map(ticket.Reservations, ticketToEdit.Reservations);
 
             _repository.Commit();
         }
 
         public void DeleteTicket(Guid id)
         {
-            CheckTicketNullValueById(id);
+            var ticket = CheckTicketNullValueById(id);
             _repository.Delete(id);
             _repository.Commit();
         }

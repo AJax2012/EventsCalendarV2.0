@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EventsCalendar.Services.Dtos
+namespace EventsCalendar.Services.Dtos.Seat
 {
     public class ReservationDto
     {

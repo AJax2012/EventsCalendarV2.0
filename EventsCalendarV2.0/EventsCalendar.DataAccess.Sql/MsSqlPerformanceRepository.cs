@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using EventsCalendar.Core.Models;
 using EventsCalendar.DataAccess.Sql.Contracts;
 
@@ -20,28 +21,14 @@ namespace EventsCalendar.DataAccess.Sql
         {
             return Context.Performances
                 .Include(p => p.Performer)
-                .Include(p => p.Venue)
                 .Include(p => p.Reservations)
+                .Include(p => p.Venue.Address)
                 .ToList();
         }
 
         public void Commit()
         {
-            bool fileSaved;
-            do
-            {
-                fileSaved = false;
-                try
-                {
-                    Context.SaveChanges();
-                }
-                catch (DbUpdateConcurrencyException e)
-                {
-                    fileSaved = true;
-                    var entry = e.Entries.Single();
-                    entry.OriginalValues.SetValues(entry.GetDatabaseValues());
-                }
-            } while (fileSaved);
+            Context.SaveChanges();
         }
 
         public void Delete(int id)
@@ -59,8 +46,8 @@ namespace EventsCalendar.DataAccess.Sql
         {
             return Context.Performances
                 .Include(p => p.Performer)
-                .Include(p => p.Venue)
                 .Include(p => p.Reservations)
+                .Include(p => p.Venue.Address)
                 .SingleOrDefault(v => v.Id == id);
         }
 

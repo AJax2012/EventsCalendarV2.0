@@ -86,22 +86,17 @@
   <ItemGroup>
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\BaseEntity.cs" />
-    <Compile Include="Models\Tickets\ConfirmationNumberData.cs" />
     <Compile Include="Models\Genre.cs" />
+    <Compile Include="Models\PerformerType.cs" />
+    <Compile Include="Models\Seats\SeatType.cs" />
     <Compile Include="Models\Performance.cs" />
     <Compile Include="Models\Performer.cs" />
-    <Compile Include="Models\PerformerType.cs" />
     <Compile Include="Models\Reservations\Reservation.cs" />
     <Compile Include="Models\Reservations\ReservationPrices.cs" />
-    <Compile Include="Models\Reservations\SimpleReservationsByType.cs" />
     <Compile Include="Models\Seats\Seat.cs" />
-    <Compile Include="Models\Seats\SeatCapacity.cs" />
-    <Compile Include="Models\Reservations\ReservationsByType.cs" />
     <Compile Include="Models\Reservations\SimpleReservation.cs" />
-    <Compile Include="Models\Tickets\Ticket.cs" />
+    <Compile Include="Models\Ticket.cs" />
     <Compile Include="Models\Reservations\UpdatePricesObject.cs" />
-    <Compile Include="Models\Seats\SimpleSeat.cs" />
-    <Compile Include="Models\Seats\SeatType.cs" />
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Models\Venue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -112,7 +107,6 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

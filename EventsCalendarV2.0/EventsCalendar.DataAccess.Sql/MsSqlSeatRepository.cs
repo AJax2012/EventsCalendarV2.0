@@ -1,5 +1,4 @@
-﻿using EventsCalendar.Core.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
 using System.Data;
@@ -64,14 +63,14 @@ namespace EventsCalendar.DataAccess.Sql
             Context.Configuration.AutoDetectChangesEnabled = enabled;
         }
 
-        public void BulkInsertSeats(int numberOfSeats, SeatType type, int venueId)
+        public void BulkInsertSeats(int numberOfSeats, int seatTypeId, int venueId)
         {
             var dt = MakeTable();
 
             for (var i = 0; i <= numberOfSeats - 1; i++)
             {
                 DataRow row = dt.NewRow();
-                row["SeatType"] = (int) type;
+                row["SeatTypeId"] = seatTypeId;
                 row["VenueId"] = venueId;
                 dt.Rows.Add(row);
             }
@@ -89,7 +88,7 @@ namespace EventsCalendar.DataAccess.Sql
 
                     try
                     {
-                        bulkCopy.ColumnMappings.Add("SeatType", "SeatType");
+                        bulkCopy.ColumnMappings.Add("SeatTypeId", "SeatTypeId");
                         bulkCopy.ColumnMappings.Add("VenueId", "VenueId");
                         bulkCopy.WriteToServer(dt);
                         Console.WriteLine("Bulk data stored successfully");
@@ -129,7 +128,7 @@ namespace EventsCalendar.DataAccess.Sql
             }
         }
 
-        public void BulkDeleteSeats(int numberOfSeats, SeatType type, int venueId)
+        public void BulkDeleteSeats(int numberOfSeats, int seatTypeId, int venueId)
         {
             using (SqlConnection sourceConnection = new SqlConnection(connectionString))
             {
@@ -138,11 +137,13 @@ namespace EventsCalendar.DataAccess.Sql
                 try
                 {
                     numberOfSeats = Math.Abs(numberOfSeats);
-                    int typeInt = (int) type;
+
                     var numberOfSeatsParam = new SqlParameter("@numberOfSeats", numberOfSeats);
-                    var seatTypeParam = new SqlParameter("@seatType", typeInt);
+                    var seatTypeParam = new SqlParameter("@seatTypeId", seatTypeId);
                     var venueIdParam = new SqlParameter("@venueId", venueId);
-                    Context.Database.ExecuteSqlCommand("dbo.BulkDeleteSeats @numberOfSeats, @seatType, @venueId", numberOfSeatsParam, seatTypeParam, venueIdParam);
+
+                    Context.Database.ExecuteSqlCommand("dbo.BulkDeleteSeats @numberOfSeats, @seatTypeId, @venueId", numberOfSeatsParam, seatTypeParam, venueIdParam);
+
                     Console.WriteLine("Seats successfully deleted.");
                 }
                 catch (Exception e)
@@ -163,7 +164,7 @@ namespace EventsCalendar.DataAccess.Sql
             dt.Columns.Add(new DataColumn()
             {
                 DataType = typeof(int),
-                ColumnName = "SeatType"
+                ColumnName = "SeatTypeId"
             });
 
             dt.Columns.Add(new DataColumn()

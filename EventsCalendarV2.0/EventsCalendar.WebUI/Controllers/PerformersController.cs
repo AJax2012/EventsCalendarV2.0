@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using EventsCalendar.Services.Contracts;
-using EventsCalendar.Services.Contracts.Services;
-using EventsCalendar.Services.Dtos;
+using EventsCalendar.Services.Dtos.Performer;
 using EventsCalendar.WebUI.ViewModels;
 
 namespace EventsCalendar.WebUI.Controllers
@@ -10,6 +10,7 @@ namespace EventsCalendar.WebUI.Controllers
     public class PerformersController : Controller
     {
         private readonly IPerformerService _performerService;
+        private const string DefaultImgSrc = "https://static1.squarespace.com/static/5ba45d79ab1a620ab25a33da/t/5bf46b1f0e2e72ab66b383f1/1543426766008/Blank+Profile+Pic.png?format=300w";
 
         public PerformersController(IPerformerService performerService)
         {
@@ -21,7 +22,18 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Index()
         {
-            IEnumerable<IPerformerViewModel> viewModel = _performerService.ListPerformers();
+            var allPerformerDtos = _performerService.GetAllPerformerDtos();
+
+            ICollection<PerformerViewModel> viewModel = 
+                allPerformerDtos.Select(performer => 
+                    new PerformerViewModel
+                    {
+                        Performer = performer,
+                        PerformerTypes = _performerService.GetPerformerTypeValues(),
+                        Genres = _performerService.GetGenreValues(),
+                        Topics = _performerService.GetTopicValues()
+                    }).ToList();
+
             return View(viewModel);
         }
 
@@ -30,8 +42,8 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Create()
         {
-            IPerformerViewModel viewModel = new PerformerViewModel();
-            return View("PerformerForm", _performerService.NewPerformerViewModel(viewModel));
+            PerformerViewModel viewModel = NewPerformerViewModel();
+            return View("PerformerForm", viewModel);
         }
         
         /*
@@ -39,29 +51,26 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Edit(int id)
         {
-            IPerformerViewModel viewModel = new PerformerViewModel
-            {
-                Performer = new PerformerDto
-                {
-                    Id = id
-                }
-            };
-
-            return View("PerformerForm", _performerService.ReturnPerformerViewModel(viewModel));
+            return View("PerformerForm", ReturnPerformerViewModel(id));
         }
 
         [HttpPost]
         public ActionResult Save(PerformerViewModel performerViewModel)
         {
             if (!ModelState.IsValid)
+            {
+                performerViewModel.PerformerTypes = _performerService.GetPerformerTypeValues();
+                performerViewModel.Genres = _performerService.GetGenreValues();
+                performerViewModel.Topics = _performerService.GetTopicValues();
                 return View("PerformerForm", performerViewModel);
+            }
 
             if (performerViewModel.Performer.Id == 0)
-                _performerService.CreatePerformer(performerViewModel);
+                _performerService.CreatePerformer(performerViewModel.Performer);
             else
-                _performerService.EditPerformer(performerViewModel, performerViewModel.Performer.Id);
+                _performerService.EditPerformer(performerViewModel.Performer);
 
-            return RedirectToAction("Index", "Performers");
+            return RedirectToAction("Index");
         }
 
         /*
@@ -79,15 +88,40 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Details(int id)
         {
-            IPerformerViewModel viewModel = new PerformerViewModel
+            PerformerViewModel viewModel = new PerformerViewModel
+            {
+                Performer = _performerService.GetPerformerDtoById(id),
+                PerformerTypes = _performerService.GetPerformerTypeValues(),
+                Genres = _performerService.GetGenreValues(),
+                Topics = _performerService.GetTopicValues()
+            };
+
+            return View(viewModel);
+        }
+
+        private PerformerViewModel NewPerformerViewModel()
+        {
+            return new PerformerViewModel
             {
                 Performer = new PerformerDto
                 {
-                    Id = id
-                }
+                    ImageUrl = DefaultImgSrc
+                },
+                PerformerTypes = _performerService.GetPerformerTypeValues(),
+                Genres = _performerService.GetGenreValues(),
+                Topics = _performerService.GetTopicValues()
             };
+        }
 
-            return View(_performerService.ReturnPerformerViewModel(viewModel));
+        private PerformerViewModel ReturnPerformerViewModel(int performerId)
+        {
+            return new PerformerViewModel
+            {
+                Performer = _performerService.GetPerformerDtoById(performerId),
+                PerformerTypes = _performerService.GetPerformerTypeValues(),
+                Genres = _performerService.GetGenreValues(),
+                Topics = _performerService.GetTopicValues()
+            };
         }
     }
 }

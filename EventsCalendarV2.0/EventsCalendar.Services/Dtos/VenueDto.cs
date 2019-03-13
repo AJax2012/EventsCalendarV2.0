@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using EventsCalendar.Services.Dtos.Performer;
+using EventsCalendar.Services.Dtos.Seat;
 
-namespace EventsCalendar.Services.Dtos
+namespace EventsCalendar.Services.Dtos.Venue
 {
     public class VenueDto
     {

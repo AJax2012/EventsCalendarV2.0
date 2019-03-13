@@ -2,9 +2,9 @@
 using System.Linq;
 using EventsCalendar.Core.Models.Seats;
 using EventsCalendar.DataAccess.Sql.Contracts;
-using EventsCalendar.Services.Contracts.Services;
+using EventsCalendar.Services.Contracts;
 
-namespace EventsCalendar.Services.Helpers
+namespace EventsCalendar.Services.CrudServices
 {
     public class SeatService : ISeatService
     {

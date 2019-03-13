@@ -4,7 +4,6 @@ using EventsCalendar.Core.Models.Seats;
 using EventsCalendar.DataAccess.Sql;
 using EventsCalendar.DataAccess.Sql.Contracts;
 using EventsCalendar.Services.Contracts;
-using EventsCalendar.Services.Contracts.Services;
 using EventsCalendar.Services.CrudServices;
 using EventsCalendar.Services.Helpers;
 
@@ -17,8 +16,8 @@ namespace EventsCalendar.Services
             builder.RegisterType<DataContext>().InstancePerRequest();
             builder.RegisterGeneric(typeof(MsSqlGenericRepository<>)).As(typeof(IRepository<>));
             builder.RegisterType(typeof(MsSqlVenueRepository)).As(typeof(IRepository<Venue>));
-            builder.RegisterType(typeof(MsSqlPerformerRepository)).As(typeof(IRepository<Performer>));
             builder.RegisterType(typeof(MsSqlPerformanceRepository)).As(typeof(IRepository<Performance>));
+            builder.RegisterType(typeof(MsSqlPerformerRepository)).As(typeof(IRepository<Performer>));
             builder.RegisterType(typeof(MsSqlReservationRepository)).As(typeof(IReservationRepository));
             builder.RegisterType(typeof(MsSqlSeatRepository)).As(typeof(ISeatRepository));
             builder.RegisterType(typeof(MsSqlTicketRepository)).As(typeof(ITicketRepository));

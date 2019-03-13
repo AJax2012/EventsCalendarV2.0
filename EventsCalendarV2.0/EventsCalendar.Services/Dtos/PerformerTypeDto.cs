@@ -1,6 +1,6 @@
 ﻿using EventsCalendar.Core.Models;
 
-namespace EventsCalendar.Services.Dtos
+namespace EventsCalendar.Services.Dtos.Performer
 {
     public class PerformerTypeDto
     {

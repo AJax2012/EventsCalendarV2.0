@@ -1,12 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace EventsCalendar.Core.Models
+﻿namespace EventsCalendar.Core.Models
 {
-    public enum Topic
+    public class Topic
     {
-        Politics,
-        Racism,
-        Economics,
-        Economy
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

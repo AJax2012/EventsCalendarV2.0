@@ -1,7 +1,6 @@
 ﻿using EventsCalendar.Core.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using EventsCalendar.Core.Models.Tickets;
 
 namespace EventsCalendar.EntityConfigurations
 {

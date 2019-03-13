@@ -24,14 +24,20 @@ namespace EventsCalendar.EntityConfigurations
                 .IsRequired()
                 .HasMaxLength(100);
 
-            Property(p => p.PerformerType)
-                .IsRequired();
+            HasRequired(p => p.PerformerType)
+                .WithMany()
+                .HasForeignKey(p => p.PerformerTypeId)
+                .WillCascadeOnDelete(false);
 
-            Property(p => p.Genre)
-                .IsOptional();
+            HasOptional(p => p.Genre)
+                .WithMany()
+                .HasForeignKey(p => p.GenreId)
+                .WillCascadeOnDelete(false);
 
-            Property(p => p.Topic)
-                .IsOptional();
+            HasOptional(p => p.Topic)
+                .WithMany()
+                .HasForeignKey(p => p.TopicId)
+                .WillCascadeOnDelete(false);
         }
     }
 }

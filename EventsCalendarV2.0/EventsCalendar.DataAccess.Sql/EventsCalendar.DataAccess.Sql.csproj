@@ -53,13 +53,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext.cs" />
-    <Compile Include="Migrations\201903102015480_InitialMigration.cs" />
-    <Compile Include="Migrations\201903102015480_InitialMigration.Designer.cs">
-      <DependentUpon>201903102015480_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201903121944519_InitialMigration.cs" />
+    <Compile Include="Migrations\201903121944519_InitialMigration.Designer.cs">
+      <DependentUpon>201903121944519_InitialMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201903102141575_ChangeTicketIDtoNull.cs" />
-    <Compile Include="Migrations\201903102141575_ChangeTicketIDtoNull.Designer.cs">
-      <DependentUpon>201903102141575_ChangeTicketIDtoNull.cs</DependentUpon>
+    <Compile Include="Migrations\201903122054538_AddSeatType.cs" />
+    <Compile Include="Migrations\201903122054538_AddSeatType.Designer.cs">
+      <DependentUpon>201903122054538_AddSeatType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903130525107_GenreAndTopicsNullable.cs" />
+    <Compile Include="Migrations\201903130525107_GenreAndTopicsNullable.Designer.cs">
+      <DependentUpon>201903130525107_GenreAndTopicsNullable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MsSqlGenericRepository.cs" />
@@ -87,11 +91,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201903102015480_InitialMigration.resx">
-      <DependentUpon>201903102015480_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201903121944519_InitialMigration.resx">
+      <DependentUpon>201903121944519_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903102141575_ChangeTicketIDtoNull.resx">
-      <DependentUpon>201903102141575_ChangeTicketIDtoNull.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201903122054538_AddSeatType.resx">
+      <DependentUpon>201903122054538_AddSeatType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903130525107_GenreAndTopicsNullable.resx">
+      <DependentUpon>201903130525107_GenreAndTopicsNullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

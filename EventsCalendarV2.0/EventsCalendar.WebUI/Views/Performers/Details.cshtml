@@ -1,5 +1,6 @@
-﻿@using Microsoft.Ajax.Utilities
-@model EventsCalendar.Services.Contracts.IPerformerViewModel
+﻿@using EventsCalendar.Services.Dtos.Performer
+@using Microsoft.Ajax.Utilities
+@model EventsCalendar.WebUI.ViewModels.PerformerViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -32,7 +33,7 @@
                     @Html.DisplayFor(model => model.Performer.PerformerType)
                 </dd>
 
-                @if (Model.Performer.PerformerType == EventsCalendar.Core.Models.PerformerType.Musician)
+                @if (Model.Performer.PerformerType == PerformerTypeDto.Musician)
                 {
                     <dt>
                         @Html.DisplayNameFor(model => model.Performer.Genre)

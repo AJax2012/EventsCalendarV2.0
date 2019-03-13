@@ -5,8 +5,7 @@ using AutoMapper;
 using EventsCalendar.Core.Models;
 using EventsCalendar.DataAccess.Sql.Contracts;
 using EventsCalendar.Services.Contracts;
-using EventsCalendar.Services.Contracts.Services;
-using EventsCalendar.Services.Dtos;
+using EventsCalendar.Services.Dtos.Performer;
 using EventsCalendar.Services.Helpers;
 
 namespace EventsCalendar.Services.CrudServices
@@ -26,124 +25,97 @@ namespace EventsCalendar.Services.CrudServices
 
         private Performer CheckPerformerNullValue(int id)
         {
-            Performer performer = _repository.Find(id);
+            var performer = _repository.Find(id);
             if (performer == null)
                 throw new HttpException(404, "Performer Not Found");
 
             return performer;
         }
 
-        private PerformerDto MapPerformerToDto(Performer performer)
+        public IEnumerable<PerformerTypeDto> GetPerformerTypeValues()
         {
-            var performerDto = new PerformerDto
+            return EnumUtil.GetValues<PerformerTypeDto>();
+        }
+
+        public IEnumerable<GenreDto> GetGenreValues()
+        {
+            return EnumUtil.GetValues<GenreDto>();
+        }
+
+        public IEnumerable<TopicDto> GetTopicValues()
+        {
+            return EnumUtil.GetValues<TopicDto>();
+        }
+
+        public void CreatePerformer(PerformerDto performer)
+        {
+            var newPerformer = new Performer
             {
-                Id = performer.Id,
                 Name = performer.Name,
-                ImageUrl = performer.ImageUrl,
+                Description = performer.Description,
                 TourName = performer.TourName,
-                IsActive = performer.IsActive,
-                PerformerType = performer.PerformerType
-            };
-
-            if (performer.PerformerType == PerformerType.Musician)
-                performerDto.Genre = performer.Genre;
-            else
-                performerDto.Topic = performer.Topic;
-
-            return performerDto;
-        }
-
-        private IPerformerViewModel mapEnumsToViewModel(IPerformerViewModel viewModel)
-        {
-            var performerTypes = EnumUtil.GetValues<PerformerType>();
-            var genres = EnumUtil.GetValues<Genre>();
-            var topics = EnumUtil.GetValues<Topic>();
-            Mapper.Map(performerTypes, viewModel.PerformerTypes);
-            Mapper.Map(genres, viewModel.Genres);
-            Mapper.Map(topics, viewModel.Topics);
-            return viewModel;
-        }
-
-        public IEnumerable<IPerformerViewModel> ListPerformers()
-        {
-            IEnumerable<Performer> performers = _repository.Collection().ToList();
-
-            var performerDtos =
-                Mapper.Map<IEnumerable<Performer>, IEnumerable<PerformerDto>>
-                    (performers);
-
-            var performerViewModels =
-                Mapper.Map<IEnumerable<PerformerDto>,
-                    IEnumerable<IPerformerViewModel>>(performerDtos);
-
-            return performerViewModels;
-        }
-
-        public IPerformerViewModel NewPerformerViewModel(IPerformerViewModel viewModel)
-        {
-            viewModel.Performer = new PerformerDto();
-            viewModel = mapEnumsToViewModel(viewModel);
-            viewModel.Performer.ImageUrl = DefaultImgSrc;
-
-            return viewModel;
-        }
-
-        public void CreatePerformer(IPerformerViewModel performerViewModel)
-        {
-            var performer = new Performer
-            {
-                Description = performerViewModel.Performer.Description,
                 IsActive = true,
-                Name = performerViewModel.Performer.Name,
-                PerformerType = performerViewModel.Performer.PerformerType,
-                ImageUrl = performerViewModel.Performer.ImageUrl,
-                TourName = performerViewModel.Performer.TourName
+                ImageUrl = performer.ImageUrl,
+                PerformerTypeId = (int) performer.PerformerType,
             };
 
             if (string.IsNullOrWhiteSpace(performer.ImageUrl))
                 performer.ImageUrl = DefaultImgSrc;
-            
-            if (performer.PerformerType.Equals(PerformerType.Musician))
-                performer.Genre = performerViewModel.Performer.Genre;
+
+            if (performer.PerformerType == PerformerTypeDto.Musician)
+                newPerformer.GenreId = (int) performer.Genre;
             else
-                performer.Topic = performerViewModel.Performer.Topic;
+                newPerformer.TopicId = (int) performer.Topic;
 
             performer.IsActive = true;
-            _repository.Insert(performer);
+            _repository.Insert(newPerformer);
             _repository.Commit();
         }
 
-        public IPerformerViewModel ReturnPerformerViewModel(IPerformerViewModel viewModel)
+        public ICollection<PerformerDto> GetAllPerformerDtos()
         {
-            Performer performer = CheckPerformerNullValue(viewModel.Performer.Id);
-            viewModel.Performer = MapPerformerToDto(performer);
-            viewModel = mapEnumsToViewModel(viewModel);
-
-            return viewModel;
+            return Mapper.Map
+                <ICollection<Performer>, ICollection<PerformerDto>>
+                (_repository.Collection().ToList());
         }
 
-        public void EditPerformer(IPerformerViewModel performerViewModel, int id)
+        public IEnumerable<Performer> GetAllPerformers()
         {
-            Performer performerToEdit = CheckPerformerNullValue(id);
+            return _repository.Collection();
+        }
 
-            performerToEdit.Description = performerViewModel.Performer.Description;
+        public PerformerDto GetPerformerDtoById(int id)
+        {
+            return Mapper.Map<Performer, PerformerDto>(CheckPerformerNullValue(id));
+        }
+
+        public Performer GetPerformerById(int id)
+        {
+            return CheckPerformerNullValue(id);
+        }
+
+        public void EditPerformer(PerformerDto performer)
+        {
+            Performer performerToEdit = CheckPerformerNullValue(performer.Id);
+
+            performerToEdit.Name = performer.Name;
+            performerToEdit.Description = performer.Description;
+            performerToEdit.TourName = performer.TourName;
             performerToEdit.IsActive = true;
-            performerToEdit.Name = performerViewModel.Performer.Name;
-            performerToEdit.PerformerType = performerViewModel.Performer.PerformerType;
-            performerToEdit.TourName = performerViewModel.Performer.TourName;
-            performerToEdit.ImageUrl = performerViewModel.Performer.ImageUrl;
+            performerToEdit.ImageUrl = performer.ImageUrl;
+            performerToEdit.PerformerTypeId = (int) performer.PerformerType;
 
-            if (performerToEdit.PerformerType.Equals(PerformerType.Musician))
-                performerToEdit.Genre = performerViewModel.Performer.Genre;
+            if (performer.PerformerType == PerformerTypeDto.Musician)
+                performerToEdit.GenreId = (int) performer.Genre;
             else
-                performerToEdit.Topic = performerViewModel.Performer.Topic;
+                performerToEdit.TopicId = (int) performer.Topic;
 
             _repository.Commit();
         }
 
         public void DeletePerformer(int id)
         {
-            CheckPerformerNullValue(id);
+            var performer = CheckPerformerNullValue(id);
 
             IList<Performance> performances = 
                 _performanceRepository.Collection()

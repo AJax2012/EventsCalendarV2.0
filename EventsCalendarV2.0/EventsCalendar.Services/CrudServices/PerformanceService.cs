@@ -1,216 +1,137 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Web;
-using System.Web.ModelBinding;
 using AutoMapper;
 using EventsCalendar.Core.Models;
 using EventsCalendar.Core.Models.Reservations;
-using EventsCalendar.Core.Models.Seats;
 using EventsCalendar.DataAccess.Sql.Contracts;
 using EventsCalendar.Services.Contracts;
-using EventsCalendar.Services.Contracts.Services;
 using EventsCalendar.Services.Dtos;
+using EventsCalendar.Services.Dtos.Performer;
+using EventsCalendar.Services.Dtos.Reservation;
+using EventsCalendar.Services.Dtos.Seat;
 
 namespace EventsCalendar.Services.CrudServices
 {
     public class PerformanceService : IPerformanceService
     {
         private readonly IRepository<Performance> _repository;
-        private readonly IRepository<Performer> _performerRepository;
         private readonly IReservationRepository _reservationRepository;
-        private readonly IRepository<Venue> _venueRepository;
+        private readonly IPerformerService _performerService;
         private readonly IReservationService _reservationService;
+        private readonly IVenueService _venueService;
 
         public PerformanceService(IRepository<Performance> repository,
-                                  IRepository<Performer> performerRepository, 
                                   IReservationRepository reservationRepository,
-                                  IRepository<Venue> venueRepository,
-                                  IReservationService reservationService)
+                                  IPerformerService performerService,
+                                  IReservationService reservationService, 
+                                  IVenueService venueService)
         {
             _repository = repository;
-            _performerRepository = performerRepository;
             _reservationRepository = reservationRepository;
-            _venueRepository = venueRepository;
+            _performerService = performerService;
             _reservationService = reservationService;
+            _venueService = venueService;
         }
 
         private Performance CheckPerformanceNullValue(int id)
         {
             var performance = _repository.Find(id);
+
             if (performance == null)
                 throw new HttpException(404, "Performance Not Found");
 
             return performance;
         }
 
-        private SeatCapacityDto CountRemainingReservations(Performance performance)
+        public void CreatePerformance(PerformanceDto performance)
         {
-            return _reservationService.GetSeatsRemaining(performance.Id);
-        }
+            var performerId = performance.PerformerDto.Id;
+            var venueId = performance.VenueDto.Id;
 
-        public DateTime FixDateTime(string date, string time)
-        {
-            if (date == null)
-                date = DateTime.Now.AddDays(1).ToShortDateString();
-
-            if (time == null)
-                time = "7:30 pm";
-
-            DateTime eventDateTime;
-            DateTime.TryParseExact($"{date} {time}", new string[] {"M/d/yyyy h:mm tt"},
-                System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None,
-                out eventDateTime);
-
-            return eventDateTime;
-        }
-
-        public IEnumerable<IPerformanceViewModel> ListPerformances()
-        {
-            IEnumerable<Performance> performances = 
-                _repository.Collection()
-                    .Where(x => x.EventDateTime >= System.DateTime.Today)
-                    .ToList();
-
-            var performanceDtos = 
-                Mapper.Map<IEnumerable<Performance>, 
-                        IEnumerable<PerformanceDto>>
-                    (performances);
-
-            var performanceViewModels = 
-                Mapper.Map<IEnumerable<PerformanceDto>, 
-                    IEnumerable<IPerformanceViewModel>>
-                    (performanceDtos);
-
-            return performanceViewModels;
-        }
-
-        public IPerformanceViewModel NewPerformanceViewModel(IPerformanceViewModel viewModel)
-        {
-            Mapper.Map(_performerRepository.Collection().ToList(), viewModel.Performers);
-            Mapper.Map(_venueRepository.Collection().ToList(), viewModel.Venues);
-            
-            return viewModel;
-        }
-
-        public void CreatePerformance(IPerformanceViewModel performanceViewModel)
-        {
-            var performerId = performanceViewModel.Performance.PerformerDto.Id;
-            var venueId = performanceViewModel.Performance.VenueDto.Id;
-            var performance = new Performance
+            var newPerformance = new Performance
             {
-                Description = performanceViewModel.Performance.Description,
-                EventDateTime = performanceViewModel.Performance.EventDateTime,
+                PerformerId = performerId,
+                VenueId = venueId,
+                Description = performance.Description,
+                EventDateTime = performance.EventDateTime,
                 IsActive = true,
-                PerformerId = performanceViewModel.Performance.PerformerDto.Id,
-                VenueId = performanceViewModel.Performance.VenueDto.Id,
-                Performer = _performerRepository.Find(performerId),
-                Venue = _venueRepository.Find(venueId),
                 Reservations = new List<Reservation>()
             };
 
-            IEnumerable<SimpleReservation> budgetReservations = _reservationService.CreateSimpleReservations(performance.VenueId, SeatType.Budget, performanceViewModel.BudgetPrice);
-            IEnumerable<SimpleReservation> moderateReservations = _reservationService.CreateSimpleReservations(performance.VenueId, SeatType.Moderate, performanceViewModel.ModeratePrice);
-            IEnumerable<SimpleReservation> premierReservations = _reservationService.CreateSimpleReservations(performance.VenueId, SeatType.Premier, performanceViewModel.PremierPrice);
+            _repository.Insert(newPerformance);
+            _repository.Commit();
 
             var reservations = new SimpleReservationsByType
             {
-                BudgetReservations = budgetReservations,
-                ModerateReservations = moderateReservations,
-                PremierReservations = premierReservations
+                BudgetReservations = _reservationService
+                    .CreateSimpleReservations(venueId, SeatTypeDto.Budget, performance.Prices.Budget),
+
+                ModerateReservations = _reservationService
+                    .CreateSimpleReservations(venueId, SeatTypeDto.Moderate,
+                        performance.Prices.Moderate),
+
+                PremierReservations = _reservationService
+                    .CreateSimpleReservations(venueId, SeatTypeDto.Premier, performance.Prices.Premier)
             };
 
-            IEnumerable<SimpleReservation> allReservations = _reservationService.CombineSimpleReservations(reservations);
-            
-            _repository.Insert(performance);
-            _repository.Commit();
-
-            _reservationRepository.BulkInsertReservations(allReservations, performance.Id);
+            var allReservations = _reservationService.CombineSimpleReservations(reservations);
+            _reservationService.InsertReservations(allReservations, newPerformance.Id);
         }
 
-        public IPerformanceViewModel ReturnPerformanceViewModel(IPerformanceViewModel viewModel)
-        {
-            Performance performance = CheckPerformanceNullValue(viewModel.Performance.Id);
-
-            var performers = _performerRepository.Collection();
-            var venues = _venueRepository.Collection();
-
-            Mapper.Map(performance, viewModel.Performance);
-            Mapper.Map(performers, viewModel.Performers);
-            Mapper.Map(venues, viewModel.Venues);
-            Mapper.Map(viewModel.Performance, viewModel);
-
-            var prices = _reservationRepository.GetPrices(performance.Id);
-            viewModel.BudgetPrice = prices.Budget;
-            viewModel.ModeratePrice = prices.Moderate;
-            viewModel.PremierPrice = prices.Premier;
-
-            return viewModel;
-        }
-
-        public IPerformanceViewModel ReturnPerformanceDetails(IPerformanceViewModel viewModel)
-        {
-            Performance performance = CheckPerformanceNullValue(viewModel.Performance.Id);
-
-            Mapper.Map(performance, viewModel.Performance);
-            Mapper.Map(_performerRepository.Collection(), viewModel.Performers);
-            Mapper.Map(_venueRepository.Collection(), viewModel.Venues);
-            viewModel.EventDate = performance.EventDateTime.ToShortDateString();
-            viewModel.EventTime = performance.EventDateTime.ToShortTimeString();
-            viewModel.BudgetPrice = _reservationRepository.GetPrices(performance.Id).Budget;
-            viewModel.ModeratePrice = _reservationRepository.GetPrices(performance.Id).Moderate;
-            viewModel.PremierPrice = _reservationRepository.GetPrices(performance.Id).Premier;
-            viewModel.SeatsRemaining = CountRemainingReservations(performance);
-
-            Mapper.Map(_performerRepository.Find(performance.PerformerId), viewModel.Performance.PerformerDto);
-            Mapper.Map(_venueRepository.Find(performance.VenueId), viewModel.Performance.VenueDto);
-
-            return viewModel;
-        }
-
-        public ICollection<PerformerDto> GetAllPerformers()
+        public IEnumerable<PerformanceDto> GetAllPerformanceDtos()
         {
             return Mapper.Map
-                <IEnumerable<Performer>, ICollection<PerformerDto>>
-                (_performerRepository.Collection());
+                <IEnumerable<Performance>, ICollection<PerformanceDto>>
+                (_repository.Collection());
         }
 
-        public ICollection<VenueDto> GetAllVenues()
+        public IEnumerable<Performance> GetAllPerformances()
+        {
+            return _repository.Collection();
+        }
+
+        public PerformanceDto GetPerformanceDtoById(int performanceId)
         {
             return Mapper.Map
-                <IEnumerable<Venue>, ICollection<VenueDto>>
-                (_venueRepository.Collection());
+                <Performance, PerformanceDto>
+                (CheckPerformanceNullValue(performanceId));
         }
 
-        public void EditPerformance(IPerformanceViewModel performanceViewModel, int id)
+        public Performance GetPerformanceById(int performanceId)
         {
-            Performance performanceToEdit = CheckPerformanceNullValue(id);
+            return CheckPerformanceNullValue(performanceId);
+        }
 
-            performanceToEdit.EventDateTime = performanceViewModel.Performance.EventDateTime;
+        public void EditPerformance(PerformanceDto performance)
+        {
+            var performanceToEdit = CheckPerformanceNullValue(performance.Id);
+
+            performanceToEdit.Description = performance.Description;
             performanceToEdit.IsActive = true;
-            performanceToEdit.PerformerId = performanceViewModel.Performance.PerformerDto.Id;
-            performanceToEdit.VenueId = performanceViewModel.Performance.VenueDto.Id;
+            performanceToEdit.EventDateTime = performance.EventDateTime;
+            performanceToEdit.PerformerId = performance.PerformerDto.Id;
+            performanceToEdit.VenueId = performance.VenueDto.Id;
 
             var prices = new ReservationPrices
             {
-                Budget = performanceViewModel.BudgetPrice,
-                Moderate = performanceViewModel.ModeratePrice,
-                Premier = performanceViewModel.PremierPrice
+                Budget = performance.Prices.Budget,
+                Moderate = performance.Prices.Moderate,
+                Premier = performance.Prices.Premier
             };
 
-            _reservationService.SetNewReservationPrices(id, prices);
+            _reservationService.SetNewReservationPrices(performanceToEdit.Id, prices);
 
             _repository.Commit();
         }
 
-        public void DeletePerformance(int id)
+        public void DeletePerformance(int performanceId)
         {
-            CheckPerformanceNullValue(id);
+            var performance = CheckPerformanceNullValue(performanceId);
 
             // performance.IsActive = false;
-            _repository.Delete(id);
+            _repository.Delete(performanceId);
             _repository.Commit();
-            _reservationRepository.DeleteAllPerformanceReservations(id);
+            _reservationRepository.DeleteAllPerformanceReservations(performanceId);
         }
     }
 }
