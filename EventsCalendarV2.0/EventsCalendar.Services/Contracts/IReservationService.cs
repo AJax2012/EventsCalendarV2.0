@@ -13,6 +13,7 @@ namespace EventsCalendar.Services.Contracts
         void InsertReservations(IEnumerable<SimpleReservation> reservations, int performanceId);
         SeatCapacityDto GetSeatsRemaining(int performanceId);
         IEnumerable<Reservation> GetReservations(SeatCapacityDto capacity, int performanceId);
+        IEnumerable<ReservationDto> GetReservationDtos(SeatCapacityDto capacity, int performanceId);
         void SetNewReservationPrices(int performanceId, ReservationPrices prices);
         ReservationPricesDto GetPrices(int performanceId);
     }

@@ -322,13 +322,13 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <iframe performerId="map" allowfullscreen></iframe>
+            <iframe id="map"  allowfullscreen></iframe>
         </div>
     </div>
 
     <div class="pt-lg-4">
         @* PURCHASE TICKETS WILL CHANGE WHEN PURCHASE FUNCTIONS ADDED *@
-        @* @Html.ActionLink("Purchase Tickets", "Create", "Tickets", new { id = Model.Performance.Id }, new { @class = "btn btn-success" }) *@
+        @Html.ActionLink("Purchase Tickets", "Create", "Tickets", new { id = Model.Performance.Id }, new { @class = "btn btn-success" })
         @Html.ActionLink("Edit", "Edit", new { id = Model.Performance.Id }, new { @class = "btn btn-primary" })
         @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
     </div>
@@ -338,12 +338,13 @@
 {
     <script>
         $(document).ready(function () {
-            var streetAddress = (@Model.Performance.VenueDto.AddressDto.StreetAddress).trim();
-            var city = @(Model.Performance.VenueDto.AddressDto.City).trim();
-            var state = @(Model.Performance.VenueDto.AddressDto.State).trim();
-            var address = `${streetAddress},+${city},+${state}`;
+            var streetAddress = '(@Model.Performance.VenueDto.AddressDto.StreetAddress)'.trim();
+            var city = '@(Model.Performance.VenueDto.AddressDto.City)'.trim();
+            var state = '@(Model.Performance.VenueDto.AddressDto.State)'.trim();
+            var address = `${streetAddress},${city},${state}`;
             address = address.replace(/\s/g, '+');
-            var src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBEvGqWLKAT14Nk_NVCtqKE-AuchnT1OU8&q=${address}&zoom=11`;
+            console.log(address);
+            var src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyCBTyvl5qFCURnzneoMmSWzJVma0O19dV4&q=${address}&zoom=11`;
             $("#map").attr('src', src);
         });
     </script>

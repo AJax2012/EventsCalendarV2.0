@@ -6,7 +6,6 @@ using EventsCalendar.Core.Models.Reservations;
 using EventsCalendar.DataAccess.Sql.Contracts;
 using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.Dtos;
-using EventsCalendar.Services.Dtos.Performer;
 using EventsCalendar.Services.Dtos.Reservation;
 using EventsCalendar.Services.Dtos.Seat;
 
@@ -16,21 +15,15 @@ namespace EventsCalendar.Services.CrudServices
     {
         private readonly IRepository<Performance> _repository;
         private readonly IReservationRepository _reservationRepository;
-        private readonly IPerformerService _performerService;
         private readonly IReservationService _reservationService;
-        private readonly IVenueService _venueService;
 
         public PerformanceService(IRepository<Performance> repository,
                                   IReservationRepository reservationRepository,
-                                  IPerformerService performerService,
-                                  IReservationService reservationService, 
-                                  IVenueService venueService)
+                                  IReservationService reservationService)
         {
             _repository = repository;
             _reservationRepository = reservationRepository;
-            _performerService = performerService;
             _reservationService = reservationService;
-            _venueService = venueService;
         }
 
         private Performance CheckPerformanceNullValue(int id)
@@ -126,7 +119,7 @@ namespace EventsCalendar.Services.CrudServices
 
         public void DeletePerformance(int performanceId)
         {
-            var performance = CheckPerformanceNullValue(performanceId);
+            CheckPerformanceNullValue(performanceId);
 
             // performance.IsActive = false;
             _repository.Delete(performanceId);

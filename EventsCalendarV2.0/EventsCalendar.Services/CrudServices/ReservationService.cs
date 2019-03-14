@@ -76,6 +76,20 @@ namespace EventsCalendar.Services.CrudServices
         }
 
         /**
+         * Gets reservations by type
+         * Takes the amount of reservations required for each type
+         * Combines all reservations to IEnumerable<Reservation>
+         */
+        public IEnumerable<ReservationDto> GetReservationDtos(SeatCapacityDto capacity, int performanceId)
+        {
+            var reservations = Mapper.Map
+                <IEnumerable<Reservation>, IEnumerable<ReservationDto>>
+                (GetReservations(capacity, performanceId));
+
+            return reservations;
+        }
+
+        /**
          * Gets all Reservations at a Performance, separated by SeatType
          * Maps each reservation's Price
          * Regroups and returns all Reservations at a Performance into an IEnumerable<Reservation>

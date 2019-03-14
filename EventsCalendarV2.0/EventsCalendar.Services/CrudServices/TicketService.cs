@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EventsCalendar.Services.Helpers;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using EventsCalendar.Core.Models;
@@ -78,9 +79,45 @@ namespace EventsCalendar.Services.CrudServices
             _repository.Commit();
         }
 
+        public ICollection<TicketDto> GetAllTicketDtos()
+        {
+            return Mapper.Map
+                <IEnumerable<Ticket>, IEnumerable<TicketDto>>
+                (_repository.Collection()).ToList();
+        }
+
+        public ICollection<Ticket> GetAllTickets()
+        {
+            return _repository.Collection().ToList();
+        }
+
+        public TicketDto GetTicketDtoById(Guid id)
+        {
+            return Mapper.Map
+                <Ticket, TicketDto>
+                (_repository.Find(id));
+        }
+
+        public Ticket GetTicketById(Guid id)
+        {
+            return _repository.Find(id);
+        }
+
+        public TicketDto GetTicketDtoByConfirmationNumber(string confirmationNumber)
+        {
+            return Mapper.Map
+                <Ticket, TicketDto>
+                (_repository.FindByConfirmationNumber(confirmationNumber));
+        }
+
+        public Ticket GetTicketByConfirmationNumber(string confirmationNumber)
+        {
+            return _repository.FindByConfirmationNumber(confirmationNumber);
+        }
+
         public void DeleteTicket(Guid id)
         {
-            var ticket = CheckTicketNullValueById(id);
+            CheckTicketNullValueById(id);
             _repository.Delete(id);
             _repository.Commit();
         }
