@@ -36,21 +36,21 @@ namespace EventsCalendar.Services.CrudServices
             return performance;
         }
 
+        private Performance MapPerformanceDtoToPerformance(Performance performance, PerformanceDto performanceDto)
+        {
+            performance.Description = performanceDto.Description;
+            performance.IsActive = true;
+            performance.EventDateTime = performanceDto.EventDateTime;
+            performance.PerformerId = performanceDto.PerformerDto.Id;
+            performance.VenueId = performanceDto.VenueDto.Id;
+            return performance;
+        }
+
         public void CreatePerformance(PerformanceDto performance)
         {
-            var performerId = performance.PerformerDto.Id;
+            var newPerformance = MapPerformanceDtoToPerformance(new Performance(), performance);
             var venueId = performance.VenueDto.Id;
-
-            var newPerformance = new Performance
-            {
-                PerformerId = performerId,
-                VenueId = venueId,
-                Description = performance.Description,
-                EventDateTime = performance.EventDateTime,
-                IsActive = true,
-                Reservations = new List<Reservation>()
-            };
-
+            
             _repository.Insert(newPerformance);
             _repository.Commit();
 
@@ -98,12 +98,7 @@ namespace EventsCalendar.Services.CrudServices
         public void EditPerformance(PerformanceDto performance)
         {
             var performanceToEdit = CheckPerformanceNullValue(performance.Id);
-
-            performanceToEdit.Description = performance.Description;
-            performanceToEdit.IsActive = true;
-            performanceToEdit.EventDateTime = performance.EventDateTime;
-            performanceToEdit.PerformerId = performance.PerformerDto.Id;
-            performanceToEdit.VenueId = performance.VenueDto.Id;
+            performanceToEdit = MapPerformanceDtoToPerformance(performanceToEdit, performance);
 
             var prices = new ReservationPrices
             {
@@ -113,7 +108,6 @@ namespace EventsCalendar.Services.CrudServices
             };
 
             _reservationService.SetNewReservationPrices(performanceToEdit.Id, prices);
-
             _repository.Commit();
         }
 
@@ -121,7 +115,7 @@ namespace EventsCalendar.Services.CrudServices
         {
             CheckPerformanceNullValue(performanceId);
 
-            // performance.IsActive = false;
+            // performanceDto.IsActive = false;
             _repository.Delete(performanceId);
             _repository.Commit();
             _reservationRepository.DeleteAllPerformanceReservations(performanceId);

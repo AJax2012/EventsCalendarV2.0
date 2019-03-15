@@ -41,25 +41,28 @@ namespace EventsCalendar.Services.CrudServices
             return venue;
         }
 
+        private Venue MapVenueDtoToVenue(Venue venue, VenueDto venueDto)
+        {
+            if (venue.AddressId == 0)
+                venue.Address = new Address();
+            
+            venue.AddressId = venueDto.AddressId;
+            venue.Name = venueDto.Name;
+            venue.Address.StreetAddress = venueDto.AddressDto.StreetAddress;
+            venue.Address.City = venueDto.AddressDto.City;
+            venue.Address.State = venueDto.AddressDto.State;
+            venue.Address.ZipCode = venueDto.AddressDto.ZipCode;
+            venue.IsActive = true;
+
+            venue.ImageUrl = string.IsNullOrWhiteSpace(venue.ImageUrl) 
+                ? DefaultImgSrc : venueDto.ImageUrl;
+
+            return venue;
+        }
+
         public void CreateVenue(VenueDto venue)
         {
-            var newVenue = new Venue
-            {
-                IsActive = true,
-                Name = venue.Name,
-                ImageUrl = venue.ImageUrl,
-
-                Address = new Address
-                {
-                    StreetAddress = venue.AddressDto.StreetAddress,
-                    City = venue.AddressDto.City,
-                    State = venue.AddressDto.State,
-                    ZipCode = venue.AddressDto.ZipCode,
-                }
-            };
-
-            if (string.IsNullOrWhiteSpace(venue.ImageUrl))
-                venue.ImageUrl = DefaultImgSrc;
+            var newVenue = MapVenueDtoToVenue(new Venue(), venue);
 
             _repository.Insert(newVenue);
             _repository.Commit();
@@ -102,15 +105,8 @@ namespace EventsCalendar.Services.CrudServices
         {
             Venue venueToEdit = CheckVenueNullValue(venue.Id);
 
-            venueToEdit.AddressId = venue.AddressId;
-            venueToEdit.Name = venue.Name;
-            venueToEdit.ImageUrl = venue.ImageUrl;
-            venueToEdit.Address.StreetAddress = venue.AddressDto.StreetAddress;
-            venueToEdit.Address.City = venue.AddressDto.City;
-            venueToEdit.Address.State = venue.AddressDto.State;
-            venueToEdit.Address.ZipCode = venue.AddressDto.ZipCode;
-            venueToEdit.IsActive = true;
-            
+            venueToEdit = MapVenueDtoToVenue(venueToEdit, venue);
+
             var oldCapacity = _seatService.GetSeatCapacitiesFromList(venueToEdit.Seats);
             var changeCapacity = _seatService.CalculateAmountOfSeatsToChange(oldCapacity, venue.SeatCapacity);
 
@@ -128,8 +124,8 @@ namespace EventsCalendar.Services.CrudServices
                 .Where(p => p.VenueId == venueId)
                 .ToList();
 
-//            venue.IsActive = false;
-//            venue.Address.IsActive = false;
+//            venueDto.IsActive = false;
+//            venueDto.Address.IsActive = false;
            
             foreach (var performance in performances)
             {
