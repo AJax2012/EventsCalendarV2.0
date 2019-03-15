@@ -32,6 +32,23 @@ namespace EventsCalendar.Services.CrudServices
             return performer;
         }
 
+        private Performer MapPerformerDtoToPerformerModel(Performer performer, PerformerDto performerDto)
+        {
+            performer.Name = performerDto.Name;
+            performer.Description = performerDto.Description;
+            performer.TourName = performerDto.TourName;
+            performer.IsActive = true;
+            performer.ImageUrl = performerDto.ImageUrl;
+            performer.PerformerTypeId = (int)performerDto.PerformerType;
+
+            if (performer.PerformerTypeId == (int) PerformerTypeDto.Musician)
+                performer.GenreId = (int) performerDto.Genre;
+            else
+                performer.TopicId = (int) performerDto.Topic;
+
+            return performer;
+        }
+
         public IEnumerable<PerformerTypeDto> GetPerformerTypeValues()
         {
             return EnumUtil.GetValues<PerformerTypeDto>();
@@ -49,25 +66,7 @@ namespace EventsCalendar.Services.CrudServices
 
         public void CreatePerformer(PerformerDto performer)
         {
-            var newPerformer = new Performer
-            {
-                Name = performer.Name,
-                Description = performer.Description,
-                TourName = performer.TourName,
-                IsActive = true,
-                ImageUrl = performer.ImageUrl,
-                PerformerTypeId = (int) performer.PerformerType,
-            };
-
-            if (string.IsNullOrWhiteSpace(performer.ImageUrl))
-                performer.ImageUrl = DefaultImgSrc;
-
-            if (performer.PerformerType == PerformerTypeDto.Musician)
-                newPerformer.GenreId = (int) performer.Genre;
-            else
-                newPerformer.TopicId = (int) performer.Topic;
-
-            performer.IsActive = true;
+            var newPerformer = MapPerformerDtoToPerformerModel(new Performer(), performer);
             _repository.Insert(newPerformer);
             _repository.Commit();
         }
@@ -94,22 +93,10 @@ namespace EventsCalendar.Services.CrudServices
             return CheckPerformerNullValue(id);
         }
 
-        public void EditPerformer(PerformerDto performer)
+        public void EditPerformer(PerformerDto performerDto)
         {
-            Performer performerToEdit = CheckPerformerNullValue(performer.Id);
-
-            performerToEdit.Name = performer.Name;
-            performerToEdit.Description = performer.Description;
-            performerToEdit.TourName = performer.TourName;
-            performerToEdit.IsActive = true;
-            performerToEdit.ImageUrl = performer.ImageUrl;
-            performerToEdit.PerformerTypeId = (int) performer.PerformerType;
-
-            if (performer.PerformerType == PerformerTypeDto.Musician)
-                performerToEdit.GenreId = (int) performer.Genre;
-            else
-                performerToEdit.TopicId = (int) performer.Topic;
-
+            Performer performer = CheckPerformerNullValue(performerDto.Id);
+            performer = MapPerformerDtoToPerformerModel(performer, performerDto);
             _repository.Commit();
         }
 
