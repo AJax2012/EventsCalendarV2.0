@@ -28,10 +28,7 @@ namespace EventsCalendar.WebUI.Controllers
                 allPerformerDtos.Select(performer => 
                     new PerformerViewModel
                     {
-                        Performer = performer,
-                        PerformerTypes = _performerService.GetPerformerTypeValues(),
-                        Genres = _performerService.GetGenreValues(),
-                        Topics = _performerService.GetTopicValues()
+                        Performer = performer
                     }).ToList();
 
             return View(viewModel);
