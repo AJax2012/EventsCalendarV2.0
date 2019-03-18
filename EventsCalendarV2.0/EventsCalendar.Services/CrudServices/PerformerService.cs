@@ -97,7 +97,7 @@ namespace EventsCalendar.Services.CrudServices
         {
             Performer performer = CheckPerformerNullValue(performerDto.Id);
             performer = MapPerformerDtoToPerformerModel(performer, performerDto);
-            _repository.Commit();
+            _repository.Update(performer);
         }
 
         public void DeletePerformer(int id)

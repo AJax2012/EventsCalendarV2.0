@@ -47,8 +47,8 @@ namespace EventsCalendar.DataAccess.Sql
 
         public void Update(T performer)
         {
-            DbSet.Attach(performer);
             Context.Entry(performer).State = EntityState.Modified;
+            Context.SaveChanges();
         }
 
         public void ToggleChangeDetection(bool enabled)

@@ -58,8 +58,8 @@ namespace EventsCalendar.DataAccess.Sql
 
         public void Update(Performance performance)
         {
-            Context.Performances.Attach(performance);
             Context.Entry(performance).State = EntityState.Modified;
+            Context.SaveChanges();
         }
 
         public void ToggleChangeDetection(bool enabled)

@@ -70,5 +70,11 @@ namespace EventsCalendar.WebUI.Tests.Controllers
                 p.TopicId == null
             )));
         }
+
+        [Test]
+        public void EditPerformer_Should_Map_PerformerDto_To_Old_Performer()
+        {
+
+        }
     }
 }

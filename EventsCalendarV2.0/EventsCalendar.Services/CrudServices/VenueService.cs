@@ -98,26 +98,25 @@ namespace EventsCalendar.Services.CrudServices
             return _repository.Find(venueId);
         }
 
-        public void EditVenue(VenueDto venue)
+        public void EditVenue(VenueDto venueDto)
         {
-            Venue venueToEdit = CheckVenueNullValue(venue.Id);
+            Venue venue = CheckVenueNullValue(venueDto.Id);
 
-            venueToEdit.AddressId = venue.AddressId;
-            venueToEdit.Name = venue.Name;
-            venueToEdit.ImageUrl = venue.ImageUrl;
-            venueToEdit.Address.StreetAddress = venue.AddressDto.StreetAddress;
-            venueToEdit.Address.City = venue.AddressDto.City;
-            venueToEdit.Address.State = venue.AddressDto.State;
-            venueToEdit.Address.ZipCode = venue.AddressDto.ZipCode;
-            venueToEdit.IsActive = true;
+            venue.AddressId = venueDto.AddressId;
+            venue.Name = venueDto.Name;
+            venue.ImageUrl = venueDto.ImageUrl;
+            venue.Address.StreetAddress = venueDto.AddressDto.StreetAddress;
+            venue.Address.City = venueDto.AddressDto.City;
+            venue.Address.State = venueDto.AddressDto.State;
+            venue.Address.ZipCode = venueDto.AddressDto.ZipCode;
+            venue.IsActive = true;
             
-            var oldCapacity = _seatService.GetSeatCapacitiesFromList(venueToEdit.Seats);
-            var changeCapacity = _seatService.CalculateAmountOfSeatsToChange(oldCapacity, venue.SeatCapacity);
+            var oldCapacity = _seatService.GetSeatCapacitiesFromList(venue.Seats);
+            var changeCapacity = _seatService.CalculateAmountOfSeatsToChange(oldCapacity, venueDto.SeatCapacity);
 
-            _seatService.ChangeAmountOfSeatsInContext(changeCapacity, venueToEdit.Id);
-
-            _repository.Commit();
-            _addressRepository.Commit();
+            _seatService.ChangeAmountOfSeatsInContext(changeCapacity, venue.Id);
+            _repository.Update(venue);
+            _addressRepository.Update(venue.Address);
         }
 
         public void DeleteVenue(int venueId)
