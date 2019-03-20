@@ -33,7 +33,7 @@ namespace EventsCalendar.Services.CrudServices
             return performer;
         }
 
-        private Performer MapPerformerDtoToPerformerModel(Performer performer, PerformerDto performerDto)
+        public Performer MapPerformerDtoToPerformerModel(Performer performer, PerformerDto performerDto)
         {
             performer.Name = performerDto.Name;
             performer.Description = performerDto.Description;

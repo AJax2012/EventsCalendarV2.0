@@ -6,6 +6,7 @@ namespace EventsCalendar.Services.Contracts
 {
     public interface IPerformerService
     {
+        Performer MapPerformerDtoToPerformerModel(Performer performer, PerformerDto performerDto);
         IEnumerable<PerformerTypeDto> GetPerformerTypeValues();
         IEnumerable<GenreDto> GetGenreValues();
         IEnumerable<TopicDto> GetTopicValues();
