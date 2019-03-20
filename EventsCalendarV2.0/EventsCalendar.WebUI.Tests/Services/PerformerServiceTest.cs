@@ -1,12 +1,13 @@
-﻿using NUnit.Framework;
-using Moq;
-using EventsCalendar.DataAccess.Sql.Contracts;
+﻿using System.Web;
 using EventsCalendar.Core.Models;
+using EventsCalendar.DataAccess.Sql.Contracts;
 using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.CrudServices;
 using EventsCalendar.Services.Dtos.Performer;
+using Moq;
+using NUnit.Framework;
 
-namespace EventsCalendar.WebUI.Tests.Controllers
+namespace EventsCalendar.WebUI.Tests.Services
 {
     /// <summary>
     /// Summary description for PerformerServiceTest
@@ -18,7 +19,7 @@ namespace EventsCalendar.WebUI.Tests.Controllers
         private Mock<IRepository<Performance>> _performanceRepository;
         private const string DefaultImgSrc = "https://static1.squarespace.com/static/5ba45d79ab1a620ab25a33da/t/5bf46b1f0e2e72ab66b383f1/1543426766008/Blank+Profile+Pic.png?format=300w";
 
-        private static PerformerDto TestPerformerDto = new PerformerDto
+        private static readonly PerformerDto TestPerformerDto = new PerformerDto
         {
             Id = 1,
             Name = "test",
@@ -41,8 +42,6 @@ namespace EventsCalendar.WebUI.Tests.Controllers
             _target = new PerformerService(
                 _performerRepository.Object,
                 _performanceRepository.Object);
-
-            
         }
 
         [Test]
@@ -52,6 +51,14 @@ namespace EventsCalendar.WebUI.Tests.Controllers
             _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(new Performer());
             _target.GetPerformerById(id);
             _performerRepository.Verify(r => r.Find(id), Times.Once());
+        }
+
+        [Test]
+        public void EditPerformer_When_Performer_Not_Found_Should_Throw_Exception()
+        {
+            _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(null as Performer);
+
+            Assert.Throws<HttpException>(() => _target.EditPerformer(TestPerformerDto));
         }
 
         [Test]
@@ -74,7 +81,17 @@ namespace EventsCalendar.WebUI.Tests.Controllers
         [Test]
         public void EditPerformer_Should_Map_PerformerDto_To_Old_Performer()
         {
+            _target.EditPerformer(TestPerformerDto);
 
+            _performerRepository.Verify(r => r.Update(It.Is<Performer>(p => 
+                p.Name == "test" &&
+                p.Description == "test desc" &&
+                p.TourName == "test tour" &&
+                p.IsActive == true &&
+                p.ImageUrl == DefaultImgSrc &&
+                p.PerformerTypeId == (int)PerformerTypeDto.Musician &&
+                p.GenreId == (int)GenreDto.Classical &&
+                p.TopicId == null)));
         }
     }
 }

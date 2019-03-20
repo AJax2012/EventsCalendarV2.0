@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.Dtos.Performer;
+using EventsCalendar.Services.Exceptions;
 using EventsCalendar.WebUI.ViewModels;
 
 namespace EventsCalendar.WebUI.Controllers
@@ -46,11 +48,6 @@ namespace EventsCalendar.WebUI.Controllers
         /*
          * Edit Page
          */
-        public ActionResult Edit(int id)
-        {
-            return View("PerformerForm", ReturnPerformerViewModel(id));
-        }
-
         [HttpPost]
         public ActionResult Save(PerformerViewModel performerViewModel)
         {
@@ -65,9 +62,30 @@ namespace EventsCalendar.WebUI.Controllers
             if (performerViewModel.Performer.Id == 0)
                 _performerService.CreatePerformer(performerViewModel.Performer);
             else
-                _performerService.EditPerformer(performerViewModel.Performer);
+            {
+                try
+                {
+                    _performerService.EditPerformer(performerViewModel.Performer);
+                }
+                catch (EntityNotFoundException entity)
+                {
+                    return new HttpNotFoundResult(entity.Message);
+                }
+            }
 
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Edit(int id)
+        {
+            try
+            {
+                return View("PerformerForm", ReturnPerformerViewModel(id));
+            }
+            catch (EntityNotFoundException entity)
+            {
+                return new HttpNotFoundResult(entity.Message);
+            }
         }
 
         /*
@@ -85,15 +103,22 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Details(int id)
         {
-            PerformerViewModel viewModel = new PerformerViewModel
+            try
             {
-                Performer = _performerService.GetPerformerDtoById(id),
-                PerformerTypes = _performerService.GetPerformerTypeValues(),
-                Genres = _performerService.GetGenreValues(),
-                Topics = _performerService.GetTopicValues()
-            };
+                var viewModel = new PerformerViewModel
+                {
+                    Performer = _performerService.GetPerformerDtoById(id),
+                    PerformerTypes = _performerService.GetPerformerTypeValues(),
+                    Genres = _performerService.GetGenreValues(),
+                    Topics = _performerService.GetTopicValues()
+                };
 
-            return View(viewModel);
+                return View(viewModel);
+            }
+            catch (EntityNotFoundException entity)
+            {
+                return new HttpNotFoundResult(entity.Message);
+            }
         }
 
         private PerformerViewModel NewPerformerViewModel()

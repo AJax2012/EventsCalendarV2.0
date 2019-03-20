@@ -87,6 +87,7 @@
     <Compile Include="Dtos\Seat\SimpleSeatDto.cs" />
     <Compile Include="Dtos\TicketDto.cs" />
     <Compile Include="Dtos\Venue\VenueDto.cs" />
+    <Compile Include="Exceptions\EntityNotFoundException.cs" />
     <Compile Include="Helpers\ConfirmationNumberUtil.cs" />
     <Compile Include="Helpers\EnumUtil.cs" />
     <Compile Include="Helpers\MonthFirstCharFormatter.cs" />

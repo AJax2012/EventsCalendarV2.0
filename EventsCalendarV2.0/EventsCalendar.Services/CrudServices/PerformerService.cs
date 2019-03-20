@@ -6,6 +6,7 @@ using EventsCalendar.Core.Models;
 using EventsCalendar.DataAccess.Sql.Contracts;
 using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.Dtos.Performer;
+using EventsCalendar.Services.Exceptions;
 using EventsCalendar.Services.Helpers;
 
 namespace EventsCalendar.Services.CrudServices
@@ -27,7 +28,7 @@ namespace EventsCalendar.Services.CrudServices
         {
             var performer = _repository.Find(id);
             if (performer == null)
-                throw new HttpException(404, "Performer Not Found");
+                throw new EntityNotFoundException("Performer not found");
 
             return performer;
         }
@@ -102,7 +103,7 @@ namespace EventsCalendar.Services.CrudServices
 
         public void DeletePerformer(int id)
         {
-            var performer = CheckPerformerNullValue(id);
+            CheckPerformerNullValue(id);
 
             IList<Performance> performances = 
                 _performanceRepository.Collection()

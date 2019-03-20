@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsCalendar.DataAccess.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsCalendar.WebUI", "EventsCalendar.WebUI\EventsCalendar.WebUI.csproj", "{38A25650-8BBA-44DA-A6F0-66F0D5B4DB98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsCalendar.WebUI.Tests", "EventsCalendar.WebUI.Tests\EventsCalendar.WebUI.Tests.csproj", "{4C8E08AF-BD75-45D2-B0B8-CAFAA0FA36C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsCalendar.Tests", "EventsCalendar.WebUI.Tests\EventsCalendar.Tests.csproj", "{4C8E08AF-BD75-45D2-B0B8-CAFAA0FA36C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsCalendar.EntityConfigurations", "EventsCalendar.EntityConfigurations\EventsCalendar.EntityConfigurations.csproj", "{F47EE6A2-EBAE-47C9-9BA1-589B0771DE81}"
 EndProject
