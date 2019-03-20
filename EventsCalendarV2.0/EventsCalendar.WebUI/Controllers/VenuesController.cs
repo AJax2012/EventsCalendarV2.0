@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.Dtos.Seat;
 using EventsCalendar.Services.Dtos.Venue;
+using EventsCalendar.Services.Exceptions;
 using EventsCalendar.WebUI.ViewModels;
 
 namespace EventsCalendar.WebUI.Controllers
@@ -61,12 +62,19 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Edit(int id)
         {
-            VenueViewModel viewModel = new VenueViewModel
+            try
             {
-                Venue = _venueService.GetVenueDtoById(id)
-            };
+                VenueViewModel viewModel = new VenueViewModel
+                {
+                    Venue = _venueService.GetVenueDtoById(id)
+                };
 
-            return View("VenueForm", viewModel);
+                return View("VenueForm", viewModel);
+            }
+            catch (EntityNotFoundException entity)
+            {
+                return HttpNotFound(entity.Message);
+            }
         }
 
         /*
@@ -84,7 +92,14 @@ namespace EventsCalendar.WebUI.Controllers
             }
             else
             {
-                _venueService.EditVenue(venueViewModel.Venue);
+                try
+                {
+                    _venueService.EditVenue(venueViewModel.Venue);
+                }
+                catch (EntityNotFoundException entity)
+                {
+                    return HttpNotFound(entity.Message);
+                }
             }
 
             return RedirectToAction("Index");
@@ -95,12 +110,19 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Details(int id)
         {
-            VenueViewModel viewModel = new VenueViewModel
+            try
             {
-                Venue = _venueService.GetVenueDtoById(id)
-            };
+                VenueViewModel viewModel = new VenueViewModel
+                {
+                    Venue = _venueService.GetVenueDtoById(id)
+                };
 
-            return View(viewModel);
+                return View(viewModel);
+            }
+            catch (EntityNotFoundException entity)
+            {
+                return HttpNotFound(entity.Message);
+            }
         }
 
         /*
@@ -109,8 +131,15 @@ namespace EventsCalendar.WebUI.Controllers
         [HttpDelete]
         public ActionResult Delete(int id)
         {
-            _venueService.DeleteVenue(id);
-            return RedirectToAction("Index");
+            try
+            {
+                _venueService.DeleteVenue(id);
+                return RedirectToAction("Index");
+            }
+            catch (EntityNotFoundException entity)
+            {
+                return HttpNotFound(entity.Message);
+            }
         }
     }
 }

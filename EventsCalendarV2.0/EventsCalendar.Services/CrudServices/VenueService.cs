@@ -7,6 +7,7 @@ using EventsCalendar.DataAccess.Sql.Contracts;
 using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.Dtos.Seat;
 using EventsCalendar.Services.Dtos.Venue;
+using EventsCalendar.Services.Exceptions;
 
 namespace EventsCalendar.Services.CrudServices
 {
@@ -36,7 +37,7 @@ namespace EventsCalendar.Services.CrudServices
         {
             Venue venue = _repository.Find(venueId);
             if (venue == null)
-                throw new HttpException(404, "Venue Not Found");
+                throw new EntityNotFoundException("Performance not found");
 
             return venue;
         }
