@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.Dtos.Performer;
@@ -94,8 +93,15 @@ namespace EventsCalendar.WebUI.Controllers
         [HttpDelete]
         public ActionResult Delete(int id)
         {
-            _performerService.DeletePerformer(id);
-            return RedirectToAction("Index");
+            try
+            {
+                _performerService.DeletePerformer(id);
+                return RedirectToAction("Index");
+            }
+            catch (EntityNotFoundException entity)
+            {
+                return HttpNotFound(entity.Message);
+            }
         }
 
         /*

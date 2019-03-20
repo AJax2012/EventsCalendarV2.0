@@ -4,6 +4,7 @@ using EventsCalendar.DataAccess.Sql.Contracts;
 using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.CrudServices;
 using EventsCalendar.Services.Dtos.Performer;
+using EventsCalendar.Services.Exceptions;
 using Moq;
 using NUnit.Framework;
 
@@ -57,8 +58,7 @@ namespace EventsCalendar.WebUI.Tests.Services
         public void EditPerformer_When_Performer_Not_Found_Should_Throw_Exception()
         {
             _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(null as Performer);
-
-            Assert.Throws<HttpException>(() => _target.EditPerformer(TestPerformerDto));
+            Assert.Throws<EntityNotFoundException>(() => _target.EditPerformer(TestPerformerDto));
         }
 
         [Test]

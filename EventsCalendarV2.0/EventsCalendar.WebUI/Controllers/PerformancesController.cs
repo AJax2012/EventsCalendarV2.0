@@ -6,6 +6,7 @@ using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.Dtos;
 using EventsCalendar.Services.Dtos.Performer;
 using EventsCalendar.Services.Dtos.Venue;
+using EventsCalendar.Services.Exceptions;
 using EventsCalendar.WebUI.ViewModels;
 
 namespace EventsCalendar.WebUI.Controllers
@@ -61,15 +62,22 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Edit(int id)
         {
-            var viewModel = ReturnPerformanceViewModel(id);
-            var prices = _reservationService.GetPrices(id);
+            try
+            {
+                var viewModel = ReturnPerformanceViewModel(id);
+                var prices = _reservationService.GetPrices(id);
 
-            viewModel.Performance.Prices = prices;
-            viewModel.Performers = _performerService.GetAllPerformerDtos();
-            viewModel.Venues = _venueService.GetAllVenueDtos();
-            viewModel.SeatsRemaining = _reservationService.GetSeatsRemaining(id);
+                viewModel.Performance.Prices = prices;
+                viewModel.Performers = _performerService.GetAllPerformerDtos();
+                viewModel.Venues = _venueService.GetAllVenueDtos();
+                viewModel.SeatsRemaining = _reservationService.GetSeatsRemaining(id);
 
-            return View("PerformanceForm", viewModel);
+                return View("PerformanceForm", viewModel);
+            }
+            catch (EntityNotFoundException entity)
+            {
+                return HttpNotFound(entity.Message);
+            }
         }
 
         [HttpPost]
@@ -90,7 +98,16 @@ namespace EventsCalendar.WebUI.Controllers
             if (performanceViewModel.Performance.Id == 0)
                 _performanceService.CreatePerformance(performanceViewModel.Performance);
             else
-                _performanceService.EditPerformance(performanceViewModel.Performance);
+            {
+                try
+                {
+                    _performanceService.EditPerformance(performanceViewModel.Performance);
+                }
+                catch (EntityNotFoundException entity)
+                {
+                    return HttpNotFound(entity.Message);
+                }
+            }
 
             return RedirectToAction("Index");
         }
@@ -100,11 +117,18 @@ namespace EventsCalendar.WebUI.Controllers
          */
         public ActionResult Details(int id)
         {
-            PerformanceViewModel viewModel = ReturnPerformanceViewModel(id);
-            viewModel.SeatsRemaining = _reservationService.GetSeatsRemaining(id);
-            var prices = _reservationService.GetPrices(id);
-            viewModel.Performance.Prices = prices;
-            return View(viewModel);
+            try
+            {
+                PerformanceViewModel viewModel = ReturnPerformanceViewModel(id);
+                viewModel.SeatsRemaining = _reservationService.GetSeatsRemaining(id);
+                var prices = _reservationService.GetPrices(id);
+                viewModel.Performance.Prices = prices;
+                return View(viewModel);
+            }
+            catch (EntityNotFoundException entity)
+            {
+                return HttpNotFound(entity.Message);
+            }
         }
 
         private DateTime FixDateTime(string date, string time)
@@ -129,8 +153,15 @@ namespace EventsCalendar.WebUI.Controllers
         [HttpDelete]
         public ActionResult Delete(int id)
         {
-            _performanceService.DeletePerformance(id);
-            return RedirectToAction("Index");
+            try
+            {
+                _performanceService.DeletePerformance(id);
+                return RedirectToAction("Index");
+            }
+            catch (EntityNotFoundException entity)
+            {
+                return HttpNotFound(entity.Message);
+            }
         }
 
         private PerformanceViewModel NewPerformanceViewModel()

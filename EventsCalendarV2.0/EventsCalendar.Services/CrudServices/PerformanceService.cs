@@ -8,6 +8,7 @@ using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.Dtos;
 using EventsCalendar.Services.Dtos.Reservation;
 using EventsCalendar.Services.Dtos.Seat;
+using EventsCalendar.Services.Exceptions;
 
 namespace EventsCalendar.Services.CrudServices
 {
@@ -31,7 +32,7 @@ namespace EventsCalendar.Services.CrudServices
             var performance = _repository.Find(id);
 
             if (performance == null)
-                throw new HttpException(404, "Performance Not Found");
+                throw new EntityNotFoundException("Performance not found.");
 
             return performance;
         }
