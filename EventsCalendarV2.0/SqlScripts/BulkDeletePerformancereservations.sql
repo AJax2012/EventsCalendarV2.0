@@ -1,4 +1,4 @@
-USE [EventsCalendar]
+USE [EventCalendarDataContext]
 GO
 
 /****** Object:  StoredProcedure [dbo].[BulkDeletePerformanceReservations]    Script Date: 3/7/2019 10:56:42 PM ******/

@@ -1,4 +1,4 @@
-USE [EventsCalendar]
+USE [EventCalendarDataContext]
 GO
 
 /****** Object:  StoredProcedure [dbo].[BulkUpdatePrices]    Script Date: 3/7/2019 10:58:17 PM ******/
