@@ -103,19 +103,15 @@ namespace EventsCalendar.Services.CrudServices
 
         public void DeletePerformer(int id)
         {
-            CheckPerformerNullValue(id);
-
-            IList<Performance> performances = 
-                _performanceRepository.Collection()
-                    .Where(p => p.PerformerId == id).ToList();
+            var performer = CheckPerformerNullValue(id);
 
             // performer.IsActive = false;
-            foreach (var performance in performances)
+            foreach (var performance in performer.Performances)
             {
                 _performanceRepository.Delete(performance.Id);
-                _performanceRepository.Commit();
             }
 
+            _performanceRepository.Commit();
             _repository.Delete(id);
             _repository.Commit();
         }

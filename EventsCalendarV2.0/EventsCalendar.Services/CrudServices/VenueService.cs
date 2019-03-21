@@ -123,20 +123,15 @@ namespace EventsCalendar.Services.CrudServices
         public void DeleteVenue(int venueId)
         {
             var venue = CheckVenueNullValue(venueId);
-
-            var performances = _performanceRepository.Collection()
-                .Where(p => p.VenueId == venueId)
-                .ToList();
+           
+            foreach (var performance in venue.Performances)
+            {
+                _performanceRepository.Delete(performance.Id);
+            }
 
 //            venue.IsActive = false;
 //            venue.Address.IsActive = false;
-           
-            foreach (var performance in performances)
-            {
-                _performanceRepository.Delete(performance.Id);
-                _performanceRepository.Commit();
-            }
-
+            _performanceRepository.Commit();
             _repository.Delete(venueId);
             _addressRepository.Delete(venue.AddressId);
             _seatRepository.DeleteAllVenueSeats(venueId);

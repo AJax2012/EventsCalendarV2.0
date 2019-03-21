@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using EventsCalendar.Core.Models;
 using EventsCalendar.DataAccess.Sql.Contracts;
@@ -197,10 +198,14 @@ namespace EventsCalendar.WebUI.Tests.Services
         public void DeletePerformer_Should_Call_Repository_With_Delete_With_Id()
         {
             int id = 1;
-            _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(new Performer());
+            var performer = new Performer{Id = id};
+            performer.Performances.Add(new Performance{Id = id});
+
+            _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(performer);
             _target.DeletePerformer(id);
 
             _performerRepository.Verify(r => r.Delete(id));
+            _performanceRepository.Verify(r => r.Delete(id));
         }
     }
 }
