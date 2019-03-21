@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using AutoMapper;
 using EventsCalendar.Core.Models;
 using EventsCalendar.DataAccess.Sql.Contracts;
+using EventsCalendar.Services;
 using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.CrudServices;
 using EventsCalendar.Services.Dtos.Performer;
@@ -33,6 +35,14 @@ namespace EventsCalendar.WebUI.Tests.Services
             PerformerType = PerformerTypeDto.Musician,
             Genre = GenreDto.Classical
         };
+
+        public PerformerServiceTests()
+        {
+            Mapper.Initialize(config =>
+            {
+                config.AddProfile<MappingProfile>();
+            });
+        }
 
 
         [SetUp]
@@ -116,7 +126,6 @@ namespace EventsCalendar.WebUI.Tests.Services
         }
 
         [Test]
-        [Ignore("Mapping not inserted. Not sure how to insert")]
         public void GetAllPerformerDtos_Should_Return_All_Performers_In_Repository_And_Map_To_Dto()
         {
             _performerRepository.Setup(r => r.Collection()).Returns(new List<Performer>());
