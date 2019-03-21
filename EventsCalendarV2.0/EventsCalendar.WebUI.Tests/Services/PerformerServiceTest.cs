@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using EventsCalendar.Core.Models;
@@ -152,6 +153,13 @@ namespace EventsCalendar.WebUI.Tests.Services
         }
 
         [Test]
+        public void GetAllPerformers_Should_Return_Empty_When_No_Performers()
+        {
+            _performerRepository.Setup(r => r.Collection()).Returns(null as List<Performer>);
+            Assert.IsNull(_target.GetAllPerformers());
+        }
+
+        [Test]
         public void GetPerformerDtoById_Should_Call_Repository_Find_With_Id()
         {
             var id = 1;
@@ -161,12 +169,28 @@ namespace EventsCalendar.WebUI.Tests.Services
         }
 
         [Test]
+        public void GetPerformerDtoById_When_Id_Not_Found_Should_Throw_Exception()
+        {
+            int id = 1;
+            _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(null as Performer);
+            Assert.Throws<EntityNotFoundException>(() => _target.GetPerformerDtoById(id));
+        }
+
+        [Test]
         public void GetPerformerById_Should_Call_Repository_Find_With_Id()
         {
             var id = 1;
             _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(new Performer());
             _target.GetPerformerById(id);
             _performerRepository.Verify(r => r.Find(id), Times.Once());
+        }
+
+        [Test]
+        public void GetPerformerById_When_Id_Not_Found_Should_Throw_Exception()
+        {
+            int id = 1;
+            _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(null as Performer);
+            Assert.Throws<EntityNotFoundException>(() => _target.GetPerformerById(id));
         }
 
         [Test]
