@@ -19,6 +19,7 @@ namespace EventsCalendar.WebUI.Tests.Services
     {
         private Mock<IRepository<Performer>> _performerRepository;
         private Mock<IRepository<Performance>> _performanceRepository;
+        private IPerformerService _target;
         private const string DefaultImgSrc = "https://static1.squarespace.com/static/5ba45d79ab1a620ab25a33da/t/5bf46b1f0e2e72ab66b383f1/1543426766008/Blank+Profile+Pic.png?format=300w";
 
         private static readonly PerformerDto TestPerformerDto = new PerformerDto
@@ -33,7 +34,6 @@ namespace EventsCalendar.WebUI.Tests.Services
             Genre = GenreDto.Classical
         };
 
-    private IPerformerService _target;
 
         [SetUp]
         public void SetUp()
@@ -49,7 +49,7 @@ namespace EventsCalendar.WebUI.Tests.Services
         [Test]
         public void MapPerformerDtoToPerformerModel_Should_Map_DTO_to_Performer()
         {
-            var expectedResult = new Performer
+            var expected = new Performer
             {
                 Name = "test",
                 Description = "test desc",
@@ -61,7 +61,7 @@ namespace EventsCalendar.WebUI.Tests.Services
             };
 
             var performer =  _target.MapPerformerDtoToPerformerModel(new Performer(), TestPerformerDto);
-            performer.Should().BeEquivalentTo(expectedResult);
+            performer.Should().BeEquivalentTo(expected);
         }
 
         [Test]
@@ -158,9 +158,13 @@ namespace EventsCalendar.WebUI.Tests.Services
         }
 
         [Test]
-        [Ignore("Broken")]
         public void EditPerformer_Should_Map_PerformerDto_To_Existing_Performer()
         {
+            var localPerformer = new Performer
+            {
+                Id = 1
+            };
+            _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(localPerformer);
             _target.EditPerformer(TestPerformerDto);
 
             _performerRepository.Verify(r => r.Update(It.Is<Performer>(p => 
