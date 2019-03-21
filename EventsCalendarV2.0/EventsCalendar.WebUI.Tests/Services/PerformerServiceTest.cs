@@ -117,12 +117,20 @@ namespace EventsCalendar.WebUI.Tests.Services
         }
 
         [Test]
-        public void GetPerformerById_Should_Call_Repository_Find_With_Id()
+        public void CreatePerformer_Should_Map_PerformerDto_To_Performer()
         {
-            var id = 1;
-            _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(new Performer());
-            _target.GetPerformerById(id);
-            _performerRepository.Verify(r => r.Find(id), Times.Once());
+            _target.CreatePerformer(TestPerformerDto);
+
+            _performerRepository.Verify(r => r.Insert(It.Is<Performer>(p =>
+                p.Name == "test" &&
+                p.Description == "test desc" &&
+                p.TourName == "test tour" &&
+                p.IsActive &&
+                p.ImageUrl == DefaultImgSrc &&
+                p.PerformerTypeId == (int)PerformerTypeDto.Musician &&
+                p.GenreId == (int)GenreDto.Classical &&
+                p.TopicId == null
+            )));
         }
 
         [Test]
@@ -143,6 +151,24 @@ namespace EventsCalendar.WebUI.Tests.Services
         }
 
         [Test]
+        public void GetPerformerDtoById_Should_Call_Repository_Find_With_Id()
+        {
+            var id = 1;
+            _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(new Performer());
+            _target.GetPerformerDtoById(id);
+            _performerRepository.Verify(r => r.Find(id), Times.Once());
+        }
+
+        [Test]
+        public void GetPerformerById_Should_Call_Repository_Find_With_Id()
+        {
+            var id = 1;
+            _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(new Performer());
+            _target.GetPerformerById(id);
+            _performerRepository.Verify(r => r.Find(id), Times.Once());
+        }
+
+        [Test]
         public void EditPerformer_When_Performer_Not_Found_Should_Throw_Exception()
         {
             _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(null as Performer);
@@ -150,30 +176,9 @@ namespace EventsCalendar.WebUI.Tests.Services
         }
 
         [Test]
-        public void CreatePerformer_Should_Map_PerformerDto_To_Performer()
-        {
-            _target.CreatePerformer(TestPerformerDto);
-
-            _performerRepository.Verify(r => r.Insert(It.Is<Performer>(p =>
-                p.Name == "test" &&
-                p.Description == "test desc" &&
-                p.TourName == "test tour" &&
-                p.IsActive &&
-                p.ImageUrl == DefaultImgSrc &&
-                p.PerformerTypeId == (int)PerformerTypeDto.Musician &&
-                p.GenreId == (int)GenreDto.Classical &&
-                p.TopicId == null
-            )));
-        }
-
-        [Test]
         public void EditPerformer_Should_Map_PerformerDto_To_Existing_Performer()
         {
-            var localPerformer = new Performer
-            {
-                Id = 1
-            };
-            _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(localPerformer);
+            _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(new Performer());
             _target.EditPerformer(TestPerformerDto);
 
             _performerRepository.Verify(r => r.Update(It.Is<Performer>(p => 
@@ -186,6 +191,16 @@ namespace EventsCalendar.WebUI.Tests.Services
                 p.GenreId == (int)GenreDto.Classical &&
                 p.TopicId == null
             )));
+        }
+
+        [Test]
+        public void DeletePerformer_Should_Call_Repository_With_Delete_With_Id()
+        {
+            int id = 1;
+            _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(new Performer());
+            _target.DeletePerformer(id);
+
+            _performerRepository.Verify(r => r.Delete(id));
         }
     }
 }
