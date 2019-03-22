@@ -12,13 +12,13 @@ namespace EventsCalendar.Services.CrudServices
     public class ReservationService : IReservationService
     {
         private readonly IReservationRepository _repository;
-        private readonly ISeatService _seatUtil;
+        private readonly ISeatService _seatService;
 
         public ReservationService(IReservationRepository repository,
-                                  ISeatService seatUtil)
+                                  ISeatService seatService)
         {
             _repository = repository;
-            _seatUtil = seatUtil;
+            _seatService = seatService;
         }
 
         /**
@@ -39,7 +39,7 @@ namespace EventsCalendar.Services.CrudServices
          */
         public IEnumerable<SimpleReservation> CreateSimpleReservations(int venueId, SeatTypeDto type, decimal price)
         {
-            var seats = _seatUtil.GetSeatsBySeatType(venueId, type);
+            var seats = _seatService.GetSeatsBySeatType(venueId, type);
             return seats.Select(seat => new SimpleReservation {SeatId = seat.Id, Price = price}).ToList();
         }
 
