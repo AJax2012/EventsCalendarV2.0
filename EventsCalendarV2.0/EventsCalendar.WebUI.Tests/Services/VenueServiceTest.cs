@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using EventsCalendar.Core.Models;
 using EventsCalendar.DataAccess.Sql.Contracts;
+using EventsCalendar.Services;
 using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.CrudServices;
 using EventsCalendar.Services.Dtos.Seat;
@@ -55,6 +57,14 @@ namespace EventsCalendar.WebUI.Tests.Services
             SeatCapacity = TestSeatCapaictyDto
         };
 
+        public VenueServiceTest()
+        {
+            Mapper.Initialize(config =>
+            {
+                config.AddProfile<MappingProfile>();
+            });
+        }
+
         [SetUp]
         public void SetUp()
         {
@@ -82,6 +92,24 @@ namespace EventsCalendar.WebUI.Tests.Services
                 v.ImageUrl == DefaultImgSrc &&
                 v.IsActive
             )));
+        }
+
+        [Test]
+        public void GetVenueDtoById_Should_Return_VenueDto_From_Id()
+        {
+            var id = 1;
+            _venueRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(new Venue());
+            _target.GetVenueDtoById(id);
+            _venueRepository.Verify(r => r.Find(id), Times.Once);
+        }
+
+        [Test]
+        public void GetVenueById_Should_Return_Venue_From_Id()
+        {
+            var id = 1;
+            _venueRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(new Venue());
+            _target.GetVenueById(id);
+            _venueRepository.Verify(r => r.Find(id), Times.Once);
         }
     }
 }
