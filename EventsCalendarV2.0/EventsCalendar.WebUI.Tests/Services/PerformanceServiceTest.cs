@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using EventsCalendar.Core.Models;
+using EventsCalendar.Core.Models.Reservations;
 using EventsCalendar.Core.Models.Seats;
 using EventsCalendar.DataAccess.Sql.Contracts;
 using EventsCalendar.Services;
@@ -210,6 +212,28 @@ namespace EventsCalendar.WebUI.Tests.Services
             int id = 1;
             _performanceRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(null as Performance);
             Assert.Throws<EntityNotFoundException>(() => _target.GetPerformanceById(id));
+        }
+
+        [Test]
+        public void DeletePerformance_Should_Call_Repository_With_Delete_With_Id()
+        {
+            var id = 1;
+            var performance = new Performance {Id = id};
+            performance.Reservations.Add(new Reservation{Id = new Guid()});
+            
+            _performanceRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(performance);
+            _target.DeletePerformance(id);
+
+            _performanceRepository.Verify(r => r.Delete(id));
+            _reservationRepository.Verify(r => r.DeleteAllPerformanceReservations(id));
+        }
+
+        [Test]
+        public void DeletePerformance_When_Id_Not_Found_Should_Throw_Exception()
+        {
+            int id = 1;
+            _performanceRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(null as Performance);
+            Assert.Throws<EntityNotFoundException>(() => _target.DeletePerformance(id));
         }
     }
 }
