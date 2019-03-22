@@ -194,5 +194,22 @@ namespace EventsCalendar.WebUI.Tests.Services
             _performanceRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(null as Performance);
             Assert.Throws<EntityNotFoundException>(() => _target.GetPerformanceById(id));
         }
+
+        [Test]
+        public void GetPerformanceById_Should_Call_Repository_Find_With_Id()
+        {
+            var id = 1;
+            _performanceRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(new Performance());
+            _target.GetPerformanceById(id);
+            _performanceRepository.Verify(r => r.Find(id), Times.Once);
+        }
+
+        [Test]
+        public void GetPerformanceById_When_Id_Not_Found_Should_Throw_Exception()
+        {
+            int id = 1;
+            _performanceRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(null as Performance);
+            Assert.Throws<EntityNotFoundException>(() => _target.GetPerformanceById(id));
+        }
     }
 }
