@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using EventsCalendar.Core.Models;
 using EventsCalendar.Core.Models.Reservations;
-using EventsCalendar.Core.Models.Seats;
 using EventsCalendar.DataAccess.Sql.Contracts;
 using EventsCalendar.Services;
 using EventsCalendar.Services.Contracts;
