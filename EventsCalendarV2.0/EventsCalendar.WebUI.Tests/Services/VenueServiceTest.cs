@@ -11,6 +11,7 @@ using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.CrudServices;
 using EventsCalendar.Services.Dtos.Seat;
 using EventsCalendar.Services.Dtos.Venue;
+using EventsCalendar.Services.Exceptions;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -152,6 +153,14 @@ namespace EventsCalendar.WebUI.Tests.Services
                 v.Name == "Test" &&
                 v.ImageUrl == DefaultImgSrc &&
                 v.IsActive)));
+        }
+
+        [Test]
+        public void EditVenue_When_Performer_Not_Found_Should_Return_Exception()
+        {
+            _venueRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(null as Venue);
+            Assert.Throws<EntityNotFoundException>(() => _target.EditVenue(TestVenueDto));
+            
         }
     }
 }
