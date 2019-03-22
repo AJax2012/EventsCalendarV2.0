@@ -156,7 +156,7 @@ namespace EventsCalendar.WebUI.Tests.Services
         }
 
         [Test]
-        public void EditVenue_When_Performer_Not_Found_Should_Return_Exception()
+        public void EditVenue_When_Venue_Not_Found_Should_Return_Exception()
         {
             _venueRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(null as Venue);
             Assert.Throws<EntityNotFoundException>(() => _target.EditVenue(TestVenueDto));
@@ -176,6 +176,14 @@ namespace EventsCalendar.WebUI.Tests.Services
 
             _venueRepository.Verify(r => r.Delete(id));
             _addressRepository.Verify(r => r.Delete(id));
+        }
+
+        [Test]
+        public void DeleteVenue_When_Venue_Not_Found_Should_Return_Exception()
+        {
+            var id = 1;
+            _venueRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(null as Venue);
+            Assert.Throws<EntityNotFoundException>(() => _target.DeleteVenue(id));
         }
     }
 }
