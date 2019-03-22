@@ -111,5 +111,35 @@ namespace EventsCalendar.WebUI.Tests.Services
             _target.GetVenueById(id);
             _venueRepository.Verify(r => r.Find(id), Times.Once);
         }
+
+        [Test]
+        public void GetAllVenueDtos_Should_Return_VenueDto_Collection()
+        {
+            _venueRepository.Setup(r => r.Collection()).Returns(new List<Venue>());
+            _target.GetAllVenueDtos();
+            _venueRepository.Verify(r => r.Collection(), Times.AtLeastOnce);
+        }
+
+        [Test]
+        public void GetAllVenueDtos_Should_Return_Null()
+        {
+            _venueRepository.Setup(r => r.Collection()).Returns(null as List<Venue>);
+            Assert.IsEmpty(_target.GetAllVenueDtos());
+        }
+
+        [Test]
+        public void GetAllVenues_Should_Return_Venue_Collection()
+        {
+            _venueRepository.Setup(r => r.Collection()).Returns(new List<Venue>());
+            _target.GetAllVenues();
+            _venueRepository.Verify(r => r.Collection(), Times.AtLeastOnce);
+        }
+
+        [Test]
+        public void GetAllVenues_Should_Return_Null()
+        {
+            _venueRepository.Setup(r => r.Collection()).Returns(null as List<Venue>);
+            Assert.IsNull(_target.GetAllVenues());
+        }
     }
 }
