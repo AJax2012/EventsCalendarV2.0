@@ -162,5 +162,20 @@ namespace EventsCalendar.WebUI.Tests.Services
             Assert.Throws<EntityNotFoundException>(() => _target.EditVenue(TestVenueDto));
             
         }
+
+        [Test]
+        public void DeleteVenue_Should_Call_Repository_With_Delete_From_Id()
+        {
+            var id = 1;
+            var venue = new Venue{Id = 1};
+            venue.Address = new Address{Id = 1};
+            venue.AddressId = 1;
+
+            _venueRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(venue);
+            _target.DeleteVenue(id);
+
+            _venueRepository.Verify(r => r.Delete(id));
+            _addressRepository.Verify(r => r.Delete(id));
+        }
     }
 }
