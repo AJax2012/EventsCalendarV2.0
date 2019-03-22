@@ -229,5 +229,13 @@ namespace EventsCalendar.WebUI.Tests.Services
             _performerRepository.Verify(r => r.Delete(id));
             _performanceRepository.Verify(r => r.Delete(id));
         }
+
+        [Test]
+        public void DeletePerformer_When_Id_Not_Found_Should_Throw_Exception()
+        {
+            int id = 1;
+            _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(null as Performer);
+            Assert.Throws<EntityNotFoundException>(() => _target.DeletePerformer(id));
+        }
     }
 }
