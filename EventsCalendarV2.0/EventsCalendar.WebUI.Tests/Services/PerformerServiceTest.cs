@@ -199,7 +199,7 @@ namespace EventsCalendar.WebUI.Tests.Services
         }
 
         [Test]
-        public void EditPerformer_Should_Map_PerformerDto_To_Existing_Performer()
+        public void EditPerformer_Should_Update_Repository_Object()
         {
             _performerRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(new Performer());
             _target.EditPerformer(TestPerformerDto);

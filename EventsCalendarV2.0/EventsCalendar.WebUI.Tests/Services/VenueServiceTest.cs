@@ -141,5 +141,17 @@ namespace EventsCalendar.WebUI.Tests.Services
             _venueRepository.Setup(r => r.Collection()).Returns(null as List<Venue>);
             Assert.IsNull(_target.GetAllVenues());
         }
+
+        [Test]
+        public void EditVenue_Should_Update_Repository_Object()
+        {
+            _venueRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(new Venue());
+            _target.EditVenue(TestVenueDto);
+
+            _venueRepository.Verify(r => r.Update(It.Is<Venue>(v =>
+                v.Name == "Test" &&
+                v.ImageUrl == DefaultImgSrc &&
+                v.IsActive)));
+        }
     }
 }

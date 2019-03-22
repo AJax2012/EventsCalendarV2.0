@@ -18,6 +18,7 @@ namespace EventsCalendar.Core.Models
         {
             Performances = new List<Performance>();
             Seats = new List<Seat>();
+            Address = new Address();
         }
     }
 }

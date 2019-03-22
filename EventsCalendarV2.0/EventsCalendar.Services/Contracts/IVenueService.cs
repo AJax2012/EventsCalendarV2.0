@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using EventsCalendar.Core.Models;
-using EventsCalendar.Services.Dtos;
 using EventsCalendar.Services.Dtos.Venue;
 
 namespace EventsCalendar.Services.Contracts
