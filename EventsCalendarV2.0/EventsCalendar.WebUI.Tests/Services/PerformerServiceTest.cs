@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using AutoMapper;
 using EventsCalendar.Core.Models;
 using EventsCalendar.DataAccess.Sql.Contracts;
@@ -119,7 +117,7 @@ namespace EventsCalendar.WebUI.Tests.Services
         }
 
         [Test]
-        public void CreatePerformer_Should_Map_PerformerDto_To_Performer()
+        public void CreatePerformer_Should_Send_Performer_To_Repository()
         {
             _target.CreatePerformer(TestPerformerDto);
 
