@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
 using EventsCalendar.Core.Models;
 using EventsCalendar.Core.Models.Seats;
 using EventsCalendar.DataAccess.Sql.Contracts;
+using EventsCalendar.Services;
 using EventsCalendar.Services.Contracts;
 using EventsCalendar.Services.CrudServices;
 using EventsCalendar.Services.Dtos;
@@ -87,6 +89,14 @@ namespace EventsCalendar.WebUI.Tests.Services
             Reservations = new List<ReservationDto>()
         };
 
+        public PerformanceServiceTest()
+        {
+            Mapper.Initialize(config =>
+            {
+                config.AddProfile<MappingProfile>();
+            });
+        }
+
         [SetUp]
         public void SetUp()
         {
@@ -119,6 +129,52 @@ namespace EventsCalendar.WebUI.Tests.Services
                 p.VenueId == 1 &&
                 p.Reservations != null
             )));
+        }
+
+        [Test]
+        public void EditPerformance_Should_Update_Repository_Object()
+        {
+            _performanceRepository.Setup(r => r.Find(It.IsAny<int>())).Returns(new Performance());
+            _target.EditPerformance(TestPerformanceDto);
+
+            _performanceRepository.Verify(r => r.Update(It.Is<Performance>(p =>
+                p.Description == "Test Description" &&
+                p.IsActive &&
+                p.EventDateTime == DateTime.Today.AddDays(1).AddHours(1) &&
+                p.PerformerId == 1 &&
+                p.VenueId == 1 &&
+                p.Reservations != null
+            )));
+        }
+
+        [Test]
+        public void GetAllPerformanceDtos_Should_Return_All_Performances_In_Repository()
+        {
+            _performanceRepository.Setup(r => r.Collection()).Returns(new List<Performance>());
+            _target.GetAllPerformanceDtos();
+            _performanceRepository.Verify(r => r.Collection(), Times.AtLeastOnce);
+        }
+
+        [Test]
+        public void GetAllPerformanceDtos_Should_Return_Empty_When_No_Performances()
+        {
+            _performanceRepository.Setup(r => r.Collection()).Returns(null as List<Performance>);
+            Assert.IsEmpty(_target.GetAllPerformanceDtos());
+        }
+
+        [Test]
+        public void GetAllPerformances_Should_Return_All_Performances_In_Repository()
+        {
+            _performanceRepository.Setup(r => r.Collection()).Returns(new List<Performance>());
+            _target.GetAllPerformances();
+            _performanceRepository.Verify(r => r.Collection(), Times.AtLeastOnce);
+        }
+
+        [Test]
+        public void GetAllPerformances_Should_Return_Return_Null_When_No_Performances()
+        {
+            _performanceRepository.Setup(r => r.Collection()).Returns(null as List<Performance>);
+            Assert.IsNull(_target.GetAllPerformances());
         }
     }
 }
